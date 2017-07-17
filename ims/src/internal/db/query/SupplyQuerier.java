@@ -1,4 +1,4 @@
-package internal.query;
+package internal.db.query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import common.db.DB;
 import common.util.Filter;
-import database.model.ProductSupply;
+import internal.db.model.ProductSupply;
 
 /**
  * database select operation for table: product_supply
@@ -191,6 +191,66 @@ public class SupplyQuerier {
 		}
 
 		return count;
+	}
+
+	/**
+	 * select by PK
+	 * 
+	 * @param supplyId
+	 * @return
+	 */
+	public ProductSupply selectById(int supplyId) {
+		ProductSupply supply = null;
+
+		String sql = "select supply_id,product_id,supplier_id,supplier_name,supplier_description,supply_type,supply_url,shipped_from,unit_price,price_description,price_time,status from product_supply where supply_id=?";
+		DB db = new DB();
+		Connection con = null;
+		try {
+			con = db.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, supplyId);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				supply = new ProductSupply();
+				supply.setSupplyId(rs.getInt(1));
+				supply.setProductId(rs.getInt(2));
+				supply.setSupplierId(rs.getString(3) == null ? null : rs.getInt(3));
+				supply.setSupplierName(rs.getString(4));
+				supply.setSupplierDescription(rs.getString(5));
+				supply.setSupplyType(rs.getString(6));
+				supply.setSupplyUrl(rs.getString(7));
+				supply.setShippedFrom(rs.getString(8));
+				supply.setUnitPrice(rs.getBigDecimal(9));
+				supply.setPriceDescription(rs.getString(10));
+				supply.setPriceTime(rs.getTimestamp(11));
+				supply.setStatus(rs.getString(12));
+
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return supply;
 	}
 
 	// has no use

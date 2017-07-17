@@ -1,7 +1,7 @@
 /**
  * 
  */
-package internal.supply;
+package internal.db.query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

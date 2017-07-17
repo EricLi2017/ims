@@ -1,5 +1,5 @@
 <%@page import="common.util.Filter"%>
-<%@page import="internal.query.ProductQuerier"%>
+<%@page import="internal.db.query.ProductQuerier"%>
 <%@page import="common.util.OrderBy"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -9,7 +9,7 @@
 <%@ page import="common.util.Time"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.sql.Timestamp"%>
-<%@ page import="database.model.InternalProduct"%>
+<%@ page import="internal.db.model.InternalProduct"%>
 <%@ page import="java.util.List"%>
 <%--
   Created by IntelliJ IDEA.

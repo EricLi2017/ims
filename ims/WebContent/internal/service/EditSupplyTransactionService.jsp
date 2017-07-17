@@ -1,5 +1,5 @@
-<%@page import="internal.supply.SupplyTransactionDatabase"%>
-<%@page import="database.model.SupplyTransaction"%>
+<%@page import="internal.db.edit.SupplyTransactionDatabase"%>
+<%@page import="internal.db.model.SupplyTransaction"%>
 <%@page import="java.text.ParseException"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.text.SimpleDateFormat"%>

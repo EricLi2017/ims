@@ -1,5 +1,5 @@
-<%@page import="internal.product.InternalProductDatabase"%>
-<%@page import="database.model.InternalProduct"%>
+<%@page import="internal.db.edit.InternalProductDatabase"%>
+<%@page import="internal.db.model.InternalProduct"%>
 <%@page import="common.util.Filter"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>

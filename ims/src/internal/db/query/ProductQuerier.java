@@ -1,4 +1,4 @@
-package internal.query;
+package internal.db.query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import common.db.DB;
 import common.util.Filter;
-import database.model.InternalProduct;
+import internal.db.model.InternalProduct;
 
 /**
  * database select operation for table: internal_product
@@ -34,8 +34,8 @@ public class ProductQuerier {
 	 * @return null: if exception happened while query database; empty size
 	 *         List: if there is no matched result;
 	 */
-	public List<InternalProduct> queryProduct(String productId, String name, Timestamp dateAfter,
-			Timestamp dateBefore, String status, String asin, String orderBy, String ascOrDesc) {
+	public List<InternalProduct> queryProduct(String productId, String name, Timestamp dateAfter, Timestamp dateBefore,
+			String status, String asin, String orderBy, String ascOrDesc) {
 
 		// SQL part1: select & from
 		String part1 = "select product_id,name,description,create_time,status,asin from internal_product";
@@ -138,6 +138,53 @@ public class ProductQuerier {
 		}
 
 		return products;
+	}
+
+	public InternalProduct selectById(int productId) {
+		InternalProduct product = null;
+
+		String sql = "select product_id,name,description,create_time,status,asin from internal_product where product_id=?";
+		DB db = new DB();
+		Connection con = null;
+		try {
+			con = db.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, productId);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				product = new InternalProduct();
+				product.setProductId(rs.getInt(1));
+				product.setName(rs.getString(2));
+				product.setDescription(rs.getString(3));
+				product.setCreateTime(rs.getTimestamp(4));
+				product.setStatus(rs.getString(5));
+				product.setAsin(rs.getString(6));
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return product;
 	}
 
 	// has no use

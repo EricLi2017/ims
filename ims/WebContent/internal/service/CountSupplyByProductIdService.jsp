@@ -1,4 +1,4 @@
-<%@page import="internal.query.SupplyQuerier"%>
+<%@page import="internal.db.query.SupplyQuerier"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>

@@ -1,6 +1,6 @@
 <%@page import="common.util.Filter"%>
-<%@page import="internal.product.InternalProductDatabase"%>
-<%@page import="database.model.InternalProduct"%>
+<%@page import="internal.db.query.ProductQuerier"%>
+<%@page import="internal.db.model.InternalProduct"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
@@ -32,7 +32,7 @@
 	}
 
 	//selet data from database
-	InternalProduct product = new InternalProductDatabase().selectById(productId);
+	InternalProduct product = new ProductQuerier().selectById(productId);
 	if (product == null) {
 		out.print("There is no matched data!");
 		return;

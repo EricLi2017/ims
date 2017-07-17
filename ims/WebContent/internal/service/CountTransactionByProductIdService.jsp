@@ -1,4 +1,4 @@
-<%@page import="internal.query.TransactionQuerier"%>
+<%@page import="internal.db.query.TransactionQuerier"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>

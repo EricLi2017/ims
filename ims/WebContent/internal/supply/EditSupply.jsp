@@ -1,5 +1,5 @@
-<%@page import="internal.supply.ProductSupplyDatabase"%>
-<%@page import="database.model.ProductSupply"%>
+<%@page import="internal.db.query.SupplyQuerier"%>
+<%@page import="internal.db.model.ProductSupply"%>
 <%@page import="common.util.Filter"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -32,7 +32,7 @@
 	}
 
 	//selet data from database
-	ProductSupply supply = new ProductSupplyDatabase().selectById(supplyId);
+	ProductSupply supply = new SupplyQuerier().selectById(supplyId);
 	if (supply == null) {
 		out.print("There is no matched data!");
 		return;

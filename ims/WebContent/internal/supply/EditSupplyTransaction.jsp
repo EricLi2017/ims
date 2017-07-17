@@ -1,5 +1,5 @@
-<%@page import="internal.supply.SupplyTransactionDatabase"%>
-<%@page import="database.model.SupplyTransaction"%>
+<%@page import="internal.db.edit.SupplyTransactionDatabase"%>
+<%@page import="internal.db.model.SupplyTransaction"%>
 <%@page import="common.util.Filter"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>

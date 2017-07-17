@@ -1,12 +1,12 @@
-<%@page import="internal.supply.SupplyTransactionDatabase"%>
+<%@page import="internal.db.edit.SupplyTransactionDatabase"%>
+<%@page import="internal.db.model.SupplyTransaction"%>
+<%@page import="internal.db.query.BatchNoGenerator"%>
+<%@page import="common.util.Filter"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="database.model.SupplyTransaction"%>
-<%@page import="internal.supply.BatchNoGenerator"%>
 <%@page import="java.text.ParseException"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="common.util.Filter"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--set request encoding--%>

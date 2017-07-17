@@ -1,8 +1,8 @@
 <%@page import="common.util.Filter"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="internal.product.InternalProductDatabase"%>
-<%@page import="database.model.InternalProduct"%>
+<%@page import="internal.db.edit.InternalProductDatabase"%>
+<%@page import="internal.db.model.InternalProduct"%>
 <%@ page import="java.util.Enumeration"%><%--
   Created by IntelliJ IDEA.
   User: Eric Li

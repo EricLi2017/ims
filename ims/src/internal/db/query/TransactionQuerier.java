@@ -1,7 +1,7 @@
 /**
  * 
  */
-package internal.query;
+package internal.db.query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +13,8 @@ import java.util.List;
 
 import common.db.DB;
 import common.util.Filter;
-import database.model.ProductSupply;
-import database.model.SupplyTransaction;
+import internal.db.model.ProductSupply;
+import internal.db.model.SupplyTransaction;
 
 /**
  * database select operation for table: supply_transaction

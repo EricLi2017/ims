@@ -1,4 +1,4 @@
-package internal.supply;
+package internal.db.edit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import common.db.DB;
-import database.model.SupplyTransaction;
+import internal.db.model.SupplyTransaction;
 
 public class SupplyTransactionDatabase {
 
