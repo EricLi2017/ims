@@ -30,7 +30,7 @@ public class ProductSupplyDatabase {
 			for (ProductSupply supply : supplies) {
 				ps = con.prepareStatement(sql);
 				ps.setInt(1, supply.getProductId());
-				ps.setString(2, supply.getSupplierId() == null ? null : String.valueOf(supply.getSupplierId()));
+				ps.setString(2, supply.getSupplierId() == null ? null : supply.getSupplierId().toString());
 				ps.setString(3, supply.getSupplierName());
 				ps.setString(4, supply.getSupplierDescription());
 				ps.setString(5, supply.getSupplyType());
@@ -80,7 +80,7 @@ public class ProductSupplyDatabase {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, supply.getProductId());
-			ps.setString(2, supply.getSupplierId() == null ? null : String.valueOf(supply.getSupplierId()));
+			ps.setString(2, supply.getSupplierId() == null ? null : supply.getSupplierId().toString());
 			ps.setString(3, supply.getSupplierName());
 			ps.setString(4, supply.getSupplierDescription());
 			ps.setString(5, supply.getSupplyType());
