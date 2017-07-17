@@ -1,0 +1,25 @@
+/*for border=1px at top bottom left and right*/
+.table-c table {
+	width: 100%;
+	border-spacing: 0;
+	padding: 0;
+}
+
+.table-c table th {
+	background-color: #7fc5fa;
+}
+
+.table-c table {
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000
+}
+
+.table-c table th {
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000
+}
+
+.table-c table td {
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000
+}

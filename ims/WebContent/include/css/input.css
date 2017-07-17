@@ -1,0 +1,5 @@
+/**for input */
+/* used to indicate this input data is required */
+.required {
+	color: #ff8080;
+}
