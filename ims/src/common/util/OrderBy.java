@@ -22,37 +22,47 @@ public class OrderBy {
 	}
 
 	/**
-	 * return a HTML down/up arrow or empty :&#8595; / &#8593; or ""
+	 * Get a HTML arrow in the opposite sort order if the sorted column selected
+	 * is valid and it is the same with the sorted column where the HTML arrow
+	 * is located in,
 	 * 
-	 * @param orderBy
-	 * @param orderByKey
+	 * otherwise get a empty string in other cases
+	 *
+	 * 
+	 * @param sortedColumnLocated
+	 * @param sortedColumnSelected
 	 * @param orderByMap
 	 * @param ascDesc
 	 * @param ascDescKey
-	 * @return
+	 * @return a HTML down/up arrow or empty string: &uarr;(&#8595;) /
+	 *         &darr;(&#8593;) or ""
 	 */
-	public static String getHtmlArrow(String orderByKey, String orderBy, Map<String, String> orderByMap,
-			String ascDesc) {
+	public static String getHtmlArrow(String sortedColumnLocated, String sortedColumnSelected,
+			Map<String, String> orderByMap, String ascDesc) {
 		String empty = "";
-		String down = "&#8595;";
-		String up = "&#8593;";
-		if (orderByKey == null || "" == orderByKey.trim() || orderBy == null || "" == orderBy.trim()
-				|| orderByMap == null || orderByMap.size() == 0 || ascDesc == null || "" == ascDesc.trim()
+		String down = "&uarr;";
+		String up = "&darr;";
+		if (sortedColumnLocated == null || sortedColumnLocated.trim().isEmpty() || sortedColumnSelected == null
+				|| sortedColumnSelected.trim().isEmpty() || orderByMap == null || orderByMap.size() == 0
+				|| ascDesc == null || ascDesc.trim().isEmpty()
 				|| (!ASCENDING.equals(ascDesc) && !DESCENDING.equals(ascDesc))) {
 			return empty;
 		}
 
-		if (orderByKey.equalsIgnoreCase(orderBy) && orderByMap.containsKey(orderByKey)) {
+		if (sortedColumnLocated.equalsIgnoreCase(sortedColumnSelected) && orderByMap.containsKey(sortedColumnLocated)) {
+
+			// reverse sort order
 			return ASCENDING.equals(ascDesc) ? up : down;
 		}
 		return empty;
 	}
 
 	/**
-	 * get opposite sort order between ASCENDING and DESCENDING
+	 * Get an opposite sort order between ASCENDING and DESCENDING
 	 * 
-	 * if the original sort order is not ASCENDING or DESCENDING, than return
-	 * itself
+	 * or
+	 * 
+	 * get itself if the original sort order is neither ASCENDING nor DESCENDING
 	 * 
 	 * @param sortOrder
 	 * @return
