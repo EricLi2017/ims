@@ -34,13 +34,15 @@
 	//empty value checking
 	if (user == null || password == null || code == null || "".equals(user.trim()) || "".equals(password.trim())
 			|| "".equals(code.trim())) {
-		out.println("Invalid login");
+		out.println("Missing required information to sign in!");
 		System.out.println("Invalid login, missing required parameters! user:" + user + " ip:" + ip);
 		return;
 	}
 	//verification code matching
 	if (!code.equalsIgnoreCase(session.getAttribute("code").toString())) {
-		out.println("Invalid login");
+		out.println("Incorrect verification code!");
+		//TODO: refresh the verification code in session
+
 		System.out.println("Invalid login, incorrect verification code! user:" + user + " ip:" + ip);
 		return;
 	}
