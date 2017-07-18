@@ -113,19 +113,20 @@ public class Time {
      * @param second    the value used to set the SECOND calendar field
      * @return XMLGregorianCalendar
      */
-    private static XMLGregorianCalendar getTime(TimeZone timeZone, int year, int month, int date, int hourOfDay,
-                                                int minute, int second) {
-        GregorianCalendar gc = new GregorianCalendar(timeZone);
-        gc.set(year, month, date, hourOfDay, minute, second);
-        XMLGregorianCalendar cal = null;
-        try {
-            cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
-            cal.setMillisecond(0);
-        } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
-        }
-        return cal;
-    }
+	// private static XMLGregorianCalendar getTime(TimeZone timeZone, int year,
+	// int month, int date, int hourOfDay,
+	// int minute, int second) {
+	// GregorianCalendar gc = new GregorianCalendar(timeZone);
+	// gc.set(year, month, date, hourOfDay, minute, second);
+	// XMLGregorianCalendar cal = null;
+	// try {
+	// cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+	// cal.setMillisecond(0);
+	// } catch (DatatypeConfigurationException e) {
+	// e.printStackTrace();
+	// }
+	// return cal;
+	// }
 
     /**
      * get the time of now in PST time zone: UTC-08:00
