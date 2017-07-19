@@ -9,7 +9,7 @@
 
 
 	<%--left part--%>
-	<div class="left" style="background-color: green; text-align: left;">
+	<div class="left">
 		<ul>
 			<li><a
 				href="/ims/internal/product/InternalProductManagement.jsp"
