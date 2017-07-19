@@ -12,11 +12,16 @@
 <html>
 <head>
 <title>Add Internal Product</title>
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--use the css style for input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
+
 	<h1 style="text-align: center">Add Internal Product</h1>
 
 	<%--input product data--%>

@@ -43,11 +43,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit Internal Product</title>
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--use the css style for input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
+
 	<h1 style="text-align: center">
 		Edit Product Supply (<span class="required">Supply ID=<%=supplyId%></span>)
 	</h1>

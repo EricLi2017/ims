@@ -45,11 +45,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit Supply Transaction</title>
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--use the css style of input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
 
 	<h1 style="text-align: center">
 		Edit Supply Transaction (<span class="required">Batch No.=<%=batchNo%>

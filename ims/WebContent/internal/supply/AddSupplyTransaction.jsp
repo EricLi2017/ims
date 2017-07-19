@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add Supply Transaction</title>
-
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--jquery lib--%>
 <script type="text/javascript"
 	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
@@ -49,6 +50,9 @@
 </script>
 </head>
 <body>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
+
 	<h1 style="text-align: center">Add Supply Transaction</h1>
 
 	<%--input data--%>

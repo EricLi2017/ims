@@ -7,11 +7,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add Product Supply</title>
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--use the css style for input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
+
 	<h1 style="text-align: center">Add Product Supply</h1>
 
 	<%--input data--%>
@@ -34,16 +39,26 @@
 					<th class="required">Status</th>
 				</tr>
 				<tr>
-					<td><input type="text" name="productId" title=""style="width: 100%"></td>
-					<td><input type="text" name="supplierId" title=""style="width: 100%"></td>
-					<td><input type="text" name="supplierName" title=""style="width: 100%"></td>
-					<td><input type="text" name="supplierDescription" title=""style="width: 100%"></td>
-					<td><input type="text" name="supplyType" title=""style="width: 100%"></td>
-					<td><input type="text" name="supplyUrl" title=""style="width: 100%"></td>
-					<td><input type="text" name="shippedFrom" title=""style="width: 100%"></td>
-					<td><input type="text" name="unitPrice" title=""style="width: 100%"></td>
-					<td><input type="text" name="priceDescription" title=""style="width: 100%"></td>
-					<td><input type="text" name="priceTime" title=""style="width: 100%"></td>
+					<td><input type="text" name="productId" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="supplierId" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="supplierName" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="supplierDescription" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="supplyType" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="supplyUrl" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="shippedFrom" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="unitPrice" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="priceDescription" title=""
+						style="width: 100%"></td>
+					<td><input type="text" name="priceTime" title=""
+						style="width: 100%"></td>
 					<td><select name="status">
 							<option value="Active" selected>Active</option>
 							<option value="Inactive">Inactive</option>

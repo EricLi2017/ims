@@ -1,0 +1,71 @@
+.left {
+	float: left;
+	overflow: hidden;
+	margin: 0;
+	border: 1px solid white; /* DIV border color */
+	border-right: none;
+	padding: 0;
+}
+
+.left ul {
+	margin: 0;
+	padding: 0;
+}
+
+.left ul li {
+	float: left;
+	list-style: none;
+}
+
+/* level 1 menu */
+.left ul li a {
+	display: block;
+	width: auto;
+	border-right: 1px solid white; /* DIV border color */
+	background-color: purple; /* level 1 menu background color */
+	padding: 0 1.6em; /* level 1 menu padding */
+	text-align: center;
+	text-decoration: none;
+	color: white;
+}
+
+.left ul li a:hover {
+	background-color: #ff3300;
+	/*  menu background color while hovered on  */
+}
+
+.left ul li ul {
+	position: absolute;
+	display: none;
+}
+
+.left ul li ul li {
+	float: none;
+}
+
+/* level 2 menu */
+.left ul li ul li a {
+	width: auto; /* level 2 menu width*/
+	border-top: 1px dotted white; /* level 2 menu border color */
+	background-color: purple; /* level 2 menu background color */
+	padding: 0 1.6em; /* level 2 menu padding */
+	text-align: left;
+}
+
+.left ul li:hover ul {
+	display: block;
+}
+
+.middle {
+	/* 	float: none; */
+	background-color: yellow; /*//TODO TEST  */
+}
+
+.right {
+	float: right;
+	background-color: orange; /*//TODO TEST  */
+}
+
+.nav {
+	background-color: red; /*//TODO TEST  */
+}

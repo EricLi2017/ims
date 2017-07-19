@@ -127,6 +127,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Product Supply Management</title>
+<%--menu style--%>
+<link rel="stylesheet" href="../../include/css/menu.css">
 <%--jquery lib--%>
 <script type="text/javascript"
 	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
@@ -176,18 +178,8 @@
 </script>
 </head>
 <body>
-	<%--Navigation links--%>
-	<div id="navDiv">
-		<div style="float: right;">
-			hi
-			<%=user%>
-			<a href="../../user/SignOut.jsp">Sign Out</a>
-		</div>
-		<div>
-			<a href="AddSupply.jsp" target="_blank">Add Product Supply</a>
-			&nbsp;|&nbsp;
-		</div>
-	</div>
+	<%--Navigation Menu--%>
+	<%@ include file="/include/Menu.jsp"%>
 
 	<%--Page title--%>
 	<div id="titleDiv" style="text-align: center">
