@@ -117,6 +117,12 @@ body button {
 	color: #ddd;
 }
 
+/* .content */
+.content {
+	margin: 0;
+	padding: 0 2.8%;
+}
+
 /* .footer */
 .footer {
 	position: fixed;
