@@ -21,23 +21,27 @@ public class OrderBy {
 		ASC_DESC_MAP.put(ASCENDING, "asc");
 	}
 
-	private String sortedColumnSelected;
-	private Map<String, String> orderByMap;
-	private String sortOrderSelected;
+	public enum Direction {
+		UP, DOWND, LEFT, RIGHT
+	}
 
-	public OrderBy(String sortedColumnSelected, Map<String, String> orderByMap, String sortOrderSelected) {
+	private String sortedColumnCurrent;
+	private Map<String, String> orderByMap;
+	private String sortOrderCurrent;
+
+	public OrderBy(String sortedColumnCurrent, Map<String, String> orderByMap, String sortOrderCurrent) {
 		super();
-		this.sortedColumnSelected = sortedColumnSelected;
+		this.sortedColumnCurrent = sortedColumnCurrent;
 		this.orderByMap = orderByMap;
-		this.sortOrderSelected = sortOrderSelected;
+		this.sortOrderCurrent = sortOrderCurrent;
 	}
 
 	/**
-	 * Get a HTML arrow:
+	 * Get the HTML arrow in the sorted column when the column be showed
 	 * 
-	 * In the opposite sort order to the sort order selected if the sorted
-	 * column selected is valid and it is the same with the sorted column where
-	 * the HTML arrow is located in;
+	 * Get a HTML up/down arrow in the current sort order: If the current sort
+	 * condition is valid and the current sorted column is same with the sorted
+	 * column where the HTML arrow located;
 	 * 
 	 * Or get a empty string "": In any other cases
 	 * 
@@ -46,22 +50,92 @@ public class OrderBy {
 	 *         &darr;(&#8593;) or ""
 	 */
 	public String getHtmlArrow(String sortedColumnLocated) {
-		String empty = "";
-		String down = "&uarr;";
-		String up = "&darr;";
-		if (sortedColumnLocated == null || sortedColumnLocated.trim().isEmpty() || sortedColumnSelected == null
-				|| sortedColumnSelected.trim().isEmpty() || orderByMap == null || orderByMap.size() == 0
-				|| sortOrderSelected == null || sortOrderSelected.trim().isEmpty()
-				|| (!ASCENDING.equals(sortOrderSelected) && !DESCENDING.equals(sortOrderSelected))) {
-			return empty;
+		// the HTML format of arrow depends on the method getHtml()
+		//
+
+		// check if the current sort condition is valid
+		if (sortedColumnCurrent == null || sortedColumnCurrent.trim().isEmpty() || orderByMap == null
+				|| orderByMap.size() == 0 || !orderByMap.containsKey(sortedColumnCurrent)
+				|| (!ASCENDING.equals(sortOrderCurrent) && !DESCENDING.equals(sortOrderCurrent))) {
+			return getHtml(null);
 		}
 
-		if (sortedColumnLocated.equalsIgnoreCase(sortedColumnSelected) && orderByMap.containsKey(sortedColumnLocated)) {
-
-			// reverse sort order
-			return ASCENDING.equals(sortOrderSelected) ? up : down;
+		// check if the current sorted column is same with the sorted column
+		// where the HTML arrow located
+		//
+		// same column
+		if (sortedColumnCurrent.equalsIgnoreCase(sortedColumnLocated)) {
+			// in the current sort order
+			return getHtml(ASCENDING.equals(sortOrderCurrent) ? Direction.UP : Direction.DOWND);
+		} else {
+			// different column
+			return getHtml(null);
 		}
-		return empty;
+	}
+
+	/**
+	 * Get a HTML arrow if the direction is valid
+	 * 
+	 * or get a empty string ""
+	 * 
+	 * @param direction
+	 * @return
+	 */
+	protected String getHtml(Direction direction) {
+		if (direction != null) {
+			switch (direction) {
+			case UP:
+				return "&uarr;";
+			case DOWND:
+				return "&darr;";
+			case LEFT:
+				return "&larr;";
+			case RIGHT:
+				return "&rarr;";
+			}
+		}
+
+		return "";
+	}
+
+	/**
+	 * Get the HTML arrow in the sorted column when the column be clicked
+	 * 
+	 * Get a HTML up/down arrow:
+	 * 
+	 * In the current sort order if the clicked sort condition is valid and the
+	 * sorted column clicked is different with the current sorted column;
+	 * 
+	 * In the opposite sort order if the clicked sort condition is valid and the
+	 * sorted column clicked is same with the current sorted column;
+	 * 
+	 * Or get a empty string "": In any other cases
+	 * 
+	 * @param sortedColumnClicked
+	 * @return
+	 */
+	public String getHtmlArrowClicked(String sortedColumnClicked) {
+		// the HTML format of arrow depends on the method getHtml()
+		//
+
+		// check if the clicked sort condition is valid
+		if (sortedColumnClicked == null || sortedColumnClicked.trim().isEmpty() || orderByMap == null
+				|| orderByMap.size() == 0 || !orderByMap.containsKey(sortedColumnClicked)
+				|| (!ASCENDING.equals(sortOrderCurrent) && !DESCENDING.equals(sortOrderCurrent))) {
+			return getHtml(null);
+		}
+
+		// check if the clicked sorted column is same with the current sorted
+		// column
+		//
+		// different column
+		if (!sortedColumnClicked.equalsIgnoreCase(sortedColumnCurrent)) {
+			// in the current sort order
+			return getHtml(ASCENDING.equals(sortOrderCurrent) ? Direction.UP : Direction.DOWND);
+		} else {// same column
+			// in the opposite sort order
+			return getHtml(ASCENDING.equals(sortOrderCurrent) ? Direction.DOWND : Direction.UP);
+		}
 	}
 
 	/**
@@ -83,4 +157,16 @@ public class OrderBy {
 		return sortOrder;
 	}
 
+//	public static Direction getDirection(String sortOrder) {
+//		if (sortOrder != null) {
+//			switch (sortOrder) {
+//			case ASCENDING:
+//
+//				return Direction.UP;
+//			case DESCENDING:
+//				return Direction.DOWND;
+//			}
+//		}
+//		return null;
+//	}
 }

@@ -97,8 +97,10 @@
 				});
 	}
 
-	/* 
-		Reverse sort order or change sorted column
+	/** 
+		Click sorted column to reorder:
+			Reverse sort order if click the current sorted column,
+			or change sorted column to the clicked column if click non current sorted column
 		
 		How to use:
 		1: Search form set id;
@@ -106,12 +108,15 @@
 		3: Result table add A link at title TD/TH
 	 */
 	function reorder(sortCol) {
-		if ($("#sortedColumnId").val() == sortCol) {//sorted column is the same
+		//is the same sorted column 
+		if ($("#sortedColumnId").val() == sortCol) {
+			//reverse sort order
 			$("#sortOrder").val(
 <%=OrderBy.getOppositeSortOrder(sortOrder)%>
-	);//reverse sort order
+	);
 		} else {
-			$("#sortedColumnId").val(sortCol);//change sorted column id
+			//change sorted column
+			$("#sortedColumnId").val(sortCol);
 		}
 
 		//submit search form
@@ -184,7 +189,8 @@
 				<tr>
 					<th width="2%"></th>
 					<th width="8%"><a href="javascript:void(0)"
-						onclick="reorder('1')">Product ID<%=orderBy.getHtmlArrow("1")%></a></th>
+						onclick="reorder('1')">Product ID<%=orderBy.getHtmlArrow("1")%>
+					</a></th>
 					<th width="20%"><a href="javascript:void(0)"
 						onclick="reorder('2')">Name<%=orderBy.getHtmlArrow("2")%></a></th>
 					<th width="30%">Description</th>
