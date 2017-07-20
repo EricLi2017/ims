@@ -66,10 +66,10 @@
 								<option value="Inactive">Inactive</option>
 						</select></td>
 					</tr>
-					<tr>
-						<td><input type="submit" value="Submit"></td>
-					</tr>
 				</table>
+				<div>
+					<input type="submit" value="Submit">
+				</div>
 			</form>
 		</div>
 	</div>

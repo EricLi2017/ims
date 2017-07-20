@@ -50,11 +50,11 @@
 								<option value="Inactive">Inactive</option>
 						</select></td>
 					</tr>
-					<tr>
-						<td><input type="submit" value="Submit"><input
-							type="reset" value="Reset"></td>
-					</tr>
 				</table>
+				<div>
+					<input type="submit" value="Submit"><input type="reset"
+						value="Reset">
+				</div>
 			</form>
 		</div>
 	</div>
