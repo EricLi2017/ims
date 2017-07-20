@@ -141,11 +141,6 @@
 <%--jquery ui for datepicker style--%>
 <link rel="stylesheet"
 	href="../../include/js/jquery-ui-1.12.1/themes/redmond/jquery-ui.css">
-<%--define the css style of query result table--%>
-<link type="text/css" rel="stylesheet"
-	href="../../include/css/table.css">
-<%--set background color of table tr while mouseover and mouseout--%>
-<script type="text/javascript" src="../../include/js/table.js"></script>
 <%--special only for this page--%>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -242,9 +237,9 @@
 					out.print("There are no any result.");
 				} else {
 		%>
-		<div id="resultDiv" class="table-c">
+		<div id="resultDiv">
 			<table>
-				<tr align="center">
+				<tr>
 					<th></th>
 					<th><a href="javascript:void(0)" onclick="reorder('1')">Supply
 							ID<%=OrderBy.getHtmlArrow("1", sortedColumnId, orderByMap, sortOrder)%></a></th>
@@ -271,8 +266,7 @@
 								SupplyTransaction transaction = transactionAndSupply.getTransaction();
 								ProductSupply supply = transactionAndSupply.getSupply();
 				%>
-				<%--define tr class to data to active mouseover and mouseout events--%>
-				<tr class="data">
+				<tr>
 					<td><a
 						href="EditSupplyTransaction.jsp?supplyId=<%=transaction.getSupplyId()%>&batchNo=<%=transaction.getBatchNo()%>"
 						title="click to edit this transaction" target="_blank"><%=++rows%></a></td>

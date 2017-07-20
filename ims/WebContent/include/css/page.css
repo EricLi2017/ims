@@ -123,12 +123,36 @@ body button {
 	padding: 0 2.8%;
 }
 
+.content table {
+	width: 100%;
+	border-spacing: 0;
+	border: 1px solid #ddd;
+	border-bottom: none;
+	background-color: #fff;
+	padding: 0;
+	text-align: left;
+}
+
+.content table th {
+	border-bottom: 1px solid #ddd;
+	background-color: #f3f3f3;
+	padding: 0 2% 0 0;
+}
+
+.content table td {
+	border-bottom: 1px solid #ddd;
+}
+
+.content table tr:HOVER {
+	background-color: #eef5ff;
+}
+
 /* .footer */
 .footer {
-	position: fixed;
+	position: static;
 	bottom: 0;
 	left: 0;
-	margin: 0;
+	margin: 15% 0 0 0;
 	border-top: 1px solid #ddd;
 	padding: 0;
 	width: 100%;
@@ -173,5 +197,4 @@ body button {
 	float: right;
 	background-color: #f3f3f3;
 	padding: 0.8em 2.4em;
-	/* 	color: #111; */
 }
