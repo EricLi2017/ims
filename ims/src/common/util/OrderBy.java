@@ -21,38 +21,45 @@ public class OrderBy {
 		ASC_DESC_MAP.put(ASCENDING, "asc");
 	}
 
+	private String sortedColumnSelected;
+	private Map<String, String> orderByMap;
+	private String sortOrderSelected;
+
+	public OrderBy(String sortedColumnSelected, Map<String, String> orderByMap, String sortOrderSelected) {
+		super();
+		this.sortedColumnSelected = sortedColumnSelected;
+		this.orderByMap = orderByMap;
+		this.sortOrderSelected = sortOrderSelected;
+	}
+
 	/**
-	 * Get a HTML arrow in the opposite sort order if the sorted column selected
-	 * is valid and it is the same with the sorted column where the HTML arrow
-	 * is located in,
+	 * Get a HTML arrow:
 	 * 
-	 * otherwise get a empty string in other cases
-	 *
+	 * In the opposite sort order to the sort order selected if the sorted
+	 * column selected is valid and it is the same with the sorted column where
+	 * the HTML arrow is located in;
+	 * 
+	 * Or get a empty string "": In any other cases
 	 * 
 	 * @param sortedColumnLocated
-	 * @param sortedColumnSelected
-	 * @param orderByMap
-	 * @param ascDesc
-	 * @param ascDescKey
 	 * @return a HTML down/up arrow or empty string: &uarr;(&#8595;) /
 	 *         &darr;(&#8593;) or ""
 	 */
-	public static String getHtmlArrow(String sortedColumnLocated, String sortedColumnSelected,
-			Map<String, String> orderByMap, String ascDesc) {
+	public String getHtmlArrow(String sortedColumnLocated) {
 		String empty = "";
 		String down = "&uarr;";
 		String up = "&darr;";
 		if (sortedColumnLocated == null || sortedColumnLocated.trim().isEmpty() || sortedColumnSelected == null
 				|| sortedColumnSelected.trim().isEmpty() || orderByMap == null || orderByMap.size() == 0
-				|| ascDesc == null || ascDesc.trim().isEmpty()
-				|| (!ASCENDING.equals(ascDesc) && !DESCENDING.equals(ascDesc))) {
+				|| sortOrderSelected == null || sortOrderSelected.trim().isEmpty()
+				|| (!ASCENDING.equals(sortOrderSelected) && !DESCENDING.equals(sortOrderSelected))) {
 			return empty;
 		}
 
 		if (sortedColumnLocated.equalsIgnoreCase(sortedColumnSelected) && orderByMap.containsKey(sortedColumnLocated)) {
 
 			// reverse sort order
-			return ASCENDING.equals(ascDesc) ? up : down;
+			return ASCENDING.equals(sortOrderSelected) ? up : down;
 		}
 		return empty;
 	}

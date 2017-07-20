@@ -236,29 +236,30 @@
 				} else if (transactionAndSupplies.size() < 1) {
 					out.print("There are no any result.");
 				} else {
+					OrderBy orderBy = new OrderBy(sortedColumnId, orderByMap, sortOrder);
 		%>
 		<div id="resultDiv">
 			<table>
 				<tr>
 					<th></th>
 					<th><a href="javascript:void(0)" onclick="reorder('1')">Supply
-							ID<%=OrderBy.getHtmlArrow("1", sortedColumnId, orderByMap, sortOrder)%></a></th>
-					<th><a href="javascript:void(0)" onclick="reorder('2')">Quantity<%=OrderBy.getHtmlArrow("2", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							ID<%=orderBy.getHtmlArrow("1")%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('2')">Quantity<%=orderBy.getHtmlArrow("2")%></a></th>
 					<th><a href="javascript:void(0)" onclick="reorder('3')">Unit
-							Price<%=OrderBy.getHtmlArrow("3", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							Price<%=orderBy.getHtmlArrow("3")%></a></th>
 					<th>Price Description</th>
-					<th><a href="javascript:void(0)" onclick="reorder('4')">Status<%=OrderBy.getHtmlArrow("4", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('4')">Status<%=orderBy.getHtmlArrow("4")%></a></th>
 					<th><a href="javascript:void(0)" onclick="reorder('5')">Batch
-							No.<%=OrderBy.getHtmlArrow("5", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							No.<%=orderBy.getHtmlArrow("5")%></a></th>
 					<th><a href="javascript:void(0)" onclick="reorder('6')">Product
-							Price<%=OrderBy.getHtmlArrow("6", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							Price<%=orderBy.getHtmlArrow("6")%></a></th>
 					<th><a href="javascript:void(0)" onclick="reorder('7')">Shipped
-							Fee<%=OrderBy.getHtmlArrow("7", sortedColumnId, orderByMap, sortOrder)%></a></th>
-					<th><a href="javascript:void(0)" onclick="reorder('8')">Time<%=OrderBy.getHtmlArrow("8", sortedColumnId, orderByMap, sortOrder)%></a></th>
-					<th><a href="javascript:void(0)" onclick="reorder('9')">Operator<%=OrderBy.getHtmlArrow("9", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							Fee<%=orderBy.getHtmlArrow("7")%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('8')">Time<%=orderBy.getHtmlArrow("8")%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('9')">Operator<%=orderBy.getHtmlArrow("9")%></a></th>
 					<th>Transaction Description</th>
 					<th><a href="javascript:void(0)" onclick="reorder('10')">Product
-							ID<%=OrderBy.getHtmlArrow("10", sortedColumnId, orderByMap, sortOrder)%></a></th>
+							ID<%=orderBy.getHtmlArrow("10")%></a></th>
 				</tr>
 				<%
 					int rows = 0;

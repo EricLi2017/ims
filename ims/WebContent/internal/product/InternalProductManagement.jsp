@@ -177,22 +177,23 @@
 				} else if (productList.size() < 1) {
 					out.print("There are no any result.");
 				} else {
+					OrderBy orderBy = new OrderBy(sortedColumnId, orderByMap, sortOrder);
 		%>
 		<div id="resultDiv">
 			<table>
 				<tr>
 					<th width="2%"></th>
 					<th width="8%"><a href="javascript:void(0)"
-						onclick="reorder('1')">Product ID<%=OrderBy.getHtmlArrow("1", sortedColumnId, orderByMap, sortOrder)%></a></th>
+						onclick="reorder('1')">Product ID<%=orderBy.getHtmlArrow("1")%></a></th>
 					<th width="20%"><a href="javascript:void(0)"
-						onclick="reorder('2')">Name<%=OrderBy.getHtmlArrow("2", sortedColumnId, orderByMap, sortOrder)%></a></th>
+						onclick="reorder('2')">Name<%=orderBy.getHtmlArrow("2")%></a></th>
 					<th width="30%">Description</th>
 					<th width="10%"><a href="javascript:void(0)"
-						onclick="reorder('3')">Create Time<%=OrderBy.getHtmlArrow("3", sortedColumnId, orderByMap, sortOrder)%></a></th>
+						onclick="reorder('3')">Create Time<%=orderBy.getHtmlArrow("3")%></a></th>
 					<th width="2%"><a href="javascript:void(0)"
-						onclick="reorder('4')">Status<%=OrderBy.getHtmlArrow("4", sortedColumnId, orderByMap, sortOrder)%></a></th>
+						onclick="reorder('4')">Status<%=orderBy.getHtmlArrow("4")%></a></th>
 					<th width="8%"><a href="javascript:void(0)"
-						onclick="reorder('5')">ASIN<%=OrderBy.getHtmlArrow("5", sortedColumnId, orderByMap, sortOrder)%></a></th>
+						onclick="reorder('5')">ASIN<%=orderBy.getHtmlArrow("5")%></a></th>
 					<th width="10%">Supply</th>
 					<th width="10%">Transaction</th>
 				</tr>
