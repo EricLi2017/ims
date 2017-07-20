@@ -134,12 +134,12 @@
 	<%@ include file="/include/Menu.jsp"%>
 
 	<%--Page title--%>
-	<div id="titleDiv" style="text-align: center">
+	<div id="titleDiv">
 		<h1>Internal Product Management</h1>
 	</div>
 
 	<%--Search form--%>
-	<div id="searchDiv" style="text-align: center;">
+	<div id="searchDiv">
 		<form id="searchForm" action="" method="get">
 			<div style="display: inline;">
 				Product ID:<input type="text" name="productId"
