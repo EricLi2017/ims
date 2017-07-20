@@ -3,8 +3,8 @@
 	<%--right part--%>
 	<div class="right">
 		hi
-		<%=session.getAttribute("user")%>
-		<a href="user/SignOut.jsp">Sign Out</a>
+		<%=session.getAttribute("user")%><span class="seperate">|</span><a
+			href="/ims/user/SignOut.jsp">Sign Out</a>
 	</div>
 
 

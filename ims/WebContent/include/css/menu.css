@@ -1,10 +1,18 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
 .nav {
+	/* 	width: 100%; */
 	overflow: hidden;
 	margin: 0;
-	border: 1px solid white; /* DIV border color */
+	/* 	border-top: 1px solid #999; */
+	border-bottom: 1px solid #999;
 	border-right: none;
 	padding: 0;
-	background-color: red; /*//TODO TEST  */
+	background-color: #f3f3f3; /*//TODO TEST  */
+	font-family: sans-serif;
 }
 
 .left {
@@ -30,17 +38,17 @@
 .left ul li a {
 	display: block;
 	width: auto;
-	border-right: 1px solid white; /* DIV border color */
-	background-color: purple; /* level 1 menu background color */
-	padding: 0 1.6em; /* level 1 menu padding */
+	/* 	border-right: 1px solid white; DIV border color */
+	background-color: #f3f3f3; /* level 1 menu background color */
+	padding: 0.8em 2.4em; /* level 1 menu padding */
 	text-align: center;
 	text-decoration: none;
-	color: white; /* menu color */
+	color: #666; /* menu color */
+	cursor: pointer;
 }
 
 .left ul li a:hover {
-	background-color: #ff3300;
-	/*  menu background color while hovered on  */
+	color: #111;
 }
 
 .left ul li ul {
@@ -55,37 +63,45 @@
 /* level 2 menu */
 .left ul li ul li a {
 	width: auto; /* level 2 menu width*/
-	border-top: 1px dotted white; /* level 2 menu border color */
-	background-color: purple; /* level 2 menu background color */
-	padding: 0 1.6em; /* level 2 menu padding */
+	background-color: #fff; /* level 2 menu background color */
+	padding: 0.8em 2.4em; /*level 2 menu padding*/
 	text-align: left;
+}
+
+.left ul li ul li a:hover {
+	background-color: #ddd;
 }
 
 .left ul li:hover ul {
 	display: block;
+	border-top: 3px solid #333;
 }
 
 .middle {
 	/* 	float: none; */
-	background-color: purple;
+	background-color: #f3f3f3;
 }
 
 .right {
 	float: right;
-	background-color: purple;
-	color: white;
+	background-color: #f3f3f3;
+	padding: 0.8em 2.4em;
+	color: #111;
 }
 
 .right a {
-	color: white;
-	/* 	width: auto; */
-	border-right: 1px solid white; /* DIV border color */
-	background-color: purple; /* level 1 menu background color */
-	padding: 0 1.6em; /* level 1 menu padding */
+	padding: 0.8em 2.4em; /* level 1 menu padding */
 	text-align: center;
 	text-decoration: none;
+	color: #666;
 }
 
 .right  a:hover {
-	background-color: #ff3300;
+	color: #111;
+}
+
+.right .seperate {
+	padding: 0.8em 2.4em; /* level 1 menu padding */
+	text-align: center;
+	color: #999;
 }
