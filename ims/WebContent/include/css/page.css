@@ -125,6 +125,7 @@ body button {
 
 .content table {
 	width: 100%;
+	margin-top: 1em;
 	border-spacing: 0;
 	border: 1px solid #ddd;
 	border-bottom: none;

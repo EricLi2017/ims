@@ -183,12 +183,12 @@
 	<div class="content">
 
 		<%--Page title--%>
-		<div id="titleDiv" style="text-align: center">
+		<div id="titleDiv">
 			<h1>Supply Transaction Management</h1>
 		</div>
 
 		<%--Search form--%>
-		<div id="searchDiv" style="text-align: center">
+		<div id="searchDiv">
 			<form action="" method="get" id="searchForm">
 				<div style="display: inline;">
 					Status:<select name="status">

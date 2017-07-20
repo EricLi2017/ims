@@ -180,12 +180,12 @@
 	<div class="content">
 
 		<%--Page title--%>
-		<div id="titleDiv" style="text-align: center">
+		<div id="titleDiv">
 			<h1>Product Supply Management</h1>
 		</div>
 
 		<%--Search form--%>
-		<div id="searchDiv" style="text-align: center">
+		<div id="searchDiv">
 			<form action="" method="get" id="searchForm">
 				<div style="display: inline;">
 					Supply ID:<input type="text" name="supplyId" value="<%=supplyId%>"
