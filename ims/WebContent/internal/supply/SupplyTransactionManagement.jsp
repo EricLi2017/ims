@@ -177,7 +177,7 @@
 </head>
 <body>
 	<%--Page Navigation Menu --%>
-	<%@ include file="/include/Menu.jsp"%>
+	<%@ include file="/include/page/Menu.jsp"%>
 
 	<%--Page Main Content --%>
 	<div class="content">
@@ -295,6 +295,6 @@
 	</div>
 
 	<%--Page Footer --%>
-	<%@ include file="/include/Footer.jsp"%>
+	<%@ include file="/include/page/Footer.jsp"%>
 </body>
 </html>
