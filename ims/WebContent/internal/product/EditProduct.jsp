@@ -43,55 +43,63 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit Internal Product</title>
-<%--menu style--%>
-<link rel="stylesheet" href="../../include/css/menu.css">
+<%--page style--%>
+<link rel="stylesheet" href="../../include/css/page.css">
 <%--use the css style for input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
-	<%--Navigation Menu--%>
+	<%--Page Navigation Menu --%>
 	<%@ include file="/include/Menu.jsp"%>
 
-	<h1 style="text-align: center">
-		Edit Internal Product (<span class="required">Product ID=<%=productId%></span>)
-	</h1>
+	<%--Page Main Content --%>
+	<div class="content">
 
-	<%--edit product data--%>
-	<div>
-		<form method="post" action="../service/EditProductService.jsp">
-			<table align="center" width="100%">
-				<tr>
-					<th width="30%" class="required">Name</th>
-					<th width="50%">Description</th>
-					<th width="10%">ASIN</th>
-					<th width="10%" class="required">Status</th>
-				</tr>
-				<tr>
-					<td><input type="text" name="name"
-						value="<%=Filter.nullFilter(product.getName())%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="description"
-						value="<%=Filter.nullFilter(product.getDescription())%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="asin"
-						value="<%=Filter.nullFilter(product.getAsin())%>" title=""
-						style="width: 100%"></td>
-					<td><select name="status">
-							<option value="Active"
-								<%="Active".equalsIgnoreCase(product.getStatus()) ? "selected" : ""%>>Active</option>
-							<option value="Inactive"
-								<%="Inactive".equalsIgnoreCase(product.getStatus()) ? "selected" : ""%>>Inactive</option>
-					</select></td>
-				</tr>
-			</table>
-			<div style="text-align: center;">
-				<input type="hidden" name="id" value="<%=product.getProductId()%>"><input
-					type="submit" value="Submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-					type="reset" value="Reset">
-			</div>
-		</form>
+		<h1 style="text-align: center">
+			Edit Internal Product (<span class="required">Product ID=<%=productId%></span>)
+		</h1>
+
+		<%--edit product data--%>
+		<div>
+			<form method="post" action="../service/EditProductService.jsp">
+				<table align="center" width="100%">
+					<tr>
+						<th width="30%" class="required">Name</th>
+						<th width="50%">Description</th>
+						<th width="10%">ASIN</th>
+						<th width="10%" class="required">Status</th>
+					</tr>
+					<tr>
+						<td><input type="text" name="name"
+							value="<%=Filter.nullFilter(product.getName())%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="description"
+							value="<%=Filter.nullFilter(product.getDescription())%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="asin"
+							value="<%=Filter.nullFilter(product.getAsin())%>" title=""
+							style="width: 100%"></td>
+						<td><select name="status">
+								<option value="Active"
+									<%="Active".equalsIgnoreCase(product.getStatus()) ? "selected" : ""%>>Active</option>
+								<option value="Inactive"
+									<%="Inactive".equalsIgnoreCase(product.getStatus()) ? "selected" : ""%>>Inactive</option>
+						</select></td>
+					</tr>
+				</table>
+				<div style="text-align: center;">
+					<input type="hidden" name="id" value="<%=product.getProductId()%>"><input
+						type="submit" value="Submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+						type="reset" value="Reset">
+				</div>
+			</form>
+		</div>
 	</div>
+
+
+	<%--Page Footer --%>
+	<%@ include file="/include/Footer.jsp"%>
 
 </body>
 </html>

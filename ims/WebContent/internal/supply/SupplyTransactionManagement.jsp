@@ -130,8 +130,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Supply Transaction Management</title>
-<%--menu style--%>
-<link rel="stylesheet" href="../../include/css/menu.css">
+<%--page style--%>
+<link rel="stylesheet" href="../../include/css/page.css">
 <%--jquery lib--%>
 <script type="text/javascript"
 	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
@@ -181,120 +181,126 @@
 </script>
 </head>
 <body>
-	<%--Navigation Menu : Permission Check included--%>
+	<%--Page Navigation Menu --%>
 	<%@ include file="/include/Menu.jsp"%>
 
-	<%--Page title--%>
-	<div id="titleDiv" style="text-align: center">
-		<h1>Supply Transaction Management</h1>
+	<%--Page Main Content --%>
+	<div class="content">
+
+		<%--Page title--%>
+		<div id="titleDiv" style="text-align: center">
+			<h1>Supply Transaction Management</h1>
+		</div>
+
+		<%--Search form--%>
+		<div id="searchDiv" style="text-align: center">
+			<form action="" method="get" id="searchForm">
+				<div style="display: inline;">
+					Status:<select name="status">
+						<option value=""></option>
+						<option value="Active"
+							<%="Active".equalsIgnoreCase(status) ? "selected" : ""%>>Active</option>
+						<option value="Inactive"
+							<%="Inactive".equalsIgnoreCase(status) ? "selected" : ""%>>Inactive</option>
+					</select>
+				</div>
+				<div style="display: inline;">
+					Supply ID:<input type="text" name="supplyId" value="<%=supplyId%>"
+						title="">
+				</div>
+				<div style="display: inline;">
+					Batch No.:<input type="text" name="batchNo" value="<%=batchNo%>"
+						title="">
+				</div>
+				<div style="display: inline;">
+					Date From:<input type="text" id="dateAfter" name="dateAfter"
+						value="<%=dateAfter%>" title="">
+				</div>
+				<div style="display: inline;">
+					Date To:<input type="text" id="dateBefore" name="dateBefore"
+						value="<%=dateBefore%>" title="">
+				</div>
+				<div style="display: inline;">
+					Product ID:<input type="text" name="productId"
+						value="<%=productId%>" title="">
+				</div>
+				<div style="display: inline;">
+					<input type="hidden" id="sortedColumnId" name="sortedColumnId"
+						value="<%=sortedColumnId%>"> <input type="hidden"
+						id="sortOrder" name="sortOrder" value="<%=sortOrder%>"><input
+						type="submit" value="Search" title="">
+				</div>
+			</form>
+		</div>
+
+		<%--Search result--%>
+		<%
+			if (isQuery) {
+				if (transactionAndSupplies == null) {
+					out.print("<font color=red>oh no, something is wrong while searching</font>");
+				} else if (transactionAndSupplies.size() < 1) {
+					out.print("There are no any result.");
+				} else {
+		%>
+		<div id="resultDiv" class="table-c">
+			<table>
+				<tr align="center">
+					<th></th>
+					<th><a href="javascript:void(0)" onclick="reorder('1')">Supply
+							ID<%=OrderBy.getHtmlArrow("1", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('2')">Quantity<%=OrderBy.getHtmlArrow("2", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('3')">Unit
+							Price<%=OrderBy.getHtmlArrow("3", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th>Price Description</th>
+					<th><a href="javascript:void(0)" onclick="reorder('4')">Status<%=OrderBy.getHtmlArrow("4", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('5')">Batch
+							No.<%=OrderBy.getHtmlArrow("5", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('6')">Product
+							Price<%=OrderBy.getHtmlArrow("6", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('7')">Shipped
+							Fee<%=OrderBy.getHtmlArrow("7", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('8')">Time<%=OrderBy.getHtmlArrow("8", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th><a href="javascript:void(0)" onclick="reorder('9')">Operator<%=OrderBy.getHtmlArrow("9", sortedColumnId, orderByMap, sortOrder)%></a></th>
+					<th>Transaction Description</th>
+					<th><a href="javascript:void(0)" onclick="reorder('10')">Product
+							ID<%=OrderBy.getHtmlArrow("10", sortedColumnId, orderByMap, sortOrder)%></a></th>
+				</tr>
+				<%
+					int rows = 0;
+							for (TransactionAndSupply transactionAndSupply : transactionAndSupplies) {
+								SupplyTransaction transaction = transactionAndSupply.getTransaction();
+								ProductSupply supply = transactionAndSupply.getSupply();
+				%>
+				<%--define tr class to data to active mouseover and mouseout events--%>
+				<tr class="data">
+					<td><a
+						href="EditSupplyTransaction.jsp?supplyId=<%=transaction.getSupplyId()%>&batchNo=<%=transaction.getBatchNo()%>"
+						title="click to edit this transaction" target="_blank"><%=++rows%></a></td>
+					<td><%=transaction.getSupplyId()%></td>
+					<td><%=transaction.getQuantity()%></td>
+					<td><%=transaction.getUnitPrice()%></td>
+					<td><%=Filter.nullFilter(transaction.getPriceDescription())%></td>
+					<td><%=transaction.getStatus()%></td>
+					<td><%=transaction.getBatchNo()%></td>
+					<td><%=transaction.getProductPrice()%></td>
+					<td><%=transaction.getShippedFee()%></td>
+					<td><%=transaction.getTime()%></td>
+					<td><%=transaction.getOperator()%></td>
+					<td><%=Filter.nullFilter(transaction.getTransactionDescription())%></td>
+					<td><%=supply.getProductId() == null ? "" : supply.getProductId()%></td>
+				</tr>
+				<%
+					} //loop end
+				%>
+			</table>
+		</div>
+		<%
+			} //show query result end
+			} // is query end
+		%>
 	</div>
 
-	<%--Search form--%>
-	<div id="searchDiv" style="text-align: center">
-		<form action="" method="get" id="searchForm">
-			<div style="display: inline;">
-				Status:<select name="status">
-					<option value=""></option>
-					<option value="Active"
-						<%="Active".equalsIgnoreCase(status) ? "selected" : ""%>>Active</option>
-					<option value="Inactive"
-						<%="Inactive".equalsIgnoreCase(status) ? "selected" : ""%>>Inactive</option>
-				</select>
-			</div>
-			<div style="display: inline;">
-				Supply ID:<input type="text" name="supplyId" value="<%=supplyId%>"
-					title="">
-			</div>
-			<div style="display: inline;">
-				Batch No.:<input type="text" name="batchNo" value="<%=batchNo%>"
-					title="">
-			</div>
-			<div style="display: inline;">
-				Date From:<input type="text" id="dateAfter" name="dateAfter"
-					value="<%=dateAfter%>" title="">
-			</div>
-			<div style="display: inline;">
-				Date To:<input type="text" id="dateBefore" name="dateBefore"
-					value="<%=dateBefore%>" title="">
-			</div>
-			<div style="display: inline;">
-				Product ID:<input type="text" name="productId"
-					value="<%=productId%>" title="">
-			</div>
-			<div style="display: inline;">
-				<input type="hidden" id="sortedColumnId" name="sortedColumnId"
-					value="<%=sortedColumnId%>"> <input type="hidden"
-					id="sortOrder" name="sortOrder" value="<%=sortOrder%>"><input
-					type="submit" value="Search" title="">
-			</div>
-		</form>
-	</div>
-
-	<%--Search result--%>
-	<%
-		if (isQuery) {
-			if (transactionAndSupplies == null) {
-				out.print("<font color=red>oh no, something is wrong while searching</font>");
-			} else if (transactionAndSupplies.size() < 1) {
-				out.print("There are no any result.");
-			} else {
-	%>
-	<div id="resultDiv" class="table-c">
-		<table>
-			<tr align="center">
-				<th></th>
-				<th><a href="javascript:void(0)" onclick="reorder('1')">Supply
-						ID<%=OrderBy.getHtmlArrow("1", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('2')">Quantity<%=OrderBy.getHtmlArrow("2", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('3')">Unit
-						Price<%=OrderBy.getHtmlArrow("3", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th>Price Description</th>
-				<th><a href="javascript:void(0)" onclick="reorder('4')">Status<%=OrderBy.getHtmlArrow("4", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('5')">Batch
-						No.<%=OrderBy.getHtmlArrow("5", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('6')">Product
-						Price<%=OrderBy.getHtmlArrow("6", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('7')">Shipped
-						Fee<%=OrderBy.getHtmlArrow("7", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('8')">Time<%=OrderBy.getHtmlArrow("8", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th><a href="javascript:void(0)" onclick="reorder('9')">Operator<%=OrderBy.getHtmlArrow("9", sortedColumnId, orderByMap, sortOrder)%></a></th>
-				<th>Transaction Description</th>
-				<th><a href="javascript:void(0)" onclick="reorder('10')">Product
-						ID<%=OrderBy.getHtmlArrow("10", sortedColumnId, orderByMap, sortOrder)%></a></th>
-			</tr>
-			<%
-				int rows = 0;
-						for (TransactionAndSupply transactionAndSupply : transactionAndSupplies) {
-							SupplyTransaction transaction = transactionAndSupply.getTransaction();
-							ProductSupply supply = transactionAndSupply.getSupply();
-			%>
-			<%--define tr class to data to active mouseover and mouseout events--%>
-			<tr class="data">
-				<td><a
-					href="EditSupplyTransaction.jsp?supplyId=<%=transaction.getSupplyId()%>&batchNo=<%=transaction.getBatchNo()%>"
-					title="click to edit this transaction" target="_blank"><%=++rows%></a></td>
-				<td><%=transaction.getSupplyId()%></td>
-				<td><%=transaction.getQuantity()%></td>
-				<td><%=transaction.getUnitPrice()%></td>
-				<td><%=Filter.nullFilter(transaction.getPriceDescription())%></td>
-				<td><%=transaction.getStatus()%></td>
-				<td><%=transaction.getBatchNo()%></td>
-				<td><%=transaction.getProductPrice()%></td>
-				<td><%=transaction.getShippedFee()%></td>
-				<td><%=transaction.getTime()%></td>
-				<td><%=transaction.getOperator()%></td>
-				<td><%=Filter.nullFilter(transaction.getTransactionDescription())%></td>
-				<td><%=supply.getProductId() == null ? "" : supply.getProductId()%></td>
-			</tr>
-			<%
-				} //loop end
-			%>
-		</table>
-	</div>
-	<%
-		} //show query result end
-		} // is query end
-	%>
-
+	<%--Page Footer --%>
+	<%@ include file="/include/Footer.jsp"%>
 </body>
 </html>

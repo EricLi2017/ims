@@ -45,87 +45,94 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit Supply Transaction</title>
-<%--menu style--%>
-<link rel="stylesheet" href="../../include/css/menu.css">
+<%--page style--%>
+<link rel="stylesheet" href="../../include/css/page.css">
 <%--use the css style of input area --%>
 <link type="text/css" rel="stylesheet"
 	href="../../include/css/input.css">
 </head>
 <body>
-	<%--Navigation Menu--%>
+	<%--Page Navigation Menu --%>
 	<%@ include file="/include/Menu.jsp"%>
 
-	<h1 style="text-align: center">
-		Edit Supply Transaction (<span class="required">Batch No.=<%=batchNo%>
-			Supply ID=<%=supplyId%></span>)
-	</h1>
+	<%--Page Main Content --%>
+	<div class="content">
 
-	<%--input data--%>
-	<div>
-		<form method="post"
-			action="../service/EditSupplyTransactionService.jsp">
-			<table align="center" width="100%">
-				<tr>
-					<!-- 									<th>Supply ID</th> -->
-					<th class="required">Supply ID</th>
-					<th class="required">Quantity</th>
-					<th class="required">Unit Price</th>
-					<th>Price Description</th>
-					<th class="required">Status</th>
-					<th class="required">Batch No.</th>
-					<th class="required">Product Price</th>
-					<th class="required">Shipped Fee</th>
-					<th class="required">Time</th>
-					<th class="required">Operator</th>
-					<th>Transaction Description</th>
-				</tr>
-				<tr>
-					<td><%=transaction.getSupplyId()%></td>
-					<td><input type="text" name="quantity"
-						value="<%=transaction.getQuantity()%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="unitPrice"
-						value="<%=transaction.getUnitPrice()%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="priceDescription"
-						value="<%=Filter.nullFilter(transaction.getPriceDescription())%>"
-						title="" style="width: 100%"></td>
-					<td><select name="status">
-							<option value="Paid"
-								<%="Paid".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Paid</option>
-							<option value="Unpaid"
-								<%="Unpaid".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Unpaid</option>
-							<option value="Stopped"
-								<%="Stopped".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Stopped</option>
-							<option value="Received"
-								<%="Received".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Received</option>
-					</select></td>
-					<td><%=transaction.getBatchNo()%></td>
-					<td><input type="text" name="productPrice"
-						value="<%=transaction.getProductPrice()%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="shippedFee"
-						value="<%=transaction.getShippedFee()%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="time"
-						value="<%=transaction.getTime()%>" title="" style="width: 100%"></td>
-					<td><input type="text" name="operator"
-						value="<%=transaction.getOperator()%>" title=""
-						style="width: 100%"></td>
-					<td><input type="text" name="transactionDescription"
-						value="<%=Filter.nullFilter(transaction.getTransactionDescription())%>"
-						title="" style="width: 100%"></td>
-				</tr>
-			</table>
-			<div style="text-align: center;">
-				<input type="hidden" name="supplyId"
-					value="<%=transaction.getSupplyId()%>"> <input
-					type="hidden" name="batchNo" value="<%=transaction.getBatchNo()%>">
-				<input type="submit" value="Submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-					type="reset" value="Reset">
-			</div>
-		</form>
+		<h1 style="text-align: center">
+			Edit Supply Transaction (<span class="required">Batch No.=<%=batchNo%>
+				Supply ID=<%=supplyId%></span>)
+		</h1>
+
+		<%--input data--%>
+		<div>
+			<form method="post"
+				action="../service/EditSupplyTransactionService.jsp">
+				<table align="center" width="100%">
+					<tr>
+						<!-- 									<th>Supply ID</th> -->
+						<th class="required">Supply ID</th>
+						<th class="required">Quantity</th>
+						<th class="required">Unit Price</th>
+						<th>Price Description</th>
+						<th class="required">Status</th>
+						<th class="required">Batch No.</th>
+						<th class="required">Product Price</th>
+						<th class="required">Shipped Fee</th>
+						<th class="required">Time</th>
+						<th class="required">Operator</th>
+						<th>Transaction Description</th>
+					</tr>
+					<tr>
+						<td><%=transaction.getSupplyId()%></td>
+						<td><input type="text" name="quantity"
+							value="<%=transaction.getQuantity()%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="unitPrice"
+							value="<%=transaction.getUnitPrice()%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="priceDescription"
+							value="<%=Filter.nullFilter(transaction.getPriceDescription())%>"
+							title="" style="width: 100%"></td>
+						<td><select name="status">
+								<option value="Paid"
+									<%="Paid".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Paid</option>
+								<option value="Unpaid"
+									<%="Unpaid".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Unpaid</option>
+								<option value="Stopped"
+									<%="Stopped".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Stopped</option>
+								<option value="Received"
+									<%="Received".equalsIgnoreCase(transaction.getStatus()) ? "selected" : ""%>>Received</option>
+						</select></td>
+						<td><%=transaction.getBatchNo()%></td>
+						<td><input type="text" name="productPrice"
+							value="<%=transaction.getProductPrice()%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="shippedFee"
+							value="<%=transaction.getShippedFee()%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="time"
+							value="<%=transaction.getTime()%>" title="" style="width: 100%"></td>
+						<td><input type="text" name="operator"
+							value="<%=transaction.getOperator()%>" title=""
+							style="width: 100%"></td>
+						<td><input type="text" name="transactionDescription"
+							value="<%=Filter.nullFilter(transaction.getTransactionDescription())%>"
+							title="" style="width: 100%"></td>
+					</tr>
+				</table>
+				<div style="text-align: center;">
+					<input type="hidden" name="supplyId"
+						value="<%=transaction.getSupplyId()%>"> <input
+						type="hidden" name="batchNo" value="<%=transaction.getBatchNo()%>">
+					<input type="submit" value="Submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+						type="reset" value="Reset">
+				</div>
+			</form>
+		</div>
 	</div>
+
+	<%--Page Footer --%>
+	<%@ include file="/include/Footer.jsp"%>
 
 </body>
 </html>
