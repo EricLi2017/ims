@@ -1,8 +1,7 @@
 <%--Navigation Menu--%>
-<div class="nav">
+<div class="menu">
 	<%--right part--%>
 	<div class="right">
-		hi
 		<%=session.getAttribute("user")%><span class="seperate">|</span><a
 			href="/ims/user/SignOut.jsp">Sign Out</a>
 	</div>
