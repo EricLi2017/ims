@@ -19,10 +19,15 @@ import java.util.*;
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
 
+import amazon.mws.SellerConfig;
+
 /** Sample call for ListOrderItems. */
 public class ListOrderItemsMWS {
-	private static String sellerId = "ASPJUC5MEFXYK";
-	// private static String marketplaceId = "ATVPDKIKX0DER";
+	/** Seller Seller ID. */
+	private static String sellerId = SellerConfig.sellerId;
+	/** Seller Marketplace ID. */
+	// private static String marketplaceId = SellerConfig.marketplaceId;
+
 	// 该 ListOrderItems 和 ListOrderItemsByNextToken 操作共享的最大请求限额为 30 个，恢复速率为每 2
 	// 秒钟 1 个请求
 

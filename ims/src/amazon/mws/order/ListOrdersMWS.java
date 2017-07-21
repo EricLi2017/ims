@@ -22,12 +22,17 @@ import com.amazonservices.mws.client.*;
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
 
+import amazon.mws.SellerConfig;
+
 /**
  * Sample call for ListOrders.
  */
 public class ListOrdersMWS {
-    private static String sellerId = "ASPJUC5MEFXYK";
-    private static String marketplaceId = "ATVPDKIKX0DER";
+	/** Seller Seller ID. */
+	private static String sellerId = SellerConfig.sellerId;
+	/** Seller Marketplace ID. */
+	private static String marketplaceId = SellerConfig.marketplaceId;
+	
     // 该 ListOrders 和 ListOrdersByNextToken 操作的最大请求限额为 6 个，恢复速率为每分钟 1 个请求
     private static Integer maxResultsPerPage = 100;// 1 to 100//TODO
 

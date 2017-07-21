@@ -12,10 +12,20 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInvento
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ResponseHeaderMetadata;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.SellerSkuList;
 
+import amazon.mws.SellerConfig;
+
 public class ListInventoryMWS {
-	private static String sellerId = "ASPJUC5MEFXYK";
-	private static String marketplaceId = "ATVPDKIKX0DER";
-	private static String responseGroup = "Basic";// Basic or Detailed
+	/** Seller Seller ID. */
+	private static String sellerId = SellerConfig.sellerId;
+	/** Seller Marketplace ID. */
+	private static String marketplaceId = SellerConfig.marketplaceId;
+
+	// 该 ListInventorySupply 操作的最大请求限额为 30 个，恢复速率为每秒钟 2 个请求。
+	//
+	// 为您已经发运至亚马逊配送中心的商品指定的卖家 SKU。最大值：50
+	public static int SKU_MAX_NUM = 50;
+	// Basic or Detailed
+	private static String responseGroup = "Basic";
 
 	/**
 	 * Call the service, log response and exceptions.
