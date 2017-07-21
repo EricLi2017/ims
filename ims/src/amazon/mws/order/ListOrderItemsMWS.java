@@ -21,15 +21,18 @@ import com.amazonservices.mws.orders._2013_09_01.model.*;
 
 import amazon.mws.SellerConfig;
 
-/** Sample call for ListOrderItems. */
+/**
+ * Throttling
+ * 
+ * The ListOrderItems and ListOrderItemsByNextToken operations together share a
+ * maximum request quota of 30 and a restore rate of one request every two
+ * seconds.
+ */
 public class ListOrderItemsMWS {
 	/** Seller Seller ID. */
 	private static String sellerId = SellerConfig.sellerId;
 	/** Seller Marketplace ID. */
 	// private static String marketplaceId = SellerConfig.marketplaceId;
-
-	// 该 ListOrderItems 和 ListOrderItemsByNextToken 操作共享的最大请求限额为 30 个，恢复速率为每 2
-	// 秒钟 1 个请求
 
 	/**
 	 * Call the service, log response and exceptions.

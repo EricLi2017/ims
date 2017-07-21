@@ -14,18 +14,44 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.SellerSkuLi
 
 import amazon.mws.SellerConfig;
 
+/**
+ * Throttling
+ * 
+ * The ListInventorySupply operation has a maximum request quota of 30 and a
+ * restore rate of two requests every second.
+ * 
+ * Seller SKUs for items that you have shipped to an Amazon fulfillment center.
+ * Maximum: 50
+ * 
+ * Note: There is no NextToken if the request SKU number is not more than the
+ * Maximum 50
+ */
 public class ListInventoryMWS {
 	/** Seller Seller ID. */
 	private static String sellerId = SellerConfig.sellerId;
 	/** Seller Marketplace ID. */
 	private static String marketplaceId = SellerConfig.marketplaceId;
 
-	// 该 ListInventorySupply 和 ListInventorySupplyByNextToken 操作的 最大请求限额为 30 个，恢复速率为每秒钟 2 个请求。
-	//
-	// 为您已经发运至亚马逊配送中心的商品指定的卖家 SKU。最大值：50
-	// 如果每次按最大值请求，就可以一次全部返回，没有NextToken
+	/**
+	 * A list of seller SKUs for items that you want inventory availability
+	 * information about.
+	 * 
+	 * Seller SKUs for items that you have shipped to an Amazon fulfillment
+	 * center. Maximum: 50
+	 */
 	public static int SKU_MAX_NUM = 50;
-	// Basic or Detailed
+	/**
+	 * Indicates whether or not you want the ListInventorySupply operation to
+	 * return the SupplyDetail element.
+	 * 
+	 * ResponseGroup values:
+	 * 
+	 * Basic - Does not include the SupplyDetail element in the response
+	 * 
+	 * Detailed - Includes the SupplyDetail element in the response
+	 * 
+	 * Default: Basic
+	 */
 	private static String responseGroup = "Basic";
 
 	/**
