@@ -20,9 +20,10 @@ public class ListInventoryMWS {
 	/** Seller Marketplace ID. */
 	private static String marketplaceId = SellerConfig.marketplaceId;
 
-	// 该 ListInventorySupply 操作的最大请求限额为 30 个，恢复速率为每秒钟 2 个请求。
+	// 该 ListInventorySupply 和 ListInventorySupplyByNextToken 操作的 最大请求限额为 30 个，恢复速率为每秒钟 2 个请求。
 	//
 	// 为您已经发运至亚马逊配送中心的商品指定的卖家 SKU。最大值：50
+	// 如果每次按最大值请求，就可以一次全部返回，没有NextToken
 	public static int SKU_MAX_NUM = 50;
 	// Basic or Detailed
 	private static String responseGroup = "Basic";
