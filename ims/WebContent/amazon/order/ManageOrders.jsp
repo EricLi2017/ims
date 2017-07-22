@@ -24,27 +24,31 @@
 <script type="text/javascript" src="../../include/js/table.js"></script>
 <%--special only for this page--%>
 <script type="text/javascript" language="javascript">
-        $(document).ready(function () {
-            /*set date*/
-            $("#dateAfter").datepicker({dateFormat: "yy-mm-dd"});
-            $("#dateBefore").datepicker({dateFormat: "yy-mm-dd"});
+	$(document).ready(function() {
+		/*set date*/
+		$("#dateAfter").datepicker({
+			dateFormat : "yy-mm-dd"
+		});
+		$("#dateBefore").datepicker({
+			dateFormat : "yy-mm-dd"
+		});
 
-        });//end of $(document).ready()
+	});//end of $(document).ready()
 
-        function sub() {
-            if ($("#dateAfter").val() == "") {
-                window.alert('Please input correct date!');
-                $("#dateAfter").focus();
-                return false;
-            }
-            if ($("#dateBefore").val() == "") {
-                window.alert('Please input correct date!');
-                $("#dateBefore").focus();
-                return false;
-            }
-            return true;
-        }
-    </script>
+	function sub() {
+		if ($("#dateAfter").val() == "") {
+			window.alert('Please input correct date!');
+			$("#dateAfter").focus();
+			return false;
+		}
+		if ($("#dateBefore").val() == "") {
+			window.alert('Please input correct date!');
+			$("#dateBefore").focus();
+			return false;
+		}
+		return true;
+	}
+</script>
 </head>
 <body>
 
@@ -59,7 +63,7 @@
 		<tr align="center">
 			<th>Time</th>
 			<td>Current Time Zone : <%=currentTZone.getID()%> , <%=currentTZone.getRawOffset() >= 0 ? "+" : ""%><%=currentTZone.getRawOffset() / 3600000%>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Time:<%=Time.getNowTime(currentTZone)%>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Time:<%=Time.getTime(currentTZone, new Timestamp(System.currentTimeMillis()))%>
 			</td>
 		</tr>
 	</table>
@@ -89,10 +93,10 @@
 
 	<!-- Query result -->
 	<%
-    //action when query submit
-    //
-    if (isQuery) {
-%>
+		//action when query submit
+		//
+		if (isQuery) {
+	%>
 	<p></p>
 	<div>
 		<table width="100%">
@@ -136,8 +140,8 @@
 		</table>
 	</div>
 	<%
-    }//end of if(isQuery)
-%>
+		} //end of if(isQuery)
+	%>
 
 </body>
 </html>

@@ -1,3 +1,4 @@
+<%@page import="java.sql.Timestamp"%>
 <%@page import="amazon.mws.order.SkuSum"%>
 <%@page import="amazon.mws.order.ListOrderAndOrderItemsManager"%>
 <%@page import="java.util.List"%>
@@ -37,7 +38,7 @@
 		if (dateAfter != null && !"".equals(dateAfter)) {
 			isDateAfterValid = false;
 			try {
-				createdAfter = Time.getTime(currentTZone, sdf.parse(dateAfter).getTime());
+				createdAfter = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateAfter).getTime()));
 				isDateAfterValid = true;
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -46,7 +47,7 @@
 		if (dateBefore != null && !"".equals(dateBefore)) {
 			isDateBeforeValid = false;
 			try {
-				createdBefore = Time.getTime(currentTZone, sdf.parse(dateBefore).getTime());
+				createdBefore = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateBefore).getTime()));
 				isDateBeforeValid = true;
 			} catch (ParseException e) {
 				e.printStackTrace();

@@ -1,3 +1,4 @@
+<%@page import="java.sql.Timestamp"%>
 <%@page import="amazon.mws.order.ListOrdersManager"%>
 <%@page import="common.util.Time"%>
 <%@page import="javax.xml.datatype.XMLGregorianCalendar"%>
@@ -31,8 +32,8 @@
 		XMLGregorianCalendar createdBefore = null;
 		if (dateAfter != null && !"".equals(dateAfter) && dateBefore != null && !"".equals(dateBefore)) {
 			try {
-				createdAfter = Time.getTime(currentTZone, sdf.parse(dateAfter).getTime());
-				createdBefore = Time.getTime(currentTZone, sdf.parse(dateBefore).getTime());
+				createdAfter = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateAfter).getTime()));
+				createdBefore = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateBefore).getTime()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

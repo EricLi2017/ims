@@ -72,8 +72,8 @@ public class ListOrdersDatabase {
                     ps.setString(1, order.getAmazonOrderId());
                     ps.setString(2, order.getSellerOrderId());
                     // PST time
-                    ps.setTimestamp(3, Time.getTimeInPST(order.getPurchaseDate()));
-                    ps.setTimestamp(4, Time.getTimeInPST(order.getLastUpdateDate()));
+                    ps.setTimestamp(3, Time.getTime(order.getPurchaseDate()));
+                    ps.setTimestamp(4, Time.getTime(order.getLastUpdateDate()));
                     ps.setString(5, order.getSalesChannel());
                     ps.setString(6, order.getFulfillmentChannel());
                     ps.setString(7, order.getIsBusinessOrder() == null ? null : order.getIsBusinessOrder().toString());

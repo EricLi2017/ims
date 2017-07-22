@@ -73,8 +73,8 @@ public class ListOrdersManager {
         if (createdAfter == null || createdBefore == null)
             return -1;
 
-        return new ListOrdersDatabase().selectCountByPruchaseDate(Time.getTimeInPST(createdAfter),
-                Time.getTimeInPST(createdBefore));
+        return new ListOrdersDatabase().selectCountByPruchaseDate(Time.getTime(createdAfter),
+                Time.getTime(createdBefore));
     }
 
 
@@ -207,7 +207,7 @@ public class ListOrdersManager {
         createdBefore.setTime(0, 0, 0);
 
         System.out.println(createdAfter);
-        System.out.println(common.util.Time.getTimeInPST(createdAfter));
+        System.out.println(common.util.Time.getTime(createdAfter));
 
         // int rows = insertShippedOrders(createdAfter, createdBefore);
         // System.out.println("insert " + rows + " rows");

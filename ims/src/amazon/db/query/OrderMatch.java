@@ -23,7 +23,7 @@ public class OrderMatch {
     public OrderMatchResult check(XMLGregorianCalendar createdAfter,
                                   XMLGregorianCalendar createdBefore) {
 
-        return check(Time.getTimeInPST(createdAfter), Time.getTimeInPST(createdBefore));
+        return check(Time.getTime(createdAfter), Time.getTime(createdBefore));
     }
 
     /**

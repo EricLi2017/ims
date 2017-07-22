@@ -46,7 +46,7 @@
 		if (dateAfter != null && !"".equals(dateAfter)) {
 			isDateAfterValid = false;
 			try {
-				createdAfter = Time.getTime(currentTZone, sdf.parse(dateAfter).getTime());
+				createdAfter = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateAfter).getTime()));
 				isDateAfterValid = true;
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -55,7 +55,7 @@
 		if (dateBefore != null && !"".equals(dateBefore)) {
 			isDateBeforeValid = false;
 			try {
-				createdBefore = Time.getTime(currentTZone, sdf.parse(dateBefore).getTime());
+				createdBefore = Time.getTime(currentTZone, new Timestamp(sdf.parse(dateBefore).getTime()));
 				isDateBeforeValid = true;
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -80,7 +80,7 @@
 		orderMatchResult = new OrderMatch().check(createdAfter, createdBefore);
 
 		amazonOrderIds = new ListOrdersAndOrderItemsDatabase().selectOrderIdsWithoutOrderItemsByPruchaseDate(
-				Time.getTimeInPST(createdAfter), Time.getTimeInPST(createdBefore));
+				Time.getTime(createdAfter), Time.getTime(createdBefore));
 
 		System.out.println("there are " + rows + " rows with order items");
 		System.out.println("there are " + noRows + " rows without order items");

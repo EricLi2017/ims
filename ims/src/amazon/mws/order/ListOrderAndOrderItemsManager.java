@@ -19,8 +19,8 @@ public class ListOrderAndOrderItemsManager {
         if (createdAfter == null || createdBefore == null)
             return null;
 
-        return new ListOrdersAndOrderItemsDatabase().selectSumByPruchaseDate(Time.getTimeInPST(createdAfter),
-                Time.getTimeInPST(createdBefore));
+        return new ListOrdersAndOrderItemsDatabase().selectSumByPruchaseDate(Time.getTime(createdAfter),
+                Time.getTime(createdBefore));
     }
 
     /**
@@ -35,7 +35,7 @@ public class ListOrderAndOrderItemsManager {
         // query database to get amazon order id list for those order that has
         // no related order items
         List<String> amazonOrderIds = new ListOrdersAndOrderItemsDatabase()
-                .selectOrderIdsWithoutOrderItemsByPruchaseDate(Time.getTimeInPST(createdAfter), Time.getTimeInPST(createdBefore));
+                .selectOrderIdsWithoutOrderItemsByPruchaseDate(Time.getTime(createdAfter), Time.getTime(createdBefore));
         if (amazonOrderIds == null || amazonOrderIds.size() == 0) {
             return rows;
         }
@@ -182,7 +182,7 @@ public class ListOrderAndOrderItemsManager {
         if (createdAfter == null || createdBefore == null)
             return -1;
         return new ListOrdersAndOrderItemsDatabase()
-                .selectCountWithOrderItemsByPruchaseDate(Time.getTimeInPST(createdAfter), Time.getTimeInPST(createdBefore));
+                .selectCountWithOrderItemsByPruchaseDate(Time.getTime(createdAfter), Time.getTime(createdBefore));
     }
 
     /**
@@ -194,7 +194,7 @@ public class ListOrderAndOrderItemsManager {
             return -1;
 
         return new ListOrdersAndOrderItemsDatabase()
-                .selectCountWithoutOrderItemsByPruchaseDate(Time.getTimeInPST(createdAfter), Time.getTimeInPST(createdBefore));
+                .selectCountWithoutOrderItemsByPruchaseDate(Time.getTime(createdAfter), Time.getTime(createdBefore));
     }
 
     public static void main(String... strings) {
@@ -212,7 +212,7 @@ public class ListOrderAndOrderItemsManager {
         createdBefore.setTime(0, 0, 0);
 
         System.out.println(createdAfter);
-        System.out.println(common.util.Time.getTimeInPST(createdAfter));
+        System.out.println(common.util.Time.getTime(createdAfter));
 
         // int rows = insertOrders(createdAfter, createdBefore);
         // System.out.println("insert " + rows + " rows");
