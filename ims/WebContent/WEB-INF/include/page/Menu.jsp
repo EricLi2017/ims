@@ -2,8 +2,15 @@
 <div class="menu">
 	<%--right part--%>
 	<div class="right">
-		<%=session.getAttribute("user")%><span class="seperate">|</span><a
-			href="/ims/user/SignOut.jsp">Sign Out</a>
+		<%-- 		<%=session.getAttribute("user")%><span class="seperate">|</span> --%>
+		<ul>
+			<li><a href="/ims/schedule/TimingTasks.jsp">Settings</a>
+				<ul>
+					<li style="border-bottom: 1px dotted #ddd;"><a
+						href="/ims/user/SignOut.jsp">Sign Out</a></li>
+					<li><a href="/ims/schedule/TimingTasks.jsp">Timing Tasks</a></li>
+				</ul></li>
+		</ul>
 	</div>
 
 

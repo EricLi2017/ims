@@ -30,22 +30,18 @@ body button {
 	font-family: sans-serif;
 }
 
-.menu .left {
-	float: left;
-}
-
-.menu .left ul {
+.menu  ul {
 	margin: 0;
 	padding: 0;
 }
 
-.menu .left ul li {
+.menu  ul li {
 	float: left;
 	list-style: none;
 }
 
 /* level 1 menu */
-.menu .left ul li a {
+.menu  ul li a {
 	display: block;
 	width: auto;
 	background-color: #f3f3f3; /* level 1 menu background color */
@@ -55,66 +51,53 @@ body button {
 	color: #666; /* menu color */
 }
 
-.menu .left ul li a:HOVER {
+.menu  ul li a:HOVER {
 	color: #111;
 }
 
-.menu .left ul li ul {
+.menu  ul li ul {
 	display: none;
 	position: absolute;
 	background-color: #fff;
 }
 
-.menu .left ul li ul li {
+.menu  ul li ul li {
 	float: none;
 	padding: 3px 3px;
 }
 
 /* level 2 menu */
-.menu .left ul li ul li a {
+.menu  ul li ul li a {
 	width: auto; /* level 2 menu width*/
 	background-color: #fff; /* level 2 menu background color */
-	padding: 0.8em 2.4em; /*level 2 menu padding*/
+	padding: 0.8em 1.6em; /*level 2 menu padding*/
 	text-align: left;
 }
 
-.menu .left ul li ul li a:HOVER {
+.menu  ul li ul li a:HOVER {
 	background-color: #ddd;
 }
 
-.menu .left ul li:hover ul {
+.menu  ul li:hover ul {
 	display: block;
 	border: 1px solid #ddd;
 	border-top: 3px solid #333;
 }
 
-.menu .middle {
-	float: none;
-	background-color: #f3f3f3;
+.menu .left {
+	float: left;
 }
 
 .menu .right {
 	float: right;
-	background-color: #f3f3f3;
-	padding: 0.8em 2.4em;
-	color: #111;
 }
 
-.menu .right a {
-	padding: 0.8em 2.4em; /* level 1 menu padding */
-	text-align: center;
-	text-decoration: none;
-	color: #666;
+.menu .right ul li ul {
+	right: 0;
 }
 
-.menu .right  a:HOVER {
-	color: #111;
-}
-
-.menu .right .seperate {
-	padding: 0.8em 2.4em; /* level 1 menu padding */
-	text-align: center;
-	color: #ddd;
+.menu .middle {
+	float: none;
 }
 
 /* .content */
