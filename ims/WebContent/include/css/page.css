@@ -40,6 +40,15 @@ body button {
 	list-style: none;
 }
 
+.menu  ul li span {
+	display: block;
+	width: auto;
+	background-color: #f3f3f3; /* level 1 menu background color */
+	padding: 0.8em 2.4em; /* level 1 menu padding */
+	text-align: center;
+	color: #666; /* menu color */
+}
+
 /* level 1 menu */
 .menu  ul li a {
 	display: block;
