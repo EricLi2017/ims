@@ -118,8 +118,8 @@ public class SupplyTransactionDatabase {
 	/**
 	 * batch insert using Database Transaction mode
 	 * 
-	 * Note about DT: if auto commit is canceled, must call commit or rollback
-	 * to avoid table be locked
+	 * Note about DT: if auto commit is canceled, must call commit or rollback to
+	 * avoid table be locked
 	 * 
 	 * Note: Mysql only InnoDB supports Database Transaction
 	 * 
@@ -160,6 +160,7 @@ public class SupplyTransactionDatabase {
 		} catch (Exception e) {// rollback should be called for any exception
 			try {
 				con.rollback();// rollback
+				rows = 0;
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

@@ -41,8 +41,8 @@ public class ListOrdersMWS {
 	private static String marketplaceId = SellerConfig.marketplaceId;
 
 	/**
-	 * A number that indicates the maximum number of orders that can be returned
-	 * per page.
+	 * A number that indicates the maximum number of orders that can be returned per
+	 * page.
 	 * 
 	 * Value must be 1 - 100. Default: 100
 	 */
@@ -151,6 +151,49 @@ public class ListOrdersMWS {
 		List<String> orderStatus = new ArrayList<String>();
 		orderStatus.add(OrderStatus.Shipped.value());
 		request.setOrderStatus(orderStatus);
+		List<String> marketplaceIds = new ArrayList<String>();
+		marketplaceIds.add(marketplaceId);
+		request.setMarketplaceId(marketplaceIds);
+		// List<String> fulfillmentChannel = new ArrayList<String>();
+		// request.setFulfillmentChannel(fulfillmentChannel);
+		// String buyerEmail = "example";
+		// request.setBuyerEmail(buyerEmail);
+		// String sellerOrderId = "example";
+		// request.setSellerOrderId(sellerOrderId);
+		request.setMaxResultsPerPage(maxResultsPerPage);
+
+		// Make the call.
+		ListOrdersResponse response = invokeListOrders(client, request);
+		return response;
+	}
+
+	/**
+	 * MWS system uses T time zone (UTC+0); Amazon.com system uses PST time zone
+	 * (UTC-8)
+	 *
+	 * @param createdAfter
+	 *            Number of minutes or DatatypeConstants.FIELD_UNDEFINED. Value
+	 *            range from -14 hours (-14 * 60 minutes) to 14 hours (14 * 60
+	 *            minutes).
+	 * @param createdBefore
+	 *            Number of minutes or DatatypeConstants.FIELD_UNDEFINED. Value
+	 *            range from -14 hours (-14 * 60 minutes) to 14 hours (14 * 60
+	 *            minutes).
+	 * @return
+	 */
+	public static ListOrdersResponse listOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore) {
+		// Get a client connection.
+		// Make sure you've set the variables in MWSOrderConfig.
+		MarketplaceWebServiceOrdersClient client = MWSOrderConfig.getClient();
+
+		// Create a request.
+		ListOrdersRequest request = new ListOrdersRequest();
+		request.setSellerId(sellerId);
+		request.setCreatedAfter(createdAfter);
+		request.setCreatedBefore(createdBefore);
+		// List<String> orderStatus = new ArrayList<String>();
+		// orderStatus.add(OrderStatus.Shipped.value());
+		// request.setOrderStatus(orderStatus);
 		List<String> marketplaceIds = new ArrayList<String>();
 		marketplaceIds.add(marketplaceId);
 		request.setMarketplaceId(marketplaceIds);

@@ -66,6 +66,16 @@
 					<td>every 2 seconds: 1 order item</td>
 					<td>every 60 seconds or above: 30 order items</td>
 				</tr>
+				<tr>
+					<td>GetOrder</td>
+					<td>six</td>
+					<td>one request every minute</td>
+					<td>N/A</td>
+					<td>N/A</td>
+					<td>AmazonOrderId Maximum: 50</td>
+					<td>every minute: 50 orders</td>
+					<td>every 6 minutes or above: 300 orders</td>
+				</tr>
 			</table>
 		</div>
 
@@ -81,30 +91,38 @@
 
 				</tr>
 				<tr>
-					<td>Update FBA Inventory</td>
+					<td>List Inventory</td>
 					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
 					<td>one time every one hour</td>
 					<td>all products in IMS</td>
-					<td>Total SKUs less than 3600*100: After first 1500 SKUs, get
-						next 100 every one second</td>
+					<td>Total SKUs &lt;=3600*100: After first 30 call(&lt;=30*50 SKUs), make
+						next call(&lt;=100 SKUs) every one second</td>
 
 				</tr>
 				<tr>
-					<td>Update Orders</td>
+					<td>List Orders</td>
 					<td>ListOrders and ListOrdersByNextToken</td>
 					<td>one time every one hour</td>
 					<td>from 12 hours before</td>
-					<td>Orders in 12 hours less than 60*100: After first 600
-						orders, get next 100 every one minute</td>
+					<td>Orders in 12 hours &lt;=60*100: After first 6 call(&lt;=6*100
+						orders), make next call(&lt;= 100 orders) every one minute</td>
 
 				</tr>
 				<tr>
-					<td>Update Order Items</td>
+					<td>List Order Items</td>
 					<td>ListOrderItems and ListOrderItemsByNextToken</td>
 					<td>one time every one hour</td>
 					<td>oldest 30 orders that has no items</td>
-					<td>: After first 30 order items, get next one every two
+					<td>: After first 30 call(30*1 order items), make next call(1 order items) every two
 						seconds</td>
+
+				</tr>
+				<tr>
+					<td>Get Order</td>
+					<td>GetOrder</td>
+					<td>one time every one hour</td>
+					<td>oldest 300 pending orders</td>
+					<td>: After first 6 call(&lt;=6*50 orders), make next call(&lt;=50 orders) every one minute</td>
 
 				</tr>
 			</table>
