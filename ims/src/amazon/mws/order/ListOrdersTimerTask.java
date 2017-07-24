@@ -35,6 +35,7 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 
 	private XMLGregorianCalendar createdAfter;
 	private XMLGregorianCalendar createdBefore;
+	private int loopTimes = 1;
 
 	public ListOrdersTimerTask() {
 		super();
@@ -103,7 +104,7 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 
 	@Override
 	public boolean isLoop() {
-		return false;
+		return loopTimes-- > 0;
 	}
 
 }

@@ -11,7 +11,6 @@ import java.util.List;
 import com.amazonservices.mws.orders._2013_09_01.model.Address;
 import com.amazonservices.mws.orders._2013_09_01.model.Order;
 
-import amazon.db.model.Orders;
 import common.db.DB;
 import common.util.Time;
 
@@ -23,7 +22,7 @@ public class ListOrdersDatabase {
 		if (orders == null || orders.size() == 0)
 			return 0;
 
-		String sql = "insert into orders(amazon_order_id,seller_order_id,purchase_date,"
+		String sql = "insert IGNORE into orders(amazon_order_id,seller_order_id,purchase_date,"
 				+ "last_update_date,sales_channel,fulfillment_channel," + "is_business_order,is_premium_order,is_prime,"
 				+ "buyer_name,buyer_email,order_status,"
 				+ "order_total_currency,order_total_amount,ship_service_category,"
@@ -121,10 +120,7 @@ public class ListOrdersDatabase {
 				}
 			}
 		}
-		if (rows != rows2) {
-			System.out.println("Error: table orders insert " + rows + " rows, but table order_shipping_address insert "
-					+ rows2 + " rows!");
-		}
+		System.out.println("table orders insert " + rows + " rows, order_shipping_address insert " + rows2 + " rows");
 
 		return rows;
 	}
@@ -133,75 +129,6 @@ public class ListOrdersDatabase {
 		List<Order> orders = new ArrayList<>();
 		orders.add(order);
 		return insert(orders);
-	}
-
-	public List<Orders> selectByPruchaseDate(Timestamp createdAfter, Timestamp createdBefore) {
-		if (createdAfter == null || createdBefore == null)
-			return null;
-		List<Orders> ordersList = new ArrayList<>();
-
-		String sql = "select (amazon_order_id,seller_order_id,purchase_date,"
-				+ "last_update_date,sales_channel,fulfillment_channel," + "is_business_order,is_premium_order,is_prime,"
-				+ "buyer_name,buyer_email,order_status,"
-				+ "order_total_currency,order_total_amount,ship_service_category,"
-				+ "ship_service_level,number_items_shipped,number_items_unshipped) from orders "
-				+ "where purchase_date >=? and purchase_date<? order by purchase_date asc";
-		DB db = new DB();
-		Connection con = null;
-		try {
-			con = db.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setTimestamp(1, createdAfter);
-			ps.setTimestamp(2, createdBefore);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Orders orders = new Orders();
-				orders.setAmazonOrderId(rs.getString("amazon_order_id"));
-				orders.setSellerOrderId(rs.getString("seller_order_id"));
-				orders.setPurchaseDate(rs.getTimestamp("purchase_date"));
-				orders.setLastUpdateDate(rs.getTimestamp("last_update_date"));
-				orders.setSalesChannel(rs.getString("sales_channel"));
-				orders.setFulfillmentChannel(rs.getString("fulfillment_channel"));
-				orders.setIsBusinessOrder(rs.getString("is_business_order"));
-				orders.setIsPremiumOrder(rs.getString("is_premium_order"));
-				orders.setIsPrime(rs.getString("is_prime"));
-				orders.setBuyerName(rs.getString("buyer_name"));
-				orders.setBuyerEmail(rs.getString("buyer_email"));
-				orders.setOrderStatus(rs.getString("order_status"));
-				orders.setOrderTotalCurrency(rs.getString("order_total_currency"));
-				orders.setOrderTotalAmount(rs.getBigDecimal("order_total_amount"));
-				orders.setShipServiceCategory(rs.getString("ship_service_category"));
-				orders.setShipServiceLevel(rs.getString("ship_service_level"));
-				orders.setNumberItemsShipped(rs.getInt("number_items_shipped"));
-				orders.setNumberItemsUnshipped(rs.getInt("number_items_unshipped"));
-
-				ordersList.add(orders);
-			}
-			rs.close();
-			ps.close();
-			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		} finally {
-			boolean flag = true;
-			try {
-				if (con == null || con.isClosed()) {
-					flag = false;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			if (flag) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return ordersList;
 	}
 
 	public int selectCountByPruchaseDate(Timestamp createdAfter, Timestamp createdBefore) {

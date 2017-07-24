@@ -3,7 +3,6 @@
  */
 package amazon.mws.order;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +12,6 @@ import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult;
 import com.amazonservices.mws.orders._2013_09_01.model.OrderItem;
 
-import amazon.db.model.Orders;
 import amazon.db.query.OrderQuerier;
 import amazon.mws.MWSTimerTask;
 
@@ -28,25 +26,18 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	public static final int RestorePeriod = 2;
 	public static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
 
-	private List<String> amazonOrderIdList = new ArrayList<>();
+	private List<String> amazonOrderIdList;
 	private String amazonOrderId;
 
 	public ListOrderItemsTimerTask() {
 		super();
-		List<Orders> ordersList = new OrderQuerier().selectOldestPendingOrders(RequestQuota);
-		if (ordersList != null) {
-			for (Orders orders : ordersList) {
-				amazonOrderIdList.add(orders.getAmazonOrderId());
-			}
-			isLoop();
-		}
-
+		amazonOrderIdList = new OrderQuerier().selectOldestOrdersWithoutItems(RequestQuota);
 	}
 
 	@Override
 	public boolean isLoop() {
-		// Check if there is any other pending orders
-		if (amazonOrderIdList.size() > 0) {
+		// Check if there is any other orders without order items
+		if (amazonOrderIdList != null && amazonOrderIdList.size() > 0) {
 			amazonOrderId = amazonOrderIdList.get(0);
 			amazonOrderIdList.remove(0);
 			return true;

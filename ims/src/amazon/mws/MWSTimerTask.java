@@ -40,7 +40,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	@Override
 	public void run() {
 		try {
-			do {
+			while (isLoop()) {
 				// Call MWS API according to the Request quota
 				Result result = callByRequestQuota();
 				String nextToken = result.getNextToken();
@@ -57,7 +57,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 							scheduledExecutorService.shutdown();
 					}
 				}
-			} while (isLoop());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
