@@ -96,10 +96,10 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `title` varchar(200) DEFAULT NULL,
   `quantity_ordered` int(11) NOT NULL,
   `quantity_shipped` int(11) DEFAULT NULL,
+  PRIMARY KEY (`order_item_id`),
   KEY `amazon_order_id` (`amazon_order_id`),
   KEY `sku` (`sku`),
-  KEY `asin` (`asin`),
-  KEY `order_item_id` (`order_item_id`)
+  KEY `asin` (`asin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='items of amazon order';
 
 -- Data exporting was unselected.
