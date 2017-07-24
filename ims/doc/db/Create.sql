@@ -57,9 +57,9 @@ CREATE TABLE IF NOT EXISTS `internal_product` (
 -- Dumping structure for table ims.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `amazon_order_id` char(20) NOT NULL,
-  `seller_order_id` char(20) NOT NULL,
-  `purchase_date` timestamp NULL DEFAULT NULL,
-  `last_update_date` timestamp NULL DEFAULT NULL,
+  `seller_order_id` char(20) DEFAULT NULL,
+  `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_update_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `sales_channel` varchar(50) DEFAULT NULL,
   `fulfillment_channel` varchar(50) DEFAULT NULL,
   `is_business_order` char(5) DEFAULT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `is_prime` char(5) DEFAULT NULL,
   `buyer_name` varchar(50) DEFAULT NULL,
   `buyer_email` varchar(50) DEFAULT NULL,
-  `order_status` char(10) DEFAULT NULL,
+  `order_status` char(10) NOT NULL,
   `order_total_currency` char(3) DEFAULT NULL,
   `order_total_amount` decimal(10,2) DEFAULT NULL,
   `ship_service_category` varchar(50) DEFAULT NULL,
@@ -76,27 +76,30 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `number_items_unshipped` int(11) DEFAULT NULL,
   PRIMARY KEY (`amazon_order_id`),
   KEY `purchase_date` (`purchase_date`),
-  KEY `last_update_date` (`last_update_date`)
+  KEY `last_update_date` (`last_update_date`),
+  KEY `order_status` (`order_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='amazon order';
 
 -- Data exporting was unselected.
 -- Dumping structure for table ims.order_items
 CREATE TABLE IF NOT EXISTS `order_items` (
   `amazon_order_id` char(20) NOT NULL,
-  `sku` char(50) NOT NULL,
   `asin` char(10) NOT NULL,
+  `sku` char(50) DEFAULT NULL,
   `price_currency` char(3) DEFAULT NULL,
   `price_amount` decimal(10,2) DEFAULT NULL,
   `discount_currency` char(3) DEFAULT NULL,
   `discount_amount` decimal(10,2) DEFAULT NULL,
   `tax_currency` char(3) DEFAULT NULL,
   `tax_amount` decimal(10,2) DEFAULT NULL,
-  `order_item_id` varchar(50) DEFAULT NULL,
+  `order_item_id` varchar(50) NOT NULL,
   `title` varchar(200) DEFAULT NULL,
-  `quantity_ordered` int(11) DEFAULT NULL,
+  `quantity_ordered` int(11) NOT NULL,
   `quantity_shipped` int(11) DEFAULT NULL,
-  PRIMARY KEY (`amazon_order_id`,`sku`),
-  UNIQUE KEY `unique_id_asin` (`amazon_order_id`,`asin`)
+  KEY `amazon_order_id` (`amazon_order_id`),
+  KEY `sku` (`sku`),
+  KEY `asin` (`asin`),
+  KEY `order_item_id` (`order_item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='items of amazon order';
 
 -- Data exporting was unselected.
