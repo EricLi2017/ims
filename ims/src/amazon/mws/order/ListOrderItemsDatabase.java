@@ -16,6 +16,8 @@ public class ListOrderItemsDatabase {
 		if (orderItems == null || orderItems.size() == 0)
 			return 0;
 
+		System.out.println("amazonOrderId:" + amazonOrderId + ", orderItems.size():" + orderItems.size());// TODO
+
 		String sql = "insert into order_items(amazon_order_id,sku,asin,"
 				+ "price_currency,price_amount,discount_currency," + "discount_amount,tax_currency,tax_amount,"
 				+ "order_item_id,title,quantity_ordered," + "quantity_shipped) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -80,6 +82,9 @@ public class ListOrderItemsDatabase {
 				}
 			}
 		}
+
+		System.out.println("amazonOrderId:" + amazonOrderId + ", table order_items insert(/should insert):" + rows + "/"
+				+ orderItems.size() + " rows");// TODO
 
 		return rows;
 	}

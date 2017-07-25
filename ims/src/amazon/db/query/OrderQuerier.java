@@ -57,6 +57,7 @@ public class OrderQuerier {
 			}
 		}
 
+		System.out.println(getClass().getName() + ": selectOldestOrdersWithoutItems().size()=" + amazonOrderIds.size());// TODO
 		return amazonOrderIds;
 	}
 

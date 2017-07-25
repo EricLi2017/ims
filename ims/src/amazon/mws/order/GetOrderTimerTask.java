@@ -16,6 +16,24 @@ import amazon.mws.MWSTimerTask;
 public class GetOrderTimerTask extends MWSTimerTask<Order> {
 
 	@Override
+	protected void beforeWork() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void afterWork() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected boolean isWorkLoop() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	protected MWSTimerTask<Order>.Result getFirstResult() {
 		// TODO Auto-generated method stub
 		return null;
@@ -31,12 +49,6 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 	protected int updateDatabase(List<Order> dataList) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	protected boolean isLoop() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

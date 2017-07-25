@@ -34,6 +34,7 @@ public class ListOrdersDatabase {
 
 		System.out.println(sql2);// TODO
 		System.out.println(sql);// TODO
+		System.out.println("orders.size()=" + orders.size());// TODO
 		DB db = new DB();
 		Connection con = null;
 		try {

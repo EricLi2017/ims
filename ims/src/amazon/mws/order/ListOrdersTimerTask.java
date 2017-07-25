@@ -37,14 +37,34 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 	private XMLGregorianCalendar createdBefore;
 	private int loopTimes = 1;
 
-	public ListOrdersTimerTask() {
-		super();
-
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR_OF_DAY, ScopeHours);
-		createdAfter = Time.getTime(new Timestamp(cal.getTimeInMillis()));
+	private void init() {
+		createdAfter = null;
 
 		createdBefore = null;
+
+		loopTimes = 1;
+	}
+
+	@Override
+	protected void beforeWork() {
+		init();
+
+		// set the createdAfter
+		Calendar cal = Calendar.getInstance();
+		// cal.add(Calendar.HOUR_OF_DAY, ScopeHours);
+		cal.add(Calendar.HOUR_OF_DAY, ScopeHours);// TODO
+		createdAfter = Time.getTime(new Timestamp(cal.getTimeInMillis()));
+	}
+
+	@Override
+	protected void afterWork() {
+		init();
+	}
+
+	@Override
+	public boolean isWorkLoop() {
+		// Check if reach the loopTimes
+		return loopTimes-- > 0;
 	}
 
 	@Override
@@ -100,11 +120,6 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 	@Override
 	public int getRestoreQuota() {
 		return RestoreQuota;
-	}
-
-	@Override
-	public boolean isLoop() {
-		return loopTimes-- > 0;
 	}
 
 }

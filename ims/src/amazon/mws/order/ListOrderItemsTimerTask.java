@@ -29,20 +29,29 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	private List<String> amazonOrderIdList;
 	private String amazonOrderId;
 
-	public ListOrderItemsTimerTask() {
-		super();
+	@Override
+	protected void beforeWork() {
+		// Get the oldest orders that without order items
 		amazonOrderIdList = new OrderQuerier().selectOldestOrdersWithoutItems(RequestQuota);
+		amazonOrderId = null;
 	}
 
 	@Override
-	public boolean isLoop() {
-		// Check if there is any other orders without order items
+	protected void afterWork() {
+		amazonOrderIdList = null;
+		amazonOrderId = null;
+	}
+
+	@Override
+	public boolean isWorkLoop() {
+		// Get amazonOrderId and remove it from amazonOrderIdList
 		if (amazonOrderIdList != null && amazonOrderIdList.size() > 0) {
 			amazonOrderId = amazonOrderIdList.get(0);
 			amazonOrderIdList.remove(0);
-			return true;
 		}
-		return false;
+
+		// If exists an order without order items, then need to loop
+		return amazonOrderId != null;
 	}
 
 	@Override

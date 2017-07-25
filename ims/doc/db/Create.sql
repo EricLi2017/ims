@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`amazon_order_id`),
   KEY `purchase_date` (`purchase_date`),
   KEY `last_update_date` (`last_update_date`),
-  KEY `order_status` (`order_status`)
+  KEY `order_status` (`order_status`),
+  KEY `seller_order_id` (`seller_order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='amazon order';
 
 -- Data exporting was unselected.
@@ -96,10 +97,10 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `title` varchar(200) DEFAULT NULL,
   `quantity_ordered` int(11) NOT NULL,
   `quantity_shipped` int(11) DEFAULT NULL,
-  PRIMARY KEY (`order_item_id`),
   KEY `amazon_order_id` (`amazon_order_id`),
   KEY `sku` (`sku`),
-  KEY `asin` (`asin`)
+  KEY `asin` (`asin`),
+  KEY `order_item_id` (`order_item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='items of amazon order';
 
 -- Data exporting was unselected.
