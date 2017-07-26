@@ -28,7 +28,7 @@ public class ListOrdersDatabase {
 				+ "order_total_currency,order_total_amount,ship_service_category,"
 				+ "ship_service_level,number_items_shipped,number_items_unshipped) "
 				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		String sql2 = "insert into order_shipping_address(amazon_order_id,name,address_line1,"
+		String sql2 = "insert IGNORE into order_shipping_address(amazon_order_id,name,address_line1,"
 				+ "address_line2,address_line3,city," + "country,district,state_or_regin,"
 				+ "postal_code,country_code,phone) values(?,?,?,?,?,?,?,?,?,?,?,?)";
 
