@@ -7,19 +7,18 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
 
 /**
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
 public abstract class MWSTimerTask<T> extends TimerTask {
-
-	/**
-	 * The times that MWS API is called
-	 */
-	private int mwsCalledTimes;
 	/**
 	 * Used to update database, Asynchronously
 	 */
@@ -27,7 +26,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	/**
 	 * Used to call MWS API to get next result
 	 */
-	private ScheduledExecutorService scheduledExecutorService;
+	protected ScheduledExecutorService scheduledExecutorService;
 
 	/**
 	 * Action need to do before the work
@@ -35,11 +34,9 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	protected abstract void beforeWork();
 
 	/**
-	 * If the work is need to loop
-	 * 
-	 * @return
+	 * Action of the work
 	 */
-	protected abstract boolean isWorkLoop();
+	protected abstract void work();
 
 	/**
 	 * Action need to do after the work
@@ -57,131 +54,115 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	@Override
 	public void run() {
 		try {
-			System.out.println(getClass().getName() + ": beforeWork()");// TODO
+			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+					+ getClass().getName() + ": beforeWork()");// TODO
 			/** Action need to do before the work */
 			beforeWork();
 
-			/** If the work is need to loop */
-			while (isWorkLoop()) {
-				// Call MWS API according to the Request quota
-				System.out.println(getClass().getName() + ": callByRequestQuota()");// TODO
-				Result result = callByRequestQuota();
-				String nextToken = result.getNextToken();
-
-				// Call MWS API according to the Restore rate
-				if (nextToken != null) {
-					try {
-						System.out.println(getClass().getName() + ": callByRestorePeriod()");// TODO
-						callByRestorePeriod(nextToken);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					// finally {
-					// // Shutdown ScheduledExecutorService
-					// if (scheduledExecutorService != null) {
-					// scheduledExecutorService.shutdown();
-					// System.out.println(getClass().getName() + ":
-					// scheduledExecutorService.shutdown()");// TODO
-					// }
-					// }
-				}
-			}
+			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+					+ getClass().getName() + ": work()");// TODO
+			/** Action of the work */
+			work();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				System.out.println(getClass().getName() + ": afterWork()");// TODO
+				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+						+ getClass().getName() + ": afterWork()");// TODO
 				/** Action need to do after the work */
 				afterWork();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-			//
-			// // Shutdown ExecutorService
-			// if (executorService != null) {
-			// executorService.shutdown();
-			// System.out.println(getClass().getName() + ": executorService.shutdown()");//
-			// TODO
-			// }
 		}
 	}
 
-	private Result callByRequestQuota() {
-		System.out.println(getClass().getName() + ": getFirstResult() in callByRequestQuota()");// TODO
-		// Make the call to get first result
-		MWSTimerTask<T>.Result result = getFirstResult();
-		mwsCalledTimes++;
-		String nextToken = result.getNextToken();
-		List<T> dataList = result.getDataList();
-
-		System.out.println(getClass().getName() + ": updateDatabaseAsync() in callByRequestQuota()");// TODO
-		// Update database according to the result from MWS, Asynchronously
-		updateDatabaseAsync(result.getDataList());
-
-		// Make the call to get next result by next token
-		while (mwsCalledTimes++ < getRequestQuota() && nextToken != null) {
-			System.out.println(getClass().getName() + ": getNextResult() in callByRequestQuota()");// TODO
-			Result nextResult = getNextResult(nextToken);
-
-			nextToken = nextResult.getNextToken();
-			dataList.addAll(nextResult.getDataList());
-
-			System.out.println(getClass().getName() + ": updateDatabaseAsync() in callByRequestQuota()");// TODO
-			// Update database according to the result from MWS, Asynchronously
-			updateDatabaseAsync(nextResult.getDataList());
-		}
-
-		// Change result
-		result.setDataList(dataList);
-		result.setNextToken(nextToken);
-
-		// Return result
-		return result;
-	}
-
-	private void callByRestorePeriod(String nextToken) {
+	/**
+	 * 
+	 * @param nextToken
+	 * @param mwsCalledTimes
+	 * @return the nextToken when this execution complete in the future
+	 */
+	protected final ScheduledFuture<String> callByRestorePeriodAsync(String nextToken, int mwsCalledTimes) {
 		if (scheduledExecutorService == null) {
 			// Create ScheduledExecutorService
 			scheduledExecutorService = Executors.newScheduledThreadPool(2);
 		}
 
-		scheduledExecutorService.schedule(new Runnable() {
+		Callable<String> callable = new Callable<String>() {
 			@Override
-			public void run() {
-				System.out.println(getClass().getName() + ": getNextResult() in callByRestorePeriod()");// TODO
+			public String call() throws Exception {
 				// Call
-				Result result = getNextResult(nextToken);
-
-				System.out.println(getClass().getName() + ": updateDatabaseAsync() in callByRestorePeriod()");// TODO
-				// Update database according to the result from MWS, Asynchronously
-				updateDatabaseAsync(result.getDataList());
-
-				// Loop call
-				if (result.getNextToken() != null) {
-					callByRestorePeriod(result.getNextToken());
+				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+						+ getClass().getName() + ": getNextResult() in callByRestorePeriodAsync(), mwsCalledTimes="
+						+ mwsCalledTimes + ", nextToken=" + nextToken);// TODO
+				Result result = null;
+				boolean isThrottled;
+				try {
+					result = getNextResult(nextToken);
+					isThrottled = false;
+				} catch (MarketplaceWebServiceOrdersException ex) {
+					isThrottled = (ex.getStatusCode() == ErrorCode.QuotaExceeded.value()
+							|| ex.getStatusCode() == ErrorCode.RequestThrottled.value());
 				}
+
+				// check if isThrottled
+				if (!isThrottled) {
+					// Update database according to the result from MWS, Asynchronously
+					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+							+ getClass().getName()
+							+ ": updateDatabaseAsync() in callByRestorePeriodAsync(), mwsCalledTimes="
+							+ mwsCalledTimes);// TODO
+					updateDatabaseAsync(result.getDataList(), mwsCalledTimes);
+
+					if (result.getNextToken() != null) {
+						// Loop call use the new nextToken
+						callByRestorePeriodAsync(result.getNextToken(), mwsCalledTimes + 1);
+					}
+					return result.getNextToken();
+				} else {
+					// re call use the same nextToken
+					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+							+ getClass().getName()
+							+ ": failed to getNextResult() in callByRestorePeriodAsync(), mwsCalledTimes="
+							+ mwsCalledTimes + ", nextToken=" + nextToken);// TODO
+					callByRestorePeriodAsync(nextToken, mwsCalledTimes + 1);
+					return nextToken;
+				}
+
 			}
-		}, getRestorePeriod(), getTimeUnit());
+		};
+
+		return scheduledExecutorService.schedule(callable, getRestorePeriod(), getTimeUnit());
 	}
 
 	/**
 	 * Update database according to the result from MWS, Asynchronously
 	 * 
-	 * @param executorService
-	 * @param result
+	 * @param dataList
+	 * @return the affected rows of database when this execution complete in the
+	 *         future
 	 */
-	private void updateDatabaseAsync(List<T> dataList) {
+	protected final Future<Integer> updateDatabaseAsync(List<T> dataList, int mwsCalledTimes) {
 		if (executorService == null) {
 			// Create ExecutorService
-			executorService = Executors.newCachedThreadPool();
+			executorService = Executors.newScheduledThreadPool(6);// for Orders API request quota is 6
 		}
 
-		executorService.submit(new Callable<Integer>() {
+		return executorService.submit(new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
+				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+						+ getClass().getName() + ": updateDatabase() in updateDatabaseAsync(), mwsCalledTimes="
+						+ mwsCalledTimes);// TODO
 				return updateDatabase(dataList);
 			}
 		});
+	}
+
+	protected final Future<Integer> updateCallConditionAsync(List<T> dataList, int mwsCalledTimes) {
+		// TODO
+		return null;
 	}
 
 	/**
@@ -196,7 +177,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	 * 
 	 * @return
 	 */
-	protected abstract Result getNextResult(String nextToken);
+	protected abstract Result getNextResult(String nextToken) throws MarketplaceWebServiceOrdersException;
 
 	/**
 	 * Update database according to the result from MWS

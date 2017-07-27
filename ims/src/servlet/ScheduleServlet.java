@@ -23,11 +23,12 @@ public class ScheduleServlet extends HttpServlet {
 
 	public static final long INITIAL_DELAY_LIST_ORDERS = 1;
 	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 2;
-	public static final long DELAY_LIST_ORDERS = 60;
-	public static final long DELAY_LIST_ORDER_ITEMS = 60;
+	// public static final long DELAY_LIST_ORDERS = 60;
+	// public static final long DELAY_LIST_ORDER_ITEMS = 60;
+	public static final long DELAY_LIST_ORDERS = 6;// TODO for test
+	public static final long DELAY_LIST_ORDER_ITEMS = 1;// TODO for test
 	public static final TimeUnit TIME_UNIT_LIST_ORDERS = TimeUnit.MINUTES;
 	public static final TimeUnit TIME_UNIT_LIST_ORDER_ITEMS = TimeUnit.MINUTES;
-	
 
 	private static final ScheduledExecutorService scheduledExecutorService;
 	static {
@@ -41,8 +42,10 @@ public class ScheduleServlet extends HttpServlet {
 				DELAY_LIST_ORDERS, TIME_UNIT_LIST_ORDERS);
 
 		// Insert order items into IMS from MWS Orders API
-		scheduledExecutorService.scheduleWithFixedDelay(new ListOrderItemsTimerTask(), INITIAL_DELAY_LIST_ORDER_ITEMS,
-				DELAY_LIST_ORDER_ITEMS, TIME_UNIT_LIST_ORDER_ITEMS);
+		// scheduledExecutorService.scheduleWithFixedDelay(new
+		// ListOrderItemsTimerTask(), INITIAL_DELAY_LIST_ORDER_ITEMS,
+		// DELAY_LIST_ORDER_ITEMS, TIME_UNIT_LIST_ORDER_ITEMS);
+		// TODO
 
 	}
 

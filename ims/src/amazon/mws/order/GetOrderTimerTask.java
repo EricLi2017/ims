@@ -22,15 +22,15 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 	}
 
 	@Override
-	protected void afterWork() {
+	protected void work() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected boolean isWorkLoop() {
+	protected void afterWork() {
 		// TODO Auto-generated method stub
-		return false;
+
 	}
 
 	@Override
