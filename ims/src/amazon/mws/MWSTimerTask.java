@@ -3,30 +3,39 @@
  */
 package amazon.mws;
 
-import java.util.List;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
-import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
 
 /**
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
 public abstract class MWSTimerTask<T> extends TimerTask {
+	private boolean isReady = true;
+
+	private boolean isReady() {
+		return isReady;
+	}
+
+	private void unready() {
+		isReady = false;
+	}
+
 	/**
-	 * Used to update database, Asynchronously
+	 * Set the task to ready for the next scheduled call
+	 * 
+	 * If there is no new async task produced by this task:
+	 * 
+	 * The ready() method should be called when the task is complete or ended by an
+	 * exception.
+	 * 
+	 * If there is new async task produced by this task: The ready method also
+	 * should be called when all the new tasks are complete or ended by an
+	 * exception.
+	 * 
 	 */
-	private ExecutorService executorService;
-	/**
-	 * Used to call MWS API to get next result
-	 */
-	protected ScheduledExecutorService scheduledExecutorService;
+	protected final void ready() {
+		isReady = true;
+	}
 
 	/**
 	 * Action need to do before the work
@@ -36,7 +45,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	/**
 	 * Action of the work
 	 */
-	protected abstract void work();
+	protected abstract void work() throws Exception;
 
 	/**
 	 * Action need to do after the work
@@ -52,23 +61,37 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	 * @see java.util.TimerTask#run()
 	 */
 	@Override
-	public void run() {
+	public final void run() {
+		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+				+ getClass().getName() + ": run()");
+		if (!isReady()) {
+			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+					+ getClass().getName() + ": The task was not ready, it stopped runnig this time!");
+			return;
+		} else {
+			unready();
+		}
+
 		try {
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": beforeWork()");// TODO
+					+ getClass().getName() + ": beforeWork()");
 			/** Action need to do before the work */
 			beforeWork();
 
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": work()");// TODO
+					+ getClass().getName() + ": work()");
 			/** Action of the work */
 			work();
 		} catch (Exception e) {
+			/** Set the task to ready for the next scheduled call */
+			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+					+ getClass().getName() + ": ready(), task ended for exception");
+			ready();
 			e.printStackTrace();
 		} finally {
 			try {
 				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-						+ getClass().getName() + ": afterWork()");// TODO
+						+ getClass().getName() + ": afterWork()");
 				/** Action need to do after the work */
 				afterWork();
 			} catch (Exception e2) {
@@ -76,116 +99,6 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 			}
 		}
 	}
-
-	/**
-	 * 
-	 * @param nextToken
-	 * @param mwsCalledTimes
-	 * @return the nextToken when this execution complete in the future
-	 */
-	protected final ScheduledFuture<String> callByRestorePeriodAsync(String nextToken, int mwsCalledTimes) {
-		if (scheduledExecutorService == null) {
-			// Create ScheduledExecutorService
-			scheduledExecutorService = Executors.newScheduledThreadPool(2);
-		}
-
-		Callable<String> callable = new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				// Call
-				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-						+ getClass().getName() + ": getNextResult() in callByRestorePeriodAsync(), mwsCalledTimes="
-						+ mwsCalledTimes + ", nextToken=" + nextToken);// TODO
-				Result result = null;
-				boolean isThrottled;
-				try {
-					result = getNextResult(nextToken);
-					isThrottled = false;
-				} catch (MarketplaceWebServiceOrdersException ex) {
-					isThrottled = (ex.getStatusCode() == ErrorCode.QuotaExceeded.value()
-							|| ex.getStatusCode() == ErrorCode.RequestThrottled.value());
-				}
-
-				// check if isThrottled
-				if (!isThrottled) {
-					// Update database according to the result from MWS, Asynchronously
-					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-							+ getClass().getName()
-							+ ": updateDatabaseAsync() in callByRestorePeriodAsync(), mwsCalledTimes="
-							+ mwsCalledTimes);// TODO
-					updateDatabaseAsync(result.getDataList(), mwsCalledTimes);
-
-					if (result.getNextToken() != null) {
-						// Loop call use the new nextToken
-						callByRestorePeriodAsync(result.getNextToken(), mwsCalledTimes + 1);
-					}
-					return result.getNextToken();
-				} else {
-					// re call use the same nextToken
-					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-							+ getClass().getName()
-							+ ": failed to getNextResult() in callByRestorePeriodAsync(), mwsCalledTimes="
-							+ mwsCalledTimes + ", nextToken=" + nextToken);// TODO
-					callByRestorePeriodAsync(nextToken, mwsCalledTimes + 1);
-					return nextToken;
-				}
-
-			}
-		};
-
-		return scheduledExecutorService.schedule(callable, getRestorePeriod(), getTimeUnit());
-	}
-
-	/**
-	 * Update database according to the result from MWS, Asynchronously
-	 * 
-	 * @param dataList
-	 * @return the affected rows of database when this execution complete in the
-	 *         future
-	 */
-	protected final Future<Integer> updateDatabaseAsync(List<T> dataList, int mwsCalledTimes) {
-		if (executorService == null) {
-			// Create ExecutorService
-			executorService = Executors.newScheduledThreadPool(6);// for Orders API request quota is 6
-		}
-
-		return executorService.submit(new Callable<Integer>() {
-			@Override
-			public Integer call() throws Exception {
-				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-						+ getClass().getName() + ": updateDatabase() in updateDatabaseAsync(), mwsCalledTimes="
-						+ mwsCalledTimes);// TODO
-				return updateDatabase(dataList);
-			}
-		});
-	}
-
-	protected final Future<Integer> updateCallConditionAsync(List<T> dataList, int mwsCalledTimes) {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Call MWS API to get fist result
-	 * 
-	 * @return
-	 */
-	protected abstract Result getFirstResult();
-
-	/**
-	 * Call MWS API to get next result by next token
-	 * 
-	 * @return
-	 */
-	protected abstract Result getNextResult(String nextToken) throws MarketplaceWebServiceOrdersException;
-
-	/**
-	 * Update database according to the result from MWS
-	 * 
-	 * @param result
-	 * @return affected rows in database
-	 */
-	protected abstract int updateDatabase(List<T> dataList);
 
 	/**
 	 * Get TimeUnit for task
@@ -218,32 +131,5 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	 * @return times
 	 */
 	protected abstract int getRestoreQuota();
-
-	public class Result {
-		private List<T> dataList;
-		private String nextToken;
-
-		public List<T> getDataList() {
-			return dataList;
-		}
-
-		public void setDataList(List<T> dataList) {
-			this.dataList = dataList;
-		}
-
-		public String getNextToken() {
-			return nextToken;
-		}
-
-		public void setNextToken(String nextToken) {
-			this.nextToken = nextToken;
-		}
-
-		@Override
-		public String toString() {
-			return "Result [dataList=" + dataList + ", nextToken=" + nextToken + "]";
-		}
-
-	}
 
 }

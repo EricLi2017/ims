@@ -3,20 +3,13 @@
  */
 package amazon.mws.order;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResponse;
-import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResult;
-import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
-import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResult;
-import com.amazonservices.mws.orders._2013_09_01.model.Order;
 import com.amazonservices.mws.orders._2013_09_01.model.OrderItem;
 
 import amazon.db.query.OrderQuerier;
 import amazon.mws.MWSTimerTask;
-import amazon.mws.MWSTimerTask.Result;
 
 /**
  * Insert order items into IMS from MWS Orders API
@@ -52,122 +45,132 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 		init();
 	}
 
-	@Override
-	protected void work() {
-		if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
-			System.out.println(
-					getClass().getName() + ": There is no any orders without related order items at this time");
-			return;
-		}
-
-		int mwsCalledTimes = 1;
-		String nextToken = null;// TODO
-		List<OrderItem> dataList = new ArrayList<>();
-		MWSTimerTask<OrderItem>.Result result = new Result();
-		for (String id : amazonOrderIdList) {
-			amazonOrderId = id;
-			if (nextToken != null) {
-				throw new IllegalArgumentException(
-						"A new amazonOrderId should start with a null nextToken! amazonOrderId=" + amazonOrderId
-								+ ", nextToken=" + nextToken);
-			}
-
-			// Condition:mwsCalledTimes<=getRequestQuota() && nextToken==null
-			if (mwsCalledTimes++ < getRequestQuota()) {
-				// get first result
-				System.out.println(getClass().getName() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);// TODO
-				// Make the call to get first result
-				result = getFirstResult();
-				nextToken = result.getNextToken();
-				dataList = result.getDataList();
-
-				System.out.println(getClass().getName() + ": updateDatabaseAsync(), mwsCalledTimes=" + mwsCalledTimes);// TODO
-				// Update database according to the result from MWS, Asynchronously
-				updateDatabaseAsync(result.getDataList(), mwsCalledTimes);
-
-				// Condition:mwsCalledTimes<=getRequestQuota() && nextToken!=null
-				// Make the call to get next result by next token
-				while (mwsCalledTimes++ < getRequestQuota() && nextToken != null) {
-					System.out.println(getClass().getName() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes);// TODO
-					Result nextResult = getNextResult(nextToken);
-
-					nextToken = nextResult.getNextToken();
-					dataList.addAll(nextResult.getDataList());
-
-					System.out.println(
-							getClass().getName() + ": updateDatabaseAsync(), mwsCalledTimes=" + mwsCalledTimes);// TODO
-					// Update database according to the result from MWS, Asynchronously
-					updateDatabaseAsync(nextResult.getDataList(), mwsCalledTimes);
-				}
-				//
-				// mwsCalledTimes>=getRequestQuota() || nextToken==null
-				//
-				// Condition:mwsCalledTimes>getRequestQuota() && nextToken==null
-				if (mwsCalledTimes > getRequestQuota() && nextToken != null) {
-					// Reach request quota and there is nextToken still
-					callByRestorePeriodAsync(nextToken, mwsCalledTimes);
-				}
-
-				// Change result
-				result.setDataList(dataList);
-				result.setNextToken(nextToken);
-			} else {// mwsCalledTimes>=getRequestQuota() && nextToken==null
-				// Condition:mwsCalledTimes>=getRequestQuota() && nextToken==null
-
-			}
-
-			// Reach request quota and there is nextToken still
-			callByRestorePeriodAsync(nextToken, mwsCalledTimes);
-
-			// // Reach request quota and there is nextToken still
-			// if (mwsCalledTimes >= getRequestQuota() && nextToken != null) {
-			//
-			// callByRestorePeriodAsync(nextToken);
-			//
-			// }
-
-			// reset for next amazonOrderId to call getOrderItems
-			nextToken = null;// TODO
-			dataList = new ArrayList<>();
-			result = new Result();
-		}
-
-	}
-
-	@Override
-	public MWSTimerTask<OrderItem>.Result getFirstResult() {
-		// Make the call ListOrderItems
-		ListOrderItemsResponse response = ListOrderItemsMWS.listOrderItems(amazonOrderId);
-		ListOrderItemsResult listOrderItemsResult = response.getListOrderItemsResult();
-
-		// Construct result
-		MWSTimerTask<OrderItem>.Result result = new Result();
-		result.setDataList(listOrderItemsResult.getOrderItems());
-		result.setNextToken(listOrderItemsResult.getNextToken());
-
-		// Return result
-		return result;
-	}
-
-	@Override
-	public MWSTimerTask<OrderItem>.Result getNextResult(String nextToken) {
-		// Make the call ListOrderItemsByNextToken
-		ListOrderItemsByNextTokenResponse nextTokenResponse = ListOrderItemsMWS.listOrderItemsByNextToken(nextToken);
-		ListOrderItemsByNextTokenResult nextTokenResult = nextTokenResponse.getListOrderItemsByNextTokenResult();
-
-		// Construct result
-		MWSTimerTask<OrderItem>.Result result = new Result();
-		result.setDataList(nextTokenResult.getOrderItems());
-		result.setNextToken(nextTokenResult.getNextToken());
-
-		// Return result
-		return result;
-	}
-
-	@Override
-	protected int updateDatabase(List<OrderItem> dataList) {
-		return new ListOrderItemsDatabase().insert(dataList, amazonOrderId);
-	}
+	// @Override
+	// protected void work() {
+	// if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
+	// System.out.println(
+	// getClass().getName() + ": There is no any orders without related order items
+	// at this time");
+	// return;
+	// }
+	//
+	// int mwsCalledTimes = 1;
+	// String nextToken = null;// TODO
+	// List<OrderItem> dataList = new ArrayList<>();
+	// MWSTimerTask<OrderItem>.Result result = new Result();
+	// for (String id : amazonOrderIdList) {
+	// amazonOrderId = id;
+	// if (nextToken != null) {
+	// throw new IllegalArgumentException(
+	// "A new amazonOrderId should start with a null nextToken! amazonOrderId=" +
+	// amazonOrderId
+	// + ", nextToken=" + nextToken);
+	// }
+	//
+	// // Condition:mwsCalledTimes<=getRequestQuota() && nextToken==null
+	// if (mwsCalledTimes++ < getRequestQuota()) {
+	// // get first result
+	// System.out.println(getClass().getName() + ": getFirstResult(),
+	// mwsCalledTimes=" + mwsCalledTimes);// TODO
+	// // Make the call to get first result
+	// result = getFirstResult();
+	// nextToken = result.getNextToken();
+	// dataList = result.getDataList();
+	//
+	// System.out.println(getClass().getName() + ": updateDatabaseAsync(),
+	// mwsCalledTimes=" + mwsCalledTimes);// TODO
+	// // Update database according to the result from MWS, Asynchronously
+	// updateDatabaseAsync(result.getDataList(), mwsCalledTimes);
+	//
+	// // Condition:mwsCalledTimes<=getRequestQuota() && nextToken!=null
+	// // Make the call to get next result by next token
+	// while (mwsCalledTimes++ < getRequestQuota() && nextToken != null) {
+	// System.out.println(getClass().getName() + ": getNextResult(),
+	// mwsCalledTimes=" + mwsCalledTimes);// TODO
+	// Result nextResult = getNextResult(nextToken);
+	//
+	// nextToken = nextResult.getNextToken();
+	// dataList.addAll(nextResult.getDataList());
+	//
+	// System.out.println(
+	// getClass().getName() + ": updateDatabaseAsync(), mwsCalledTimes=" +
+	// mwsCalledTimes);// TODO
+	// // Update database according to the result from MWS, Asynchronously
+	// updateDatabaseAsync(nextResult.getDataList(), mwsCalledTimes);
+	// }
+	// //
+	// // mwsCalledTimes>=getRequestQuota() || nextToken==null
+	// //
+	// // Condition:mwsCalledTimes>getRequestQuota() && nextToken==null
+	// if (mwsCalledTimes > getRequestQuota() && nextToken != null) {
+	// // Reach request quota and there is nextToken still
+	// callByRestorePeriodAsync(nextToken, mwsCalledTimes);
+	// }
+	//
+	// // Change result
+	// result.setDataList(dataList);
+	// result.setNextToken(nextToken);
+	// } else {// mwsCalledTimes>=getRequestQuota() && nextToken==null
+	// // Condition:mwsCalledTimes>=getRequestQuota() && nextToken==null
+	//
+	// }
+	//
+	// // Reach request quota and there is nextToken still
+	// callByRestorePeriodAsync(nextToken, mwsCalledTimes);
+	//
+	// // // Reach request quota and there is nextToken still
+	// // if (mwsCalledTimes >= getRequestQuota() && nextToken != null) {
+	// //
+	// // callByRestorePeriodAsync(nextToken);
+	// //
+	// // }
+	//
+	// // reset for next amazonOrderId to call getOrderItems
+	// nextToken = null;// TODO
+	// dataList = new ArrayList<>();
+	// result = new Result();
+	// }
+	//
+	// }
+	//
+	// @Override
+	// public MWSTimerTask<OrderItem>.Result getFirstResult() {
+	// // Make the call ListOrderItems
+	// ListOrderItemsResponse response =
+	// ListOrderItemsMWS.listOrderItems(amazonOrderId);
+	// ListOrderItemsResult listOrderItemsResult =
+	// response.getListOrderItemsResult();
+	//
+	// // Construct result
+	// MWSTimerTask<OrderItem>.Result result = new Result();
+	// result.setDataList(listOrderItemsResult.getOrderItems());
+	// result.setNextToken(listOrderItemsResult.getNextToken());
+	//
+	// // Return result
+	// return result;
+	// }
+	//
+	// @Override
+	// public MWSTimerTask<OrderItem>.Result getNextResult(String nextToken) {
+	// // Make the call ListOrderItemsByNextToken
+	// ListOrderItemsByNextTokenResponse nextTokenResponse =
+	// ListOrderItemsMWS.listOrderItemsByNextToken(nextToken);
+	// ListOrderItemsByNextTokenResult nextTokenResult =
+	// nextTokenResponse.getListOrderItemsByNextTokenResult();
+	//
+	// // Construct result
+	// MWSTimerTask<OrderItem>.Result result = new Result();
+	// result.setDataList(nextTokenResult.getOrderItems());
+	// result.setNextToken(nextTokenResult.getNextToken());
+	//
+	// // Return result
+	// return result;
+	// }
+	//
+	// @Override
+	// protected int updateDatabase(List<OrderItem> dataList) {
+	// return new ListOrderItemsDatabase().insert(dataList, amazonOrderId);
+	// }
 
 	@Override
 	public TimeUnit getTimeUnit() {
@@ -187,6 +190,12 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	@Override
 	public int getRestoreQuota() {
 		return RestoreQuota;
+	}
+
+	@Override
+	protected void work() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

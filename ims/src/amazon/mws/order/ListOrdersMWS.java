@@ -47,7 +47,7 @@ public class ListOrdersMWS {
 	 * Value must be 1 - 100. Default: 100
 	 */
 	// private static Integer maxResultsPerPage = 100;
-	private static Integer maxResultsPerPage = 2;// TODO for test
+	private static Integer maxResultsPerPage = 100;// TODO for test
 
 	/**
 	 * Call the service, log response and exceptions.

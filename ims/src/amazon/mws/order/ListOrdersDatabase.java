@@ -16,7 +16,7 @@ import common.util.Time;
 
 public class ListOrdersDatabase {
 
-	public int insert(List<Order> orders) {
+	public int insert(List<Order> orders) throws SQLException {
 		int rows = 0;// insert into table orders numbers
 		int rows2 = 0;// insert into table order_shipping_address numbers
 		if (orders == null || orders.size() == 0)
@@ -104,6 +104,7 @@ public class ListOrdersDatabase {
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+			throw new SQLException(e);
 		} finally {
 			boolean flag = true;
 			try {
@@ -126,7 +127,7 @@ public class ListOrdersDatabase {
 		return rows;
 	}
 
-	public int insert(Order order) {
+	public int insert(Order order) throws SQLException  {
 		List<Order> orders = new ArrayList<>();
 		orders.add(order);
 		return insert(orders);
