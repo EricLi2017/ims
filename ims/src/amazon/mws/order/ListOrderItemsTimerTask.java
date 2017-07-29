@@ -30,7 +30,6 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 		amazonOrderId = null;
 	}
 
-	@Override
 	protected void beforeWork() {
 		init();
 		// Get the oldest orders that without order items
@@ -40,7 +39,6 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 		amazonOrderId = null;
 	}
 
-	@Override
 	protected void afterWork() {
 		init();
 	}

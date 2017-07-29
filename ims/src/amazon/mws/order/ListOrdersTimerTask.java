@@ -56,18 +56,37 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 
 	// indicate if exists a pending task in database
 	private boolean hasPerviousPendingId;
-	// the id of the table list_orders_track with pending status
+	// the id of the table list_orders_track with pending status used for the task
 	private int pendingId;
 
 	/**
-	 * Used to call MWS API to get next result
+	 * Used to scheduled new tasks for calling MWS API to get next result
 	 */
 	protected ScheduledExecutorService scheduledExecutorService;
 
-	// get createdAfter : if does not exist, insert a default
-	private XMLGregorianCalendar getCreatedAfterAndId() throws ClassNotFoundException, SQLException
+	@Override
+	protected void work() throws SQLException, ClassNotFoundException, MarketplaceWebServiceOrdersException {
+		// initialization
+		init();
 
-	{
+		// Get all orders from MWS by createdAfter and save them to database
+		saveAllOrdersByCreatedAfter();
+	}
+
+	/**
+	 * Get the createdAfter for call MWS
+	 * 
+	 * If latestCompletedCreatedBefore exists in database, return it;
+	 * 
+	 * else insert a default first completed row, and return its createdBefore
+	 * value.
+	 * 
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	private XMLGregorianCalendar getCreatedAfter() throws ClassNotFoundException, SQLException {
+		// query latestCompletedCreatedBefore
 		Timestamp latestCompletedCreatedBefore = ListOrdersTrackQuerier.queryLatestCompletedCreatedBefore();
 		if (latestCompletedCreatedBefore != null) {
 			return Time.getTime(latestCompletedCreatedBefore);
@@ -85,8 +104,7 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		}
 	}
 
-	@Override
-	protected void beforeWork() {
+	private void init() throws ClassNotFoundException, SQLException {
 		// reset
 		createdAfter = null;
 		createdBefore = null;
@@ -94,48 +112,49 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		pendingId = 0;
 
 		// set values
-		// Use exception to accurately determine the current situation
-		try {
-			createdAfter = getCreatedAfterAndId();
-			hasPerviousPendingId = ListOrdersTrackQuerier.hasPendingTask();
-			if (!hasPerviousPendingId) {
-				// insert a new row and get row id
-				pendingId = ListOrdersTrackEditor.insertNewAndGetId(new Timestamp(System.currentTimeMillis()));
-			} else {
-				// get row id from the pending task
-				pendingId = ListOrdersTrackQuerier.getOldestPendingTaskId();
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+		createdAfter = getCreatedAfter();
+		hasPerviousPendingId = ListOrdersTrackQuerier.hasPendingTask();
+		if (!hasPerviousPendingId) {
+			// insert a new row and get row id
+			pendingId = ListOrdersTrackEditor.insertNewAndGetId(new Timestamp(System.currentTimeMillis()));
+		} else {
+			// get row id from the pending task
+			pendingId = ListOrdersTrackQuerier.getOldestPendingTaskId();
 		}
 
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": beforeWork() hasPerviousPendingId=" + hasPerviousPendingId);
+				+ getClass().getName() + ": init() hasPerviousPendingId=" + hasPerviousPendingId);
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": beforeWork() pendingId=" + pendingId);
+				+ getClass().getName() + ": init() pendingId=" + pendingId);
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": beforeWork() createdAfter=" + createdAfter);
+				+ getClass().getName() + ": init() createdAfter=" + createdAfter);
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": beforeWork() createdBefore=" + createdBefore);
+				+ getClass().getName() + ": init() createdBefore=" + createdBefore);
 
 	}
 
-	@Override
-	protected void afterWork() {
-	}
-
-	@Override
-	protected void work() throws SQLException, ClassNotFoundException {
-		/**
-		 * if MarketplaceWebServiceOrdersException happened while calling MWS to get
-		 * first result, then do not handle the exception and end the times task for
-		 * this time
-		 */
+	/**
+	 * Get all orders from MWS by createdAfter and save them to database
+	 * 
+	 * If any MarketplaceWebServiceOrdersException happened while calling MWS to get
+	 * first result, then do not handle the exception and end task will be ended for
+	 * this time.
+	 * 
+	 * If throttling MarketplaceWebServiceOrdersException happened while calling MWS
+	 * using a nextToken, then continue to scheduled a new task calling MWS using
+	 * the same nextToke until get result from MWS or throttling exception happened
+	 * to loop again.
+	 * 
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	private void saveAllOrdersByCreatedAfter()
+			throws SQLException, ClassNotFoundException, MarketplaceWebServiceOrdersException {
 		// Make the call to get first result
 		int mwsCalledTimes = 1;
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
 				+ getClass().getName() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);// TODO
-		ListOrdersResult result = getFirstResult();
+		ListOrdersResult result = getFirstResult();// may cause MarketplaceWebServiceOrdersException
 		String nextToken = result.getNextToken();
 		// List<Order> dataList = result.getDataList();
 
@@ -144,13 +163,9 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 				+ getClass().getName() + ": updateDatabase(), mwsCalledTimes=" + mwsCalledTimes);// TODO
 		updateDatabase(result.getOrders());
 
+		boolean isThrottling = false;
 		while (nextToken != null) {
-			if (++mwsCalledTimes <= getRequestQuota()) {
-				/**
-				 * if MarketplaceWebServiceOrdersException happened while calling MWS using a
-				 * nextToken, then continue to calling MWS using the same nextToke until get
-				 * result from MWS or reach request quota
-				 */
+			if (++mwsCalledTimes <= getRequestQuota() && !isThrottling) {
 				try {
 					// Make the call to get next result by next token
 					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
@@ -166,15 +181,17 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 							+ getClass().getName() + ": updateDatabase(), mwsCalledTimes=" + mwsCalledTimes);// TODO
 					updateDatabase(nextResult.getOrders());
 				} catch (MarketplaceWebServiceOrdersException ex) {
+					// check if it is a throttling exception
+					isThrottling = isThrottlingException(ex);
 					System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
 							+ getClass().getName() + ": failed to getNextResult(), mwsCalledTimes=" + mwsCalledTimes
-							+ ", nextToken=" + nextToken);// TODO
+							+ ", isThrottling=" + isThrottling + ", nextToken=" + nextToken);// TODO
 				}
 			} else {
 				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
 						+ getClass().getName() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);// TODO
 				callByRestorePeriodAsync(nextToken, mwsCalledTimes);
-				break;
+				return;
 			}
 		}
 
@@ -192,15 +209,10 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		}
 	}
 
-	private ListOrdersResult getFirstResult() {
+	private ListOrdersResult getFirstResult() throws MarketplaceWebServiceOrdersException {
 		// Make the call ListOrders
 		ListOrdersResponse response = ListOrdersMWS.listOrders(createdAfter, createdBefore);
 		ListOrdersResult listOrdersResult = response.getListOrdersResult();
-
-		// Construct result
-		// MWSTimerTask<Order>.Result result = new Result();
-		// result.setDataList(listOrdersResult.getOrders());
-		// result.setNextToken(listOrdersResult.getNextToken());
 
 		// Return result
 		return listOrdersResult;

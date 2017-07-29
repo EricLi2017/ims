@@ -15,19 +15,7 @@ import amazon.mws.MWSTimerTask;
 public class GetOrderTimerTask extends MWSTimerTask<Order> {
 
 	@Override
-	protected void beforeWork() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected void work() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void afterWork() {
 		// TODO Auto-generated method stub
 
 	}

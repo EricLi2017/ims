@@ -6,6 +6,8 @@ package amazon.mws;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
+
 /**
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
@@ -38,9 +40,25 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	}
 
 	/**
+	 * Indicates if an MarketplaceWebServiceOrdersException is a Throttling
+	 * Exception
+	 * 
+	 * If a Throttling Exception happened, usually should wait a while for MWS to
+	 * restore
+	 * 
+	 * @param mwsoe
+	 * @return
+	 */
+	protected final boolean isThrottlingException(MarketplaceWebServiceOrdersException mwsoe) {
+		return mwsoe != null && (ErrorCode.QuotaExceeded.value() == mwsoe.getStatusCode()
+				|| ErrorCode.RequestThrottled.value() == mwsoe.getStatusCode());
+
+	}
+
+	/**
 	 * Action need to do before the work
 	 */
-	protected abstract void beforeWork();
+	// protected abstract void beforeWork() throws Exception;
 
 	/**
 	 * Action of the work
@@ -50,7 +68,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	/**
 	 * Action need to do after the work
 	 */
-	protected abstract void afterWork();
+	// protected abstract void afterWork();
 
 	/**
 	 * 
@@ -63,7 +81,7 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	@Override
 	public final void run() {
 		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": run()");
+				+ getClass().getName() + ": run() started");
 		if (!isReady()) {
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
 					+ getClass().getName() + ": The task was not ready, it stopped runnig this time!");
@@ -74,30 +92,21 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 
 		try {
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": beforeWork()");
-			/** Action need to do before the work */
-			beforeWork();
-
-			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": work()");
+					+ getClass().getName() + ": work() started");
 			/** Action of the work */
 			work();
+			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+					+ getClass().getName() + ": work() ended");
 		} catch (Exception e) {
 			/** Set the task to ready for the next scheduled call */
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": ready(), task ended for exception");
+					+ getClass().getName() + ": work() ended for exception, call ready()");
 			ready();
 			e.printStackTrace();
-		} finally {
-			try {
-				System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-						+ getClass().getName() + ": afterWork()");
-				/** Action need to do after the work */
-				afterWork();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
+
+		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
+				+ getClass().getName() + ": run() ended");
 	}
 
 	/**

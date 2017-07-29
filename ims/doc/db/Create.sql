@@ -54,6 +54,17 @@ CREATE TABLE IF NOT EXISTS `internal_product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
+-- Dumping structure for table ims.list_orders_track
+CREATE TABLE IF NOT EXISTS `list_orders_track` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_before` timestamp NULL DEFAULT NULL,
+  `status` tinyint(4) NOT NULL,
+  `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8 COMMENT='track of call MWS ListOrders API';
+
+-- Data exporting was unselected.
 -- Dumping structure for table ims.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `amazon_order_id` char(20) NOT NULL,

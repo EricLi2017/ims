@@ -47,7 +47,7 @@ public class ListOrdersMWS {
 	 * Value must be 1 - 100. Default: 100
 	 */
 	// private static Integer maxResultsPerPage = 100;
-	private static Integer maxResultsPerPage = 100;// TODO for test
+	private static Integer maxResultsPerPage = 10;// TODO for test
 
 	/**
 	 * Call the service, log response and exceptions.
@@ -137,7 +137,7 @@ public class ListOrdersMWS {
 	 * @return
 	 */
 	public static ListOrdersResponse listShippedOrders(XMLGregorianCalendar createdAfter,
-			XMLGregorianCalendar createdBefore) {
+			XMLGregorianCalendar createdBefore) throws MarketplaceWebServiceOrdersException {
 		// Get a client connection.
 		// Make sure you've set the variables in MWSOrderConfig.
 		MarketplaceWebServiceOrdersClient client = MWSOrderConfig.getClient();
@@ -182,7 +182,8 @@ public class ListOrdersMWS {
 	 *            minutes).
 	 * @return
 	 */
-	public static ListOrdersResponse listOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore) {
+	public static ListOrdersResponse listOrders(XMLGregorianCalendar createdAfter, XMLGregorianCalendar createdBefore)
+			throws MarketplaceWebServiceOrdersException {
 		// Get a client connection.
 		// Make sure you've set the variables in MWSOrderConfig.
 		MarketplaceWebServiceOrdersClient client = MWSOrderConfig.getClient();
@@ -215,7 +216,8 @@ public class ListOrdersMWS {
 	 * @param nextToken
 	 * @return
 	 */
-	public static ListOrdersByNextTokenResponse listOrdersByNextToken(String nextToken) {
+	public static ListOrdersByNextTokenResponse listOrdersByNextToken(String nextToken)
+			throws MarketplaceWebServiceOrdersException {
 		// Get a client connection.
 		// Make sure you've set the variables in MWSOrderConfig.
 		MarketplaceWebServiceOrdersClient client = MWSOrderConfig.getClient();
@@ -249,7 +251,7 @@ public class ListOrdersMWS {
 		createdBefore.setTime(0, 0, 0);
 
 		// Make the call.
-		ListOrdersResponse response = ListOrdersMWS.listShippedOrders(createdAfter, createdBefore);
+		ListOrdersResponse response = ListOrdersMWS.listOrders(createdAfter, createdBefore);
 
 		ListOrdersResult listOrdersResult = response.getListOrdersResult();
 		boolean hasNextOrders = listOrdersResult.isSetNextToken();
