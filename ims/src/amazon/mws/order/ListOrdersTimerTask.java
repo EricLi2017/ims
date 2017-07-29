@@ -31,11 +31,10 @@ import common.util.Time;
  * Insert orders into IMS from MWS Orders API
  * 
  * When this task is done each time, it should process all the orders which are
- * in the specified time.
+ * in the specified createdAfter.
  * 
- * In other words, there should be no pending task after this task is done each
- * time. If there is a pending task, it means there is a task still running or a
- * task ended in an unexpected error.
+ * Use table list_orders_track to track the execution of the task and to provide
+ * createdAfter value.
  * 
  * Created by Eclipse. User: Eric Li Date: Jul 23, 2017 Time: 9:40:09 PM
  */
@@ -62,7 +61,7 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 	/**
 	 * Used to scheduled new tasks for calling MWS API to get next result
 	 */
-	protected ScheduledExecutorService scheduledExecutorService;
+	private ScheduledExecutorService scheduledExecutorService;
 
 	@Override
 	protected void work() throws SQLException, ClassNotFoundException, MarketplaceWebServiceOrdersException {
@@ -223,11 +222,6 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		ListOrdersByNextTokenResponse nextTokenResponse = ListOrdersMWS.listOrdersByNextToken(nextToken);
 		ListOrdersByNextTokenResult nextTokenResult = nextTokenResponse.getListOrdersByNextTokenResult();
 
-		// Construct result
-		// MWSTimerTask<Order>.Result result = new Result();
-		// result.setDataList(nextTokenResult.getOrders());
-		// result.setNextToken(nextTokenResult.getNextToken());
-
 		// Return result
 		return nextTokenResult;
 	}
@@ -240,33 +234,13 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		return ListOrdersTrackEditor.updateToCompleted(createdBefore, new Timestamp(System.currentTimeMillis()), id);
 	}
 
-	@Override
-	public TimeUnit getTimeUnit() {
-		return TIME_UNIT;
-	}
-
-	@Override
-	public int getRequestQuota() {
-		return RequestQuota;
-	}
-
-	@Override
-	public int getRestorePeriod() {
-		return RestorePeriod;
-	}
-
-	@Override
-	public int getRestoreQuota() {
-		return RestoreQuota;
-	}
-
 	/**
 	 * 
 	 * @param nextToken
 	 * @param mwsCalledTimes
 	 * @return the nextToken when this execution complete in the future
 	 */
-	protected final ScheduledFuture<String> callByRestorePeriodAsync(String nextToken, int mwsCalledTimes) {
+	private ScheduledFuture<String> callByRestorePeriodAsync(String nextToken, int mwsCalledTimes) {
 		if (scheduledExecutorService == null) {
 			// Create ScheduledExecutorService
 			scheduledExecutorService = Executors.newScheduledThreadPool(2);
@@ -330,5 +304,25 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		return scheduledExecutorService.schedule(callable,
 
 				getRestorePeriod(), getTimeUnit());
+	}
+
+	@Override
+	public TimeUnit getTimeUnit() {
+		return TIME_UNIT;
+	}
+
+	@Override
+	public int getRequestQuota() {
+		return RequestQuota;
+	}
+
+	@Override
+	public int getRestorePeriod() {
+		return RestorePeriod;
+	}
+
+	@Override
+	public int getRestoreQuota() {
+		return RestoreQuota;
 	}
 }
