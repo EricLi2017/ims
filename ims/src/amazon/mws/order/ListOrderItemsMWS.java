@@ -16,12 +16,30 @@
 package amazon.mws.order;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
 
 import amazon.mws.SellerConfig;
 
 /**
+ * The following response elements are not available for orders with an
+ * OrderStatus of Pending but are available for orders with an OrderStatus of
+ * Unshipped, Partially Shipped, or Shipped state:
+ * 
+ * <pre>
+ * ItemTax
+ * GiftWrapPrice
+ * ItemPrice
+ * PromotionDiscount
+ * GiftWrapTax
+ * ShippingTax
+ * ShippingPrice
+ * ShippingDiscount
+ * </pre>
+ * 
+ * 
  * Throttling
  * 
  * The ListOrderItems and ListOrderItemsByNextToken operations together share a
@@ -29,6 +47,14 @@ import amazon.mws.SellerConfig;
  * seconds.
  */
 public class ListOrderItemsMWS {
+	/**
+	 * Throttling
+	 */
+	public static final int REQUEST_QUOTA = 30;
+	public static final int RESTORE_QUOTA = 1;
+	public static final int RESTORE_PERIOD = 2;
+	public static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
+
 	/** Seller Seller ID. */
 	private static String sellerId = SellerConfig.sellerId;
 	/** Seller Marketplace ID. */

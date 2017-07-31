@@ -18,17 +18,25 @@ import common.db.DB;
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 10:27:50 PM
  */
 public class OrderQuerier {
-	public List<String> selectOldestOrdersWithoutItems(int rows) {
+	/**
+	 * Acquire the oldest (by purchase_date) non-pending (status!=pending)
+	 * amazonOrderId of orders without order items
+	 * 
+	 * @param rows
+	 * @return
+	 */
+	public List<String> selectOldestNonPendingOrdersWithoutItems(int rows) {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select a.amazon_order_id from orders as a "
-				+ "where a.amazon_order_id not in (select amazon_order_id from order_items) order by a.purchase_date asc limit ?";
+				+ "where a.order_status!=? and a.amazon_order_id not in (select amazon_order_id from order_items) order by a.purchase_date asc limit ?";
 		DB db = new DB();
 		Connection con = null;
 		try {
 			con = db.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setInt(1, rows);
+			ps.setString(1, OrderStatus.Pending.name());
+			ps.setInt(2, rows);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -76,7 +84,7 @@ public class OrderQuerier {
 		try {
 			con = db.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, OrderStatus.Pending.value());
+			ps.setString(1, OrderStatus.Pending.name());
 			ps.setInt(2, rows);
 
 			ResultSet rs = ps.executeQuery();

@@ -16,38 +16,54 @@
 package amazon.mws.order;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.amazonservices.mws.client.*;
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
 
 import amazon.mws.SellerConfig;
 
 /**
+ * The following response elements are not available for orders with an
+ * OrderStatus of Pending but are available for orders with an OrderStatus of
+ * Unshipped, Partially Shipped, or Shipped state:
+ * 
+ * <pre>
+ * BuyerEmail, 
+ * BuyerName, 
+ * ShippingAddress, 
+ * OrderTotal
+ * </pre>
+ * 
+ * 
  * Throttling
  * 
  * The ListOrders and ListOrdersByNextToken operations together share a maximum
  * request quota of six and a restore rate of one request every minute.
  * 
- * MaxResultsPerPage
- * 
- * Value must be 1 - 100. Default: 100
+ * MaxResultsPerPage: A number that indicates the maximum number of orders that
+ * can be returned per page. Value must be 1 - 100. Default: 100
  */
 public class ListOrdersMWS {
+	/**
+	 * Throttling
+	 */
+	public static final int REQUEST_QUOTA = 6;
+	public static final int RESTORE_QUOTA = 1;
+	public static final int RESTORE_PERIOD = 60;
+	public static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
+
+	/**
+	 * MaxResultsPerPage
+	 */
+	public static final int MAX_RESULTS_PER_PAGE = 10;// TODO for test
+
 	/** Seller Seller ID. */
 	private static String sellerId = SellerConfig.sellerId;
 	/** Seller Marketplace ID. */
 	private static String marketplaceId = SellerConfig.marketplaceId;
-
-	/**
-	 * A number that indicates the maximum number of orders that can be returned per
-	 * page.
-	 * 
-	 * Value must be 1 - 100. Default: 100
-	 */
-	// private static Integer maxResultsPerPage = 100;
-	private static Integer maxResultsPerPage = 10;// TODO for test
 
 	/**
 	 * Call the service, log response and exceptions.
@@ -161,7 +177,7 @@ public class ListOrdersMWS {
 		// request.setBuyerEmail(buyerEmail);
 		// String sellerOrderId = "example";
 		// request.setSellerOrderId(sellerOrderId);
-		request.setMaxResultsPerPage(maxResultsPerPage);
+		request.setMaxResultsPerPage(MAX_RESULTS_PER_PAGE);
 
 		// Make the call.
 		ListOrdersResponse response = invokeListOrders(client, request);
@@ -205,7 +221,7 @@ public class ListOrdersMWS {
 		// request.setBuyerEmail(buyerEmail);
 		// String sellerOrderId = "example";
 		// request.setSellerOrderId(sellerOrderId);
-		request.setMaxResultsPerPage(maxResultsPerPage);
+		request.setMaxResultsPerPage(MAX_RESULTS_PER_PAGE);
 
 		// Make the call.
 		ListOrdersResponse response = invokeListOrders(client, request);
@@ -230,113 +246,5 @@ public class ListOrdersMWS {
 		// Make the call.
 		ListOrdersByNextTokenResponse response = invokeListOrdersByNextToken(client, request);
 		return response;
-	}
-
-	/**
-	 * Command line entry point.
-	 */
-	public static void main(String[] args) {
-
-		XMLGregorianCalendar createdAfter = MwsUtl.getDTF().newXMLGregorianCalendar();
-		createdAfter.setTimezone(-8 * 60);// PST time zone UTC-8
-		createdAfter.setYear(2017);
-		createdAfter.setMonth(2);
-		createdAfter.setDay(3);
-		createdAfter.setTime(0, 0, 0);
-		XMLGregorianCalendar createdBefore = MwsUtl.getDTF().newXMLGregorianCalendar();
-		createdBefore.setTimezone(-8 * 60);// PST time zone UTC-8
-		createdBefore.setYear(2017);
-		createdBefore.setMonth(2);
-		createdBefore.setDay(4);
-		createdBefore.setTime(0, 0, 0);
-
-		// Make the call.
-		ListOrdersResponse response = ListOrdersMWS.listOrders(createdAfter, createdBefore);
-
-		ListOrdersResult listOrdersResult = response.getListOrdersResult();
-		boolean hasNextOrders = listOrdersResult.isSetNextToken();
-		String nextToken = listOrdersResult.getNextToken();
-		List<Order> orders = listOrdersResult.getOrders();
-		for (Order order : orders) { // TODO
-			System.out.println(order.getAmazonOrderId());
-			System.out.println(order.getSellerOrderId());
-			System.out.println(order.getPurchaseDate());
-			System.out.println(order.getLastUpdateDate());
-			System.out.println(order.getSalesChannel());// :Amazon.com
-			System.out.println(order.getFulfillmentChannel());// :AFN
-			System.out.println(order.getIsBusinessOrder());
-			System.out.println(order.getIsPremiumOrder());
-			System.out.println(order.getIsPrime());
-			System.out.println(order.getBuyerName());
-			System.out.println(order.getBuyerEmail());
-			// System.out.println(order.getPurchaseOrderNumber());// NULL
-			// System.out.println(order.getOrderChannel());// NULL
-			// System.out.println(order.getOrderType());//:StandardOrder
-			System.out.println(order.getOrderStatus());// Shipped
-			System.out.println(order.getOrderTotal().getCurrencyCode());
-			System.out.println(order.getOrderTotal().getAmount());
-			// :Expedited FreeEconomy NextDay SameDay SecondDay Scheduled
-			// Standard
-			System.out.println(order.getShipmentServiceLevelCategory());
-			System.out.println(order.getShipServiceLevel());// :SecondDay...
-			System.out.println(order.getNumberOfItemsShipped());
-			System.out.println(order.getNumberOfItemsUnshipped());
-			// System.out.println(order.getPaymentMethod());//:other...
-			// System.out.println(order.getPaymentExecutionDetail());//only
-			// available for CN and JP
-			System.out.println(order.getShippingAddress().toXML());// 11
-			// attributes
-		}
-		System.out.println("hasNextOrders= " + hasNextOrders);
-		System.out.println("nextToken= " + nextToken);
-
-		while (hasNextOrders && nextToken != null) {
-			ListOrdersByNextTokenResponse nextTokenResponse = listOrdersByNextToken(nextToken);
-			ListOrdersByNextTokenResult nextTokenResult = nextTokenResponse.getListOrdersByNextTokenResult();
-			hasNextOrders = nextTokenResult.isSetNextToken();
-			nextToken = nextTokenResult.getNextToken();
-			List<Order> nextOrders = nextTokenResult.getOrders();
-			for (Order order : nextOrders) {// TODO
-				System.out.println(order.getAmazonOrderId());
-				System.out.println(order.getSellerOrderId());
-				System.out.println(order.getPurchaseDate());
-				System.out.println(order.getLastUpdateDate());
-				System.out.println(order.getSalesChannel());// :Amazon.com
-				System.out.println(order.getFulfillmentChannel());// :AFN
-				System.out.println(order.getIsBusinessOrder());
-				System.out.println(order.getIsPremiumOrder());
-				System.out.println(order.getIsPrime());
-				System.out.println(order.getBuyerName());
-				System.out.println(order.getBuyerEmail());
-				// System.out.println(order.getPurchaseOrderNumber());// NULL
-				// System.out.println(order.getOrderChannel());// NULL
-				// System.out.println(order.getOrderType());//:StandardOrder
-				System.out.println(order.getOrderStatus());// Shipped
-				System.out.println(order.getOrderTotal().getCurrencyCode());
-				System.out.println(order.getOrderTotal().getAmount());
-				// :Expedited FreeEconomy NextDay SameDay SecondDay Scheduled
-				// Standard
-				System.out.println(order.getShipmentServiceLevelCategory());
-				System.out.println(order.getShipServiceLevel());// :SecondDay...
-				System.out.println(order.getNumberOfItemsShipped());
-				System.out.println(order.getNumberOfItemsUnshipped());
-				// System.out.println(order.getPaymentMethod());//:other...
-				// System.out.println(order.getPaymentExecutionDetail());//only
-				// available for CN and JP
-				System.out.println(order.getShippingAddress().toXML());// 11
-				// attributes
-
-			}
-			System.out.println("hasNextOrders= " + hasNextOrders);
-			System.out.println("nextToken= " + nextToken);
-		}
-
-		// try {
-		// Thread.currentThread();
-		// Thread.sleep(10000);
-		// } catch (InterruptedException ie) {
-		// ie.printStackTrace();
-		// }
-
 	}
 }

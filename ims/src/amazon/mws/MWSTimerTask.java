@@ -4,7 +4,6 @@
 package amazon.mws;
 
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
 
@@ -12,14 +11,16 @@ import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersExce
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
 public abstract class MWSTimerTask<T> extends TimerTask {
+
 	private boolean isReady = true;
 
-	private boolean isReady() {
-		return isReady;
-	}
-
-	private void unready() {
-		isReady = false;
+	private synchronized boolean isReady() {
+		if (isReady) {
+			isReady = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -55,15 +56,14 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 
 	}
 
+	protected final String getLogPrefix() {
+		return Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": " + getClass().getName();
+	}
+
 	/**
 	 * Action need to do before the work
 	 */
 	// protected abstract void beforeWork() throws Exception;
-
-	/**
-	 * Action of the work
-	 */
-	protected abstract void work() throws Exception;
 
 	/**
 	 * Action need to do after the work
@@ -80,65 +80,49 @@ public abstract class MWSTimerTask<T> extends TimerTask {
 	 */
 	@Override
 	public final void run() {
-		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": run() started");
+		System.out.println(getLogPrefix() + ": run() started");
 		if (!isReady()) {
-			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": The task was not ready, it stopped runnig this time!");
+			System.out.println(getLogPrefix() + ": The task was not ready, it stopped runnig this time!");
 			return;
-		} else {
-			unready();
 		}
 
 		try {
-			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": work() started");
+			System.out.println(getLogPrefix() + ": work() started");
 			/** Action of the work */
 			work();
 			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
 					+ getClass().getName() + ": work() ended");
 		} catch (Exception e) {
 			/** Set the task to ready for the next scheduled call */
-			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": work() ended for exception, call ready()");
+			System.out.println(getLogPrefix() + ": work() ended for exception, call ready()");
 			ready();
 			e.printStackTrace();
+		} finally {
+			afterWork();
 		}
 
-		System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-				+ getClass().getName() + ": run() ended");
+		System.out.println(getLogPrefix() + ": run() ended");
 	}
 
 	/**
-	 * Get TimeUnit for task
-	 * 
-	 * @return
+	 * Action need to do before the work
 	 */
-	protected abstract TimeUnit getTimeUnit();
+	// protected abstract void beforeWork() throws Exception;
 
 	/**
-	 * Get Request quota of the MWS API
-	 * 
-	 * @return times
+	 * Action of the work
 	 */
-	protected abstract int getRequestQuota();
+	protected abstract void work() throws Exception;
 
 	/**
-	 * Get Restore period of the MWS API
+	 * Action must be done after the work
 	 * 
-	 * Restore rate = Restore quota/Restore period
+	 * Default is an empty method, and can be override when needed.
 	 * 
-	 * @return time in getTimeUnit()
+	 * Note : Please confirm whether it is safe to do some actions here especially
+	 * in the case asynchronous thread may be produced by work method.
 	 */
-	protected abstract int getRestorePeriod();
+	protected void afterWork() {
 
-	/**
-	 * Get Restore quota of the MWS API
-	 * 
-	 * Restore rate = Restore quota/Restore period
-	 * 
-	 * @return times
-	 */
-	protected abstract int getRestoreQuota();
-
+	}
 }
