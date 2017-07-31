@@ -50,6 +50,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	@Override
 	protected void work() {
 		// initialization
+		System.out.println(getLogPrefix() + ": workType is " + workType.name());
 		mwsCalledTimes = 0;
 		if (workType == WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList set from internal

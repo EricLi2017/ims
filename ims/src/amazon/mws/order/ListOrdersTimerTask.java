@@ -154,7 +154,9 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 		String nextToken = result.getNextToken();
 
 		// Update database according to the result from MWS, Asynchronously
-		System.out.println(getLogPrefix() + ": insertOrders(), mwsCalledTimes=" + mwsCalledTimes);
+		System.out.println(getLogPrefix() + ": insertOrders(), orders size="
+				+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
+				+ mwsCalledTimes);
 		insertOrders(result.getOrders());
 
 		boolean isThrottling = false;
@@ -170,7 +172,9 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 					nextToken = nextResult.getNextToken();
 
 					// Update database according to the result from MWS, Asynchronously
-					System.out.println(getLogPrefix() + ": insertOrders(), mwsCalledTimes=" + mwsCalledTimes);
+					System.out.println(getLogPrefix() + ": insertOrders(), orders size="
+							+ (nextResult.getOrders() == null ? null : nextResult.getOrders().size())
+							+ ", mwsCalledTimes=" + mwsCalledTimes);
 					insertOrders(nextResult.getOrders());
 				} catch (MarketplaceWebServiceOrdersException ex) {
 					// check if it is a throttling exception
@@ -192,7 +196,7 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 			ready();
 
 			// Complete the track of ListOrders task
-			System.out.println(getLogPrefix() + ": insertOrders(), mwsCalledTimes=" + mwsCalledTimes);
+			System.out.println(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
 			updateTrackToCompleted(Time.getTime(result.getCreatedBefore()), pendingId);
 		}
 	}
@@ -248,8 +252,9 @@ public class ListOrdersTimerTask extends MWSTimerTask<Order> {
 					newNextToken = result.getNextToken();
 
 					// Update database according to the result from MWS, Asynchronously
-					System.out.println(getLogPrefix()
-							+ ": insertOrders() in callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);
+					System.out.println(getLogPrefix() + ": insertOrders() in callByRestorePeriodAsync(), orders size="
+							+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
+							+ mwsCalledTimes);
 					insertOrders(result.getOrders());
 
 					// task end
