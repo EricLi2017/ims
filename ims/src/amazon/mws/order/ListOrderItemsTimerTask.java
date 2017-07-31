@@ -23,7 +23,7 @@ import amazon.mws.MWSTimerTask;
 public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	private int mwsCalledTimes;
 	private List<String> amazonOrderIdList;
-	private WorkType workType;
+	private WorkType workType = WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID;
 
 	public enum WorkType {
 		INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID, INSERT_BY_EXTERNAL_SET_AMAZON_ORDER_ID
@@ -157,6 +157,6 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 	private void reset() {
 		mwsCalledTimes = 0;
 		amazonOrderIdList = null;
-		workType = null;
+		workType = WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID;
 	}
 }
