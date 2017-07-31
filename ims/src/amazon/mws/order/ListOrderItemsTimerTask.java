@@ -55,7 +55,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
 		if (workType == WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList set from internal
 			setAmazonOrderIdList(
-					new OrderQuerier().selectOldestNonPendingOrdersWithoutItems(ListOrderItemsMWS.REQUEST_QUOTA));
+					OrderQuerier.selectOldestNonPendingOrdersWithoutItems(ListOrderItemsMWS.REQUEST_QUOTA));
 			if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
 				System.out.println(getLogPrefix() + ": All non-pending orders have related order items.");
 			}
