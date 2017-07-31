@@ -11,13 +11,26 @@ import amazon.mws.MWSTimerTask;
  * Update orders that status changed from pending to non-pending, and call
  * ListOrderItemsTimerTask to insert order items for these orders
  * 
- * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 11:01:56 AM
+ * Created by Eclipse on Jul 31, 2017 at 2:12:53 PM.
+ *
+ * @author Eric Li
+ * @version 1.0
+ * @since 1.0
  */
 public class GetOrderTimerTask extends MWSTimerTask<Order> {
+	private static GetOrderTimerTask getOrderTimerTask = new GetOrderTimerTask();
+
+	private GetOrderTimerTask() {
+	}
+
+	public static GetOrderTimerTask getInstance() {
+		return getOrderTimerTask;
+	}
 
 	@Override
-	protected void work() {
+	protected void work() throws Exception {
 		// TODO Auto-generated method stub
 
 	}
+
 }

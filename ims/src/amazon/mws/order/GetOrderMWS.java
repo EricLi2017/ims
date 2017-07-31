@@ -38,7 +38,7 @@ import amazon.mws.SellerConfig;
  * 
  * Created by Eclipse on Jul 31, 2017 at 1:10:00 PM.
  *
- * @auth Eric Li
+ * @author Eric Li
  * @version 1.0
  * @since 1.0
  */
