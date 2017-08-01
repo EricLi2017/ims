@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import amazon.mws.fulfillment.ListInventorySupplyTimerTask;
 import amazon.mws.order.GetOrderTimerTask;
 import amazon.mws.order.ListOrderItemsTimerTask;
 import amazon.mws.order.ListOrdersTimerTask;
@@ -35,7 +36,7 @@ public class ScheduleServlet extends HttpServlet {
 	public static final long DELAY_LIST_ORDERS = 6 * 60;// at least 6 minutes
 	public static final long DELAY_LIST_ORDER_ITEMS = 1 * 60;// at least 1 minute
 	public static final long DELAY_GET_ORDER = 6 * 60;// at least 6 minutes
-	public static final long DELAY_LIST_INVENTORY_SUPPLY = 30 * 60;// at least 15 seconds
+	public static final long DELAY_LIST_INVENTORY_SUPPLY = 2 * 60;// at least 15 seconds//TODO for test
 	/**
 	 * unit
 	 */
@@ -73,6 +74,12 @@ public class ScheduleServlet extends HttpServlet {
 		 */
 		scheduledExecutorService.scheduleWithFixedDelay(GetOrderTimerTask.getInstance(), INITIAL_DELAY_GET_ORDER,
 				DELAY_GET_ORDER, TIME_UNIT);
+
+		/**
+		 * Update product inventory by SKU
+		 */
+		scheduledExecutorService.scheduleWithFixedDelay(ListInventorySupplyTimerTask.getInstance(),
+				INITIAL_DELAY_LIST_INVENTORY_SUPPLY, DELAY_LIST_INVENTORY_SUPPLY, TIME_UNIT);
 	}
 
 	/**

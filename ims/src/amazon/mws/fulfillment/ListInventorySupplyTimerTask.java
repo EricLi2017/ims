@@ -15,6 +15,10 @@ import amazon.mws.order.GetOrderMWS;
 import common.util.Page;
 
 /**
+ * Update product inventory by SKU
+ * 
+ * Updated information: fnsku,total_supply_quantity,in_stock_supply_quantity
+ * 
  * Created by Eclipse on Aug 1, 2017 at 3:38:12 PM.
  *
  * @author Eric Li
@@ -22,6 +26,15 @@ import common.util.Page;
  * @since 1.0
  */
 public class ListInventorySupplyTimerTask extends MWSTimerTask {
+	private static ListInventorySupplyTimerTask listInventorySupplyTimerTask = new ListInventorySupplyTimerTask();
+
+	private ListInventorySupplyTimerTask() {
+
+	}
+
+	public static ListInventorySupplyTimerTask getInstance() {
+		return listInventorySupplyTimerTask;
+	}
 
 	@Override
 	protected void work() throws ClassNotFoundException, SQLException {
