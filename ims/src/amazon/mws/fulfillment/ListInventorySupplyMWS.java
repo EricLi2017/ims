@@ -107,7 +107,7 @@ public class ListInventorySupplyMWS {
 	 *            max size 50
 	 * @return
 	 */
-	public static ListInventorySupplyResponse listInventory(List<String> skus) {
+	public static ListInventorySupplyResponse listInventory(List<String> skus) throws FBAInventoryServiceMWSException {
 		// Get a client connection.
 		// Make sure you've set the variables in
 		// FBAInventoryServiceMWSSampleConfig. (changed to MWSConfig)

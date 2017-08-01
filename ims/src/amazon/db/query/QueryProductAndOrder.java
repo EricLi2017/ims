@@ -51,9 +51,10 @@ public class QueryProductAndOrder {
         if (sku != null && !"".equals(sku.trim())) {
             if (where2 == null) {
                 where2 = " where d.sku='" + sku + "'";
-            } else {
-                where2 = " and d.sku='" + sku + "'";
-            }
+            } 
+			// else {
+			// where2 = " and d.sku='" + sku + "'";
+			// }
             part2 += where2;
         }
         if (fnsku != null && !"".equals(fnsku.trim())) {

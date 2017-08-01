@@ -26,14 +26,16 @@ public class ScheduleServlet extends HttpServlet {
 	 * initialDealy
 	 */
 	public static final long INITIAL_DELAY_LIST_ORDERS = 60;
-	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 100;
-	public static final long INITIAL_DELAY_GET_ORDER = 120;
+	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 80;
+	public static final long INITIAL_DELAY_GET_ORDER = 100;
+	public static final long INITIAL_DELAY_LIST_INVENTORY_SUPPLY = 120;
 	/**
 	 * delay
 	 */
 	public static final long DELAY_LIST_ORDERS = 6 * 60;// at least 6 minutes
 	public static final long DELAY_LIST_ORDER_ITEMS = 1 * 60;// at least 1 minute
 	public static final long DELAY_GET_ORDER = 6 * 60;// at least 6 minutes
+	public static final long DELAY_LIST_INVENTORY_SUPPLY = 30 * 60;// at least 15 seconds
 	/**
 	 * unit
 	 */

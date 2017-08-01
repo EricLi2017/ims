@@ -16,6 +16,7 @@ import com.amazonservices.mws.orders._2013_09_01.model.Order;
 import amazon.db.query.OrderQuerier;
 import amazon.mws.MWSTimerTask;
 import amazon.mws.order.ListOrderItemsTimerTask.WorkType;
+import common.util.Page;
 
 /**
  * Update orders that status changed from pending to non-pending, and schedule
@@ -50,13 +51,13 @@ public class GetOrderTimerTask extends MWSTimerTask {
 
 		// Update orders that status changed from pending to non-pending, and schedule
 		// ListOrderItemsTimerTask to asynchronously insert order items for these orders
-		int subIndex = 0;
+		int total = pendingAmazonOrderIds.size();
 		int subSize = GetOrderMWS.MAX_SIZE_AMAZON_ORDER_ID_LIST;
-		int subMaxIndex = pendingAmazonOrderIds.size() % subSize == 0 ? pendingAmazonOrderIds.size() / subSize
-				: pendingAmazonOrderIds.size() / subSize + 1;
+		int subMaxIndex = total % subSize == 0 ? total / subSize : total / subSize + 1;
+		int subIndex = 0;
 		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get subPendingAmazonOrderIds
-			List<String> subPendingAmazonOrderIds = getSub(pendingAmazonOrderIds, subIndex, subSize);
+			List<String> subPendingAmazonOrderIds = Page.getSub(pendingAmazonOrderIds, subIndex, subSize);
 			System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub "
 					+ subPendingAmazonOrderIds.size() + " pendingAmaonOderIds");
 
@@ -96,14 +97,16 @@ public class GetOrderTimerTask extends MWSTimerTask {
 	 * @param subSize
 	 * @return
 	 */
-	private static List<String> getSub(List<String> list, int index, int subSize) {
-		if (list == null)
-			return null;
-		int maxIndex = list.size() % subSize == 0 ? list.size() / subSize : list.size() / subSize + 1;
-		int endIndex = (index == maxIndex ? list.size() : index * subSize);
-
-		return list.subList((index - 1) * subSize, endIndex);
-	}
+	// private static List<String> getSub(List<String> list, int index, int subSize)
+	// {
+	// if (list == null)
+	// return null;
+	// int maxIndex = list.size() % subSize == 0 ? list.size() / subSize :
+	// list.size() / subSize + 1;
+	// int endIndex = (index == maxIndex ? list.size() : index * subSize);
+	//
+	// return list.subList((index - 1) * subSize, endIndex);
+	// }
 
 	private static List<Order> getNonPendingOrders(List<Order> orders) {
 		if (orders == null)

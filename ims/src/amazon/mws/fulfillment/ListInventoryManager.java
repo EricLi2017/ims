@@ -8,6 +8,7 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.InventorySu
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyResponse;
 
 import amazon.db.edit.InventoryReportDatabase;
+import amazon.db.edit.AmazonProductEditor;
 import amazon.db.model.Product;
 
 /**
@@ -43,7 +44,7 @@ public class ListInventoryManager extends Observable {
 	private static int update(List<String> skus) {
 		ListInventorySupplyResponse response = ListInventorySupplyMWS.listInventory(skus);
 		List<InventorySupply> supplys = response.getListInventorySupplyResult().getInventorySupplyList().getMember();
-		return new ListInventoryDatabase().update(supplys);
+		return AmazonProductEditor.update(supplys);
 	}
 
 	public int updateAll() {
