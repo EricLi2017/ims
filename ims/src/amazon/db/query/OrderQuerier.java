@@ -23,8 +23,11 @@ public class OrderQuerier {
 	 * 
 	 * @param rows
 	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
 	 */
-	public static List<String> selectOldestNonPendingOrdersWithoutItems(int rows) {
+	public static List<String> selectOldestNonPendingOrdersWithoutItems(int rows)
+			throws ClassNotFoundException, SQLException {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select a.amazon_order_id from orders as a "
@@ -44,8 +47,6 @@ public class OrderQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
 		} finally {
 			boolean flag = true;
 			try {
@@ -75,8 +76,10 @@ public class OrderQuerier {
 	 * 
 	 * @param rows
 	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
 	 */
-	public static List<String> selectOldestPendingOrders(int rows) {
+	public static List<String> selectOldestPendingOrders(int rows) throws ClassNotFoundException, SQLException {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select amazon_order_id from orders where order_status=? order by purchase_date asc limit ?";
@@ -95,8 +98,6 @@ public class OrderQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
 		} finally {
 			boolean flag = true;
 			try {

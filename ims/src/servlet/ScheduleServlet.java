@@ -26,7 +26,7 @@ public class ScheduleServlet extends HttpServlet {
 	 * initialDealy
 	 */
 	public static final long INITIAL_DELAY_LIST_ORDERS = 60;
-	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 120;
+	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 100;
 	public static final long INITIAL_DELAY_GET_ORDER = 120;
 	/**
 	 * delay

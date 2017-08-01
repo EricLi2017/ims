@@ -41,7 +41,7 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 	}
 
 	@Override
-	protected void work() throws Exception {
+	protected void work() throws ClassNotFoundException, SQLException {
 		// init
 		int mwsCalledTimes = 0;
 		List<String> pendingAmazonOrderIds = OrderQuerier
@@ -57,25 +57,30 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get subPendingAmazonOrderIds
 			List<String> subPendingAmazonOrderIds = getSub(pendingAmazonOrderIds, subIndex, subSize);
-			System.out.println(
-					getLogPrefix() + ": process the sub " + subPendingAmazonOrderIds.size() + " pendingAmaonOderIds");
+			System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub "
+					+ subPendingAmazonOrderIds.size() + " pendingAmaonOderIds");
 
 			// call
 			GetOrderResponse response = GetOrderMWS.getOrder(subPendingAmazonOrderIds);
 			List<Order> nonPendingOrders = getNonPendingOrders(response.getGetOrderResult().getOrders());
 			List<String> nonPendingAmazonOrderIds = getAmazonOrderIds(nonPendingOrders);
-			System.out.println(getLogPrefix() + ": " + nonPendingAmazonOrderIds.size() + "/"
+			System.out.println(getLogPrefix() + ": found " + nonPendingAmazonOrderIds.size() + "/"
 					+ subPendingAmazonOrderIds.size() + " orders in MWS changed from pending to non-pending");
 
 			// update orders
-			int update = updateOrders(nonPendingOrders);
-			System.out.println(getLogPrefix() + ": " + update + "/" + nonPendingOrders.size()
-					+ " orders in IMS updated from pending to non-pending");
+			if (nonPendingOrders != null && nonPendingOrders.size() > 0) {
+				int update = updateOrders(nonPendingOrders);
+				System.out.println(getLogPrefix() + ": updated " + update + "/" + nonPendingOrders.size()
+						+ " orders in IMS from pending to non-pending");
+			}
 
 			// schedule async ListOrderItemsTimerTask to insert order items
-			System.out.println(getLogPrefix() + ": scheduleListOrderItemsTimerTask(), nonPendingAmazonOrderIds.size()="
-					+ nonPendingAmazonOrderIds.size());
-			scheduleListOrderItemsTimerTask(nonPendingAmazonOrderIds);
+			if (nonPendingAmazonOrderIds != null && nonPendingAmazonOrderIds.size() > 0) {
+				System.out.println(
+						getLogPrefix() + ": scheduleListOrderItemsTimerTask(), nonPendingAmazonOrderIds.size()="
+								+ nonPendingAmazonOrderIds.size());
+				scheduleListOrderItemsTimerTask(nonPendingAmazonOrderIds);
+			}
 		}
 
 		// set ready for the next scheduled task running
@@ -88,14 +93,16 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 	 * 
 	 * @param list
 	 * @param index
-	 * @param maxSize
+	 * @param subSize
 	 * @return
 	 */
-	private static List<String> getSub(List<String> list, int index, int maxSize) {
+	private static List<String> getSub(List<String> list, int index, int subSize) {
 		if (list == null)
 			return null;
+		int maxIndex = list.size() % subSize == 0 ? list.size() / subSize : list.size() / subSize + 1;
+		int endIndex = (index == maxIndex ? list.size() : index * subSize);
 
-		return list.subList((index - 1) * maxSize, index * maxSize);
+		return list.subList((index - 1) * subSize, endIndex);
 	}
 
 	private static List<Order> getNonPendingOrders(List<Order> orders) {
@@ -123,12 +130,10 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 	}
 
 	private static int updateOrders(List<Order> orders) throws SQLException {
-		// TODO
 		return ListOrdersDatabase.deleteAndInsert(orders);
 	}
 
 	private void scheduleListOrderItemsTimerTask(List<String> amazonOrderIdList) {
-		// TODO
 		ListOrderItemsTimerTask listOrderItemsTimerTask = ListOrderItemsTimerTask
 				.getInstance(WorkType.INSERT_BY_EXTERNAL_SET_AMAZON_ORDER_ID);
 		listOrderItemsTimerTask.setAmazonOrderIdList(amazonOrderIdList);
