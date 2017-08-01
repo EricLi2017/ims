@@ -11,7 +11,6 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInvento
 import amazon.db.edit.AmazonProductEditor;
 import amazon.db.query.AmazonProductQuerier;
 import amazon.mws.MWSTimerTask;
-import amazon.mws.order.GetOrderMWS;
 import common.util.Page;
 
 /**
@@ -48,7 +47,7 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 		int subSize = ListInventorySupplyMWS.SKU_MAX_NUM;
 		int subMaxIndex = total % subSize == 0 ? total / subSize : total / subSize + 1;
 		int subIndex = 0;
-		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
+		while (++mwsCalledTimes <= ListInventorySupplyMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get sub SKUs
 			List<String> subSkus = Page.getSub(skus, subIndex, subSize);
 			System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub "
@@ -66,8 +65,8 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 				// update database
 				if (supplys.size() > 0) {
 					int update = AmazonProductEditor.update(supplys);
-					System.out
-							.println(getLogPrefix() + ": update " + update + "/" + supplys.size() + " amazon product");
+					System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") update " + update
+							+ "/" + supplys.size() + " amazon product");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
