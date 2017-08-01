@@ -41,7 +41,7 @@ public class ListInventoryManager extends Observable {
 	 * @return updated rows
 	 */
 	private static int update(List<String> skus) {
-		ListInventorySupplyResponse response = ListInventoryMWS.listInventory(skus);
+		ListInventorySupplyResponse response = ListInventorySupplyMWS.listInventory(skus);
 		List<InventorySupply> supplys = response.getListInventorySupplyResult().getInventorySupplyList().getMember();
 		return new ListInventoryDatabase().update(supplys);
 	}
@@ -68,7 +68,7 @@ public class ListInventoryManager extends Observable {
 			// sku list
 			skus.add(product.getSku());
 			skuNum++;
-			if (skuNum % ListInventoryMWS.SKU_MAX_NUM == 0 || skuNum == products.size()) {
+			if (skuNum % ListInventorySupplyMWS.SKU_MAX_NUM == 0 || skuNum == products.size()) {
 				// call MWS and update inventory in database
 				batchUpdateRows = updateInventory(skus);
 				totalUpdateRows += batchUpdateRows;

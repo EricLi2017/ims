@@ -10,7 +10,7 @@ import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersExce
 /**
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
-public abstract class MWSTimerTask<T> extends TimerTask {
+public abstract class MWSTimerTask extends TimerTask {
 
 	private boolean isReady = true;
 

@@ -37,7 +37,7 @@ import common.util.Time;
  * 
  * Created by Eclipse. User: Eric Li Date: Jul 23, 2017 Time: 9:40:09 PM
  */
-public class ListOrdersTimerTask extends MWSTimerTask<Order> {
+public class ListOrdersTimerTask extends MWSTimerTask {
 
 	// the default first createdAfter time span in hour before now
 	public static final int DEFAULT_FIRST_CREATED_AFTER_FROM_NOW_HOUR = -24 * 30 * 3;// 90 days before now

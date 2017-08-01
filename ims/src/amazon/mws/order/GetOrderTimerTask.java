@@ -27,7 +27,7 @@ import amazon.mws.order.ListOrderItemsTimerTask.WorkType;
  * @version 1.0
  * @since 1.0
  */
-public class GetOrderTimerTask extends MWSTimerTask<Order> {
+public class GetOrderTimerTask extends MWSTimerTask {
 	private final ScheduledExecutorService scheduledExecutorService;
 
 	private static GetOrderTimerTask getOrderTimerTask = new GetOrderTimerTask();

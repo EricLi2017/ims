@@ -21,7 +21,7 @@ import amazon.mws.MWSTimerTask;
  * 
  * Created by Eclipse. User: Eric Li Date: Jul 23, 2017 Time: 10:23:48 PM
  */
-public class ListOrderItemsTimerTask extends MWSTimerTask<OrderItem> {
+public class ListOrderItemsTimerTask extends MWSTimerTask {
 	private int mwsCalledTimes;
 	private List<String> amazonOrderIdList;
 	private WorkType workType = WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID;
