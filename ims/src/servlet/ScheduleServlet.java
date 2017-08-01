@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import amazon.mws.order.GetOrderTimerTask;
 import amazon.mws.order.ListOrderItemsTimerTask;
 import amazon.mws.order.ListOrdersTimerTask;
 
@@ -21,31 +22,55 @@ import amazon.mws.order.ListOrdersTimerTask;
 public class ScheduleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public static final long INITIAL_DELAY_LIST_ORDERS = 1;
+	/**
+	 * initialDealy
+	 */
+	public static final long INITIAL_DELAY_LIST_ORDERS = 60;
 	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 120;
-	// public static final long DELAY_LIST_ORDERS = 60;
-	// public static final long DELAY_LIST_ORDER_ITEMS = 60;
-	public static final long DELAY_LIST_ORDERS = 6;// TODO for test
-	public static final long DELAY_LIST_ORDER_ITEMS = 60;
-	public static final TimeUnit TIME_UNIT_LIST_ORDERS = TimeUnit.MINUTES;
-	public static final TimeUnit TIME_UNIT_LIST_ORDER_ITEMS = TimeUnit.SECONDS;
+	public static final long INITIAL_DELAY_GET_ORDER = 120;
+	/**
+	 * delay
+	 */
+	public static final long DELAY_LIST_ORDERS = 6 * 60;// at least 6 minutes
+	public static final long DELAY_LIST_ORDER_ITEMS = 1 * 60;// at least 1 minute
+	public static final long DELAY_GET_ORDER = 6 * 60;// at least 6 minutes
+	/**
+	 * unit
+	 */
+	public static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
 
+	/**
+	 * <pre>
+	 * ********************************************************************    
+	 * Use scheduleWithFixedDelay to comply with the MWS API Throttling 
+	 * ********************************************************************
+	 * </pre>
+	 */
 	private static final ScheduledExecutorService scheduledExecutorService;
 	static {
 		scheduledExecutorService = Executors.newScheduledThreadPool(5);
 
 		/**
-		 * Use scheduleWithFixedDelay to comply with the MWS API Throttling
+		 * Insert all status orders into IMS from MWS Orders API
 		 */
-		// Insert orders into IMS from MWS Orders API
 		scheduledExecutorService.scheduleWithFixedDelay(ListOrdersTimerTask.getInstance(), INITIAL_DELAY_LIST_ORDERS,
-				DELAY_LIST_ORDERS, TIME_UNIT_LIST_ORDERS);
+				DELAY_LIST_ORDERS, TIME_UNIT);
 
-		// Insert order items into IMS from MWS Orders API
+		/**
+		 * Insert order items that order is not pending status and order has no related
+		 * order items into IMS from MWS Orders API
+		 */
 		scheduledExecutorService.scheduleWithFixedDelay(
-				ListOrderItemsTimerTask.getInstance(ListOrderItemsTimerTask.WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID),
-				INITIAL_DELAY_LIST_ORDER_ITEMS, DELAY_LIST_ORDER_ITEMS, TIME_UNIT_LIST_ORDER_ITEMS);
+				ListOrderItemsTimerTask
+						.getInstance(ListOrderItemsTimerTask.WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID),
+				INITIAL_DELAY_LIST_ORDER_ITEMS, DELAY_LIST_ORDER_ITEMS, TIME_UNIT);
 
+		/**
+		 * Update orders that status changed from pending to non-pending, and schedule
+		 * ListOrderItemsTimerTask to asynchronously insert order items for these orders
+		 */
+		scheduledExecutorService.scheduleWithFixedDelay(GetOrderTimerTask.getInstance(), INITIAL_DELAY_GET_ORDER,
+				DELAY_GET_ORDER, TIME_UNIT);
 	}
 
 	/**
@@ -71,5 +96,4 @@ public class ScheduleServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

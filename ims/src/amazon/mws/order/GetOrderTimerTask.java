@@ -46,26 +46,41 @@ public class GetOrderTimerTask extends MWSTimerTask<Order> {
 		int mwsCalledTimes = 0;
 		List<String> pendingAmazonOrderIds = OrderQuerier
 				.selectOldestPendingOrders(GetOrderMWS.REQUEST_QUOTA * GetOrderMWS.MAX_SIZE_AMAZON_ORDER_ID_LIST);
+		System.out.println(getLogPrefix() + ": " + pendingAmazonOrderIds.size() + " pendingAmaonOderIds are selected.");
 
 		// Update orders that status changed from pending to non-pending, and schedule
 		// ListOrderItemsTimerTask to asynchronously insert order items for these orders
-		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA) {
+		int subIndex = 0;
+		int subSize = GetOrderMWS.MAX_SIZE_AMAZON_ORDER_ID_LIST;
+		int subMaxIndex = pendingAmazonOrderIds.size() % subSize == 0 ? pendingAmazonOrderIds.size() / subSize
+				: pendingAmazonOrderIds.size() / subSize + 1;
+		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get subPendingAmazonOrderIds
-			List<String> subPendingAmazonOrderIds = getSub(pendingAmazonOrderIds, mwsCalledTimes,
-					GetOrderMWS.MAX_SIZE_AMAZON_ORDER_ID_LIST);
+			List<String> subPendingAmazonOrderIds = getSub(pendingAmazonOrderIds, subIndex, subSize);
+			System.out.println(
+					getLogPrefix() + ": process the sub " + subPendingAmazonOrderIds.size() + " pendingAmaonOderIds");
 
 			// call
 			GetOrderResponse response = GetOrderMWS.getOrder(subPendingAmazonOrderIds);
 			List<Order> nonPendingOrders = getNonPendingOrders(response.getGetOrderResult().getOrders());
 			List<String> nonPendingAmazonOrderIds = getAmazonOrderIds(nonPendingOrders);
+			System.out.println(getLogPrefix() + ": " + nonPendingAmazonOrderIds.size() + "/"
+					+ subPendingAmazonOrderIds.size() + " orders in MWS changed from pending to non-pending");
 
 			// update orders
-			updateOrders(nonPendingOrders);
+			int update = updateOrders(nonPendingOrders);
+			System.out.println(getLogPrefix() + ": " + update + "/" + nonPendingOrders.size()
+					+ " orders in IMS updated from pending to non-pending");
 
 			// schedule async ListOrderItemsTimerTask to insert order items
+			System.out.println(getLogPrefix() + ": scheduleListOrderItemsTimerTask(), nonPendingAmazonOrderIds.size()="
+					+ nonPendingAmazonOrderIds.size());
 			scheduleListOrderItemsTimerTask(nonPendingAmazonOrderIds);
 		}
 
+		// set ready for the next scheduled task running
+		System.out.println(getLogPrefix() + ": ready()");
+		ready();
 	}
 
 	/**
