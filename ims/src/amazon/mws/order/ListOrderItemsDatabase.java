@@ -21,10 +21,9 @@ public class ListOrderItemsDatabase {
 		String sql = "insert into order_items(amazon_order_id,sku,asin,"
 				+ "price_currency,price_amount,discount_currency," + "discount_amount,tax_currency,tax_amount,"
 				+ "order_item_id,title,quantity_ordered," + "quantity_shipped) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			con.setAutoCommit(false);// cancel auto commit
 			PreparedStatement ps;
 			for (OrderItem orderItem : orderItems) {

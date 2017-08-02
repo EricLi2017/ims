@@ -16,10 +16,9 @@ public class SupplyTransactionDatabase {
 		SupplyTransaction transaction = null;
 
 		String sql = "select supply_id,quantity,unit_price,price_description,status,batch_no,product_price,shipped_fee,time,operator,transaction_description from supply_transaction where supply_id=? and batch_no=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, supplyId);
 			ps.setInt(2, batchNo);
@@ -69,10 +68,9 @@ public class SupplyTransactionDatabase {
 		int rows = -1;
 
 		String sql = "update supply_transaction set supply_id=?,quantity=?,unit_price=?,price_description=?,status=?,batch_no=?,product_price=?,shipped_fee=?,time=?,operator=?,transaction_description=? where supply_id=? and batch_no=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, transaction.getSupplyId());// PK
 			ps.setInt(2, transaction.getQuantity());
@@ -132,10 +130,9 @@ public class SupplyTransactionDatabase {
 
 		int rows = 0;
 		String sql = "insert into supply_transaction (supply_id,quantity,unit_price,price_description,status,batch_no,product_price,shipped_fee,time,operator,transaction_description) values (?,?,?,?,?,?,?,?,?,?,?)";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			con.setAutoCommit(false);// cancel auto commit
 			PreparedStatement ps;
 			for (SupplyTransaction transaction : transactions) {

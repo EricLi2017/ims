@@ -33,10 +33,9 @@ public class ListOrdersTrackQuerier {
 		Timestamp latestCompletedCreatedBefore = null;
 
 		String sql = "SELECT created_before FROM list_orders_track WHERE status=? ORDER BY created_before DESC LIMIT 1";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setByte(1, ListOrdersTrackStatus.Completed.value());
 			ResultSet rs = ps.executeQuery();
@@ -83,10 +82,9 @@ public class ListOrdersTrackQuerier {
 		boolean isEmpty = false;
 
 		String sql = "SELECT id FROM list_orders_track LIMIT 1";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 
@@ -133,10 +131,9 @@ public class ListOrdersTrackQuerier {
 		boolean hasPendingTask = false;
 
 		String sql = "SELECT id FROM list_orders_track WHERE status=? ORDER BY id ASC LIMIT 1";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setByte(1, ListOrdersTrackStatus.Pending.value());
 			ResultSet rs = ps.executeQuery();
@@ -172,10 +169,9 @@ public class ListOrdersTrackQuerier {
 		int id = 0;
 
 		String sql = "SELECT id FROM list_orders_track WHERE status=? ORDER BY id ASC LIMIT 1";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setByte(1, ListOrdersTrackStatus.Pending.value());
 			ResultSet rs = ps.executeQuery();

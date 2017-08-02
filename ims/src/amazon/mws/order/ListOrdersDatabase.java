@@ -35,10 +35,9 @@ public class ListOrdersDatabase {
 		System.out.println(sql2);// TODO
 		System.out.println(sql);// TODO
 		System.out.println("orders.size()=" + orders.size());// TODO
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			con.setAutoCommit(false);// cancel auto commit
 			PreparedStatement ps;
 			PreparedStatement ps2;
@@ -152,10 +151,9 @@ public class ListOrdersDatabase {
 		System.out.println(sql2);// TODO
 		System.out.println(sql);// TODO
 		System.out.println("orders.size()=" + orders.size());// TODO
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			con.setAutoCommit(false);// cancel auto commit
 			PreparedStatement delPs;
 			PreparedStatement delPs2;
@@ -260,10 +258,9 @@ public class ListOrdersDatabase {
 		int rows = -1;
 
 		String sql = "select count(amazon_order_id) from orders where purchase_date >=? and purchase_date<?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setTimestamp(1, createdAfter);
 			ps.setTimestamp(2, createdBefore);
@@ -305,10 +302,9 @@ public class ListOrdersDatabase {
 		int rows = -1;
 
 		String sql = "select count(amazon_order_id) from orders where amazon_order_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, amazonOrderId);
 			ResultSet rs = ps.executeQuery();

@@ -20,10 +20,9 @@ public class ProductSupplyDatabase {
 
 		int rows = 0;
 		String sql = "insert into product_supply (product_id,supplier_id,supplier_name,supplier_description,supply_type,supply_url,shipped_from,unit_price,price_description,price_time,status) values (?,?,?,?,?,?,?,?,?,?,?)";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps;
 			for (ProductSupply supply : supplies) {
 				ps = con.prepareStatement(sql);
@@ -71,10 +70,9 @@ public class ProductSupplyDatabase {
 		int rows = -1;
 
 		String sql = "update product_supply set product_id=?,supplier_id=?,supplier_name=?,supplier_description=?,supply_type=?,supply_url=?,shipped_from=?,unit_price=?,price_description=?,price_time=?,status=? where supply_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, supply.getProductId());

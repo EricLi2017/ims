@@ -96,10 +96,9 @@ public class ProductQuerier {
 		// System.out.println(sql);
 
 		List<InternalProduct> products = new ArrayList<>();
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -144,10 +143,9 @@ public class ProductQuerier {
 		InternalProduct product = null;
 
 		String sql = "select product_id,name,description,create_time,status,asin from internal_product where product_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, productId);
 

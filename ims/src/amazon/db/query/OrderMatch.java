@@ -39,10 +39,9 @@ public class OrderMatch {
         OrderMatchResult orderMatchResult = new OrderMatchResult();
         String sql1 = "SELECT COUNT(a.amazon_order_id), SUM(a.number_items_shipped+a.number_items_unshipped) FROM orders a WHERE a.purchase_date >=? AND a.purchase_date<? AND a.order_status=?";
         String sql2 = "SELECT COUNT(DISTINCT b.amazon_order_id),SUM(b.quantity_ordered) FROM orders a, order_items b WHERE a.amazon_order_id=b.amazon_order_id AND a.purchase_date >=? AND a.purchase_date<? AND a.order_status=?";
-        DB db = new DB();
         Connection con = null;
         try {
-            con = db.getConnection();
+			con = DB.getConnection();
             //query orders
             PreparedStatement ps1 = con.prepareStatement(sql1);
             ps1.setTimestamp(1, createdAfter);

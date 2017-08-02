@@ -7,14 +7,16 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DB {
-	private static Properties config = null;
+	private DB() {
+	}
 
-	public Connection getConnection() throws ClassNotFoundException, SQLException {
+	private static Properties config;
 
+	public static synchronized Connection getConnection() throws ClassNotFoundException, SQLException {
 		if (config == null) {
 			config = new Properties();
 			try {
-				config.load(getClass().getResourceAsStream("DB.properties"));
+				config.load(DB.class.getResourceAsStream("DB.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 				// avoid to produce new type exception
@@ -25,6 +27,7 @@ public class DB {
 		Class.forName(config.getProperty("DRIVER"));
 		Connection conn = DriverManager.getConnection(config.getProperty("URL"), config.getProperty("USER"),
 				config.getProperty("PASSWORD"));
+
 		return conn;
 	}
 

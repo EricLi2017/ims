@@ -12,107 +12,105 @@ import common.db.DB;
 
 public class InventoryReportDatabase {
 
-    /**
-     * insert: sku,asin,your_price
-     *
-     * @param products
-     * @return
-     */
-    public int insert(List<Product> products) {
-        int rows = 0;
-        if (products == null || products.size() == 0)
-            return 0;
+	/**
+	 * insert: sku,asin,your_price
+	 *
+	 * @param products
+	 * @return
+	 */
+	public int insert(List<Product> products) {
+		int rows = 0;
+		if (products == null || products.size() == 0)
+			return 0;
 
-        String sql = "insert into amazon_product (sku,asin,your_price) values (?,?,?)";
-        DB db = new DB();
-        Connection con = null;
-        try {
-            con = db.getConnection();
-            PreparedStatement ps;
-            for (Product product : products) {
-                ps = con.prepareStatement(sql);
-                ps.setString(1, product.getSku());
-                ps.setString(2, product.getAsin());
-                ps.setDouble(3, product.getPrice());
+		String sql = "insert into amazon_product (sku,asin,your_price) values (?,?,?)";
+		Connection con = null;
+		try {
+			con = DB.getConnection();
+			PreparedStatement ps;
+			for (Product product : products) {
+				ps = con.prepareStatement(sql);
+				ps.setString(1, product.getSku());
+				ps.setString(2, product.getAsin());
+				ps.setDouble(3, product.getPrice());
 
-                rows += ps.executeUpdate();
-                ps.close();
-            }
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            boolean flag = true;
-            try {
-                if (con == null || con.isClosed()) {
-                    flag = false;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (flag) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+				rows += ps.executeUpdate();
+				ps.close();
+			}
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-        return rows;
-    }
+		return rows;
+	}
 
-    /**
-     * select all: sku,asin,your_price
-     *
-     * @return null: if exception happen while query database
-     * List<Product>:  matched result found in database
-     */
-    public List<Product> selectAll() {
-        List<Product> products = new ArrayList<>();
+	/**
+	 * select all: sku,asin,your_price
+	 *
+	 * @return null: if exception happen while query database List<Product>: matched
+	 *         result found in database
+	 */
+	public List<Product> selectAll() {
+		List<Product> products = new ArrayList<>();
 
-        String sql = "select sku,asin,your_price from amazon_product order by sku asc";
-        DB db = new DB();
-        Connection con = null;
-        try {
-            con = db.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);
+		String sql = "select sku,asin,your_price from amazon_product order by sku asc";
+		Connection con = null;
+		try {
+			con = DB.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Product product = new Product();
-                product.setSku(rs.getString(1));
-                product.setAsin(rs.getString(2));
-                product.setPrice(rs.getDouble(3));
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Product product = new Product();
+				product.setSku(rs.getString(1));
+				product.setAsin(rs.getString(2));
+				product.setPrice(rs.getDouble(3));
 
-                products.add(product);
-            }
-            rs.close();
-            ps.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            boolean flag = true;
-            try {
-                if (con == null || con.isClosed()) {
-                    flag = false;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (flag) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+				products.add(product);
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-        return products;
+		return products;
 
-    }
+	}
 
 }

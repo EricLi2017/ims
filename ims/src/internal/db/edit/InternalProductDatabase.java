@@ -19,10 +19,9 @@ public class InternalProductDatabase {
 
 		int rows = 0;
 		String sql = "insert into internal_product (name,description,status,asin) values (?,?,?,?)";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps;
 			for (InternalProduct product : products) {
 				ps = con.prepareStatement(sql);
@@ -67,10 +66,9 @@ public class InternalProductDatabase {
 		int rows = -1;
 
 		String sql = "update internal_product set name=?,description=?,status=?,asin=? where product_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, product.getName());
 			ps.setString(2, product.getDescription());

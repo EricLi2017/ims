@@ -32,10 +32,9 @@ public class AmazonProductQuerier {
 		List<String> skus = new ArrayList<>();
 
 		String sql = "SELECT sku FROM amazon_product";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 
 			ResultSet rs = ps.executeQuery();

@@ -31,8 +31,8 @@ public class SupplyQuerier {
 	 * @param status
 	 * @param orderBy
 	 * @param ascDesc
-	 * @return null: if exception happened while query database; empty size
-	 *         List: if there is no matched result;
+	 * @return null: if exception happened while query database; empty size List: if
+	 *         there is no matched result;
 	 */
 	public List<ProductSupply> querySupply(String supplyId, String productId, String supplyUrl, Timestamp dateAfter,
 			Timestamp dateBefore, String status, String orderBy, String ascDesc) {
@@ -96,10 +96,9 @@ public class SupplyQuerier {
 		// System.out.println(sql);
 
 		List<ProductSupply> supplies = new ArrayList<>();
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 
 			ResultSet rs = ps.executeQuery();
@@ -156,10 +155,9 @@ public class SupplyQuerier {
 		int count = -1;
 
 		String sql = "select count(*) from product_supply where product_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, productId);
 
@@ -203,10 +201,9 @@ public class SupplyQuerier {
 		ProductSupply supply = null;
 
 		String sql = "select supply_id,product_id,supplier_id,supplier_name,supplier_description,supply_type,supply_url,shipped_from,unit_price,price_description,price_time,status from product_supply where supply_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, supplyId);
 

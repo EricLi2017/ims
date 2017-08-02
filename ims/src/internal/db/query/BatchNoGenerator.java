@@ -47,10 +47,9 @@ public class BatchNoGenerator {
 		int batchNo = -1;
 
 		String sql = "select batch_no from supply_transaction order by batch_no desc limit 1";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 
 			ResultSet rs = ps.executeQuery();

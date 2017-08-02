@@ -36,8 +36,8 @@ public class TransactionQuerier {
 	 * @param productId
 	 * @param orderBy
 	 * @param ascDesc
-	 * @return null: if exception happened while query database; empty size
-	 *         List: if there is no matched result;
+	 * @return null: if exception happened while query database; empty size List: if
+	 *         there is no matched result;
 	 */
 	public List<TransactionAndSupply> queryTransactionAndSupply(String supplyId, String batchNo, Timestamp dateAfter,
 			Timestamp dateBefore, String status, String productId, String orderBy, String ascDesc) {
@@ -101,10 +101,9 @@ public class TransactionQuerier {
 		// System.out.println(sql);
 
 		List<TransactionAndSupply> transactionAndSupplies = new ArrayList<>();
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 
 			ResultSet rs = ps.executeQuery();
@@ -169,10 +168,9 @@ public class TransactionQuerier {
 		int count = -1;
 
 		String sql = "select count(*) from supply_transaction as a,product_supply as b where a.supply_id=b.supply_id and b.product_id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, productId);
 

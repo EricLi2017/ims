@@ -32,10 +32,9 @@ public class OrderQuerier {
 
 		String sql = "select a.amazon_order_id from orders as a "
 				+ "where a.order_status!=? and a.amazon_order_id not in (select amazon_order_id from order_items) order by a.purchase_date asc limit ?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, OrderStatus.Pending.name());
 			ps.setInt(2, rows);
@@ -83,10 +82,9 @@ public class OrderQuerier {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select amazon_order_id from orders where order_status=? order by purchase_date asc limit ?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, OrderStatus.Pending.name());
 			ps.setInt(2, rows);

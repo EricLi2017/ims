@@ -33,10 +33,9 @@ public class ListOrdersTrackEditor {
 		int rows = -1;
 
 		String sql = "INSERT INTO list_orders_track(created_before,status,start_time,end_time) VALUES (?,?,?,?)";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps;
 			ps = con.prepareStatement(sql);
 			ps.setTimestamp(1, createdBefore);
@@ -86,10 +85,9 @@ public class ListOrdersTrackEditor {
 
 		String insertSql = "INSERT INTO list_orders_track(status,start_time) VALUES (?,?)";
 		String selectSql = "SELECT LAST_INSERT_ID()";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps;
 			ps = con.prepareStatement(insertSql);
 			ps.setByte(1, ListOrdersTrackStatus.Pending.value());
@@ -148,10 +146,9 @@ public class ListOrdersTrackEditor {
 		int rows = -1;
 
 		String sql = "UPDATE list_orders_track SET created_before=?,status=?,end_time=? WHERE id=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setTimestamp(1, createdBefore);
 			ps.setByte(2, ListOrdersTrackStatus.Completed.value());

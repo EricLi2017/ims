@@ -19,10 +19,9 @@ public class AmazonProductEditor {
 			return 0;
 
 		String sql = "update amazon_product set fnsku=?,total_supply_quantity=?,in_stock_supply_quantity=? where sku=?";
-		DB db = new DB();
 		Connection con = null;
 		try {
-			con = db.getConnection();
+			con = DB.getConnection();
 			PreparedStatement ps;
 			// System.out.println("sku condition fusku TotalSupplyQuantity
 			// InStockSupplyQuantity");//TODO for debug
