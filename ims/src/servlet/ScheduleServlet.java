@@ -33,10 +33,10 @@ public class ScheduleServlet extends HttpServlet {
 	/**
 	 * delay
 	 */
-	public static final long DELAY_LIST_ORDERS = 6 * 60;// at least 6 minutes
-	public static final long DELAY_LIST_ORDER_ITEMS = 1 * 60;// at least 1 minute
-	public static final long DELAY_GET_ORDER = 6 * 60;// at least 6 minutes
-	public static final long DELAY_LIST_INVENTORY_SUPPLY = 2 * 60;// at least 15 seconds//TODO for test
+	public static final long DELAY_LIST_ORDERS = 60 * 60;// at least 6 minutes
+	public static final long DELAY_LIST_ORDER_ITEMS = 60 * 60;// at least 1 minute
+	public static final long DELAY_GET_ORDER = 60 * 60;// at least 6 minutes
+	public static final long DELAY_LIST_INVENTORY_SUPPLY = 60 * 60;// at least 15 seconds
 	/**
 	 * unit
 	 */

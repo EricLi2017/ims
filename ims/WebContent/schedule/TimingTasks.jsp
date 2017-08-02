@@ -1,3 +1,5 @@
+<%@page import="amazon.mws.order.ListOrdersTimerTask"%>
+<%@page import="servlet.ScheduleServlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
@@ -85,7 +87,8 @@
 				<tr>
 					<th title="">Timing Task</th>
 					<th title="">MWS API</th>
-					<th>Schedule</th>
+					<th>Initial Delay</th>
+					<th>Delay</th>
 					<th>Scope</th>
 					<th>Setting Requirement</th>
 
@@ -93,36 +96,46 @@
 				<tr>
 					<td>List Inventory</td>
 					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
-					<td>one time every one hour</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
 					<td>all products in IMS</td>
-					<td>Total SKUs &lt;=3600*100: After first 30 call(&lt;=30*50 SKUs), make
-						next call(&lt;=100 SKUs) every one second</td>
+					<td>Total SKUs &lt;=30*50: Run until all SKU call once or
+						total call times reach 30(&lt;=30*50 SKUs), then task end for this
+						time</td>
 
 				</tr>
 				<tr>
 					<td>List Orders</td>
 					<td>ListOrders and ListOrdersByNextToken</td>
-					<td>one time every one hour</td>
-					<td>from 12 hours before</td>
-					<td>Orders in 12 hours &lt;=60*100: After first 6 call(&lt;=6*100
-						orders), make next call(&lt;= 100 orders) every one minute</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_LIST_ORDERS%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_LIST_ORDERS%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td>list_order_track (first from <%=ListOrdersTimerTask.DEFAULT_FIRST_CREATED_AFTER_FROM_NOW_HOUR%>
+						hours before current executive time)
+					</td>
+					<td>Get createdAfter from list_order_track, use it call MWS
+						and continuously call getByNextToken until get all result or
+						exception happened (but will recall for 503 throttling exception)
+						to end task for this time</td>
 
 				</tr>
 				<tr>
 					<td>List Order Items</td>
 					<td>ListOrderItems and ListOrderItemsByNextToken</td>
-					<td>one time every one hour</td>
-					<td>oldest 30 orders that has no items</td>
-					<td>: After first 30 call(30*1 order items), make next call(1 order items) every two
-						seconds</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_LIST_ORDER_ITEMS%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_LIST_ORDER_ITEMS%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td>oldest 30 orders that has no items and is not pending</td>
+					<td>: If 30 call(&lt;=30*1 order items) complete or exception
+						happened, then task end for this time</td>
 
 				</tr>
 				<tr>
 					<td>Get Order</td>
 					<td>GetOrder</td>
-					<td>one time every one hour</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_GET_ORDER%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_GET_ORDER%> <%=ScheduleServlet.TIME_UNIT%></td>
 					<td>oldest 300 pending orders</td>
-					<td>: After first 6 call(&lt;=6*50 orders), make next call(&lt;=50 orders) every one minute</td>
+					<td>: If 6 call(&lt;=6*50 orders) complete or exception
+						happened, then task end for this time</td>
 
 				</tr>
 			</table>
