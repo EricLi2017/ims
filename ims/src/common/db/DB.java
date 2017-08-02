@@ -18,17 +18,25 @@ public class DB {
 
 	public static Connection getConnection() throws NamingException, SQLException {
 		if (dataSource == null) {
-			if (config == null) {
-				config = new Properties();
-				try {
-					config.load(DB.class.getResourceAsStream("DB.properties"));
-				} catch (IOException e) {
-					e.printStackTrace();
-					// avoid to produce new type exception
-					throw new NamingException("Could no find database connection config properties file!");
+			// maybe some threads will wait here to get class lock to enter the block
+			synchronized (DB.class) {
+				// after any one thread executed, the dataSource should not be null and this
+				// will
+				// prevent other waiting threads to execute again
+				if (dataSource == null) {
+					if (config == null) {
+						config = new Properties();
+						try {
+							config.load(DB.class.getResourceAsStream("DB.properties"));
+						} catch (IOException e) {
+							e.printStackTrace();
+							// avoid to produce new type exception
+							throw new NamingException("Could no find database connection config properties file!");
+						}
+					}
+					dataSource = (DataSource) new InitialContext().lookup(config.getProperty("JNDI_NAME_IMS"));
 				}
 			}
-			dataSource = (DataSource) new InitialContext().lookup(config.getProperty("JNDI_NAME_IMS"));
 		}
 
 		Connection conn = dataSource.getConnection();
