@@ -52,10 +52,9 @@
 	//database checking
 	boolean isLoginSuccess = false;
 	String sql = "select * from user where name=? and password=?";
-	DB db = new DB();
 	Connection con = null;
 	try {
-		con = db.getConnection();
+		con = DB.getConnection();
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, user);
 		ps.setString(2, pwdMD5);
