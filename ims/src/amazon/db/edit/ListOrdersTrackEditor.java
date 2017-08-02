@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.naming.NamingException;
+
 import amazon.db.model.ListOrdersTrackStatus;
 import common.db.DB;
 
@@ -24,10 +26,11 @@ public class ListOrdersTrackEditor {
 	 * @param endTime
 	 * @return
 	 * @throws SQLException
+	 * @throws NamingException
 	 * @throws ClassNotFoundException
 	 */
 	public static int insertDefaultFirst(Timestamp createdBefore, Timestamp startTime, Timestamp endTime)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, NamingException {
 		if (createdBefore == null || startTime == null || endTime == null)
 			return 0;
 		int rows = -1;
@@ -74,10 +77,11 @@ public class ListOrdersTrackEditor {
 	 * @param startTime
 	 * @return
 	 * @throws SQLException
+	 * @throws NamingException
 	 * @throws ClassNotFoundException
 	 */
 
-	public static int insertNewAndGetId(Timestamp startTime) throws ClassNotFoundException, SQLException {
+	public static int insertNewAndGetId(Timestamp startTime) throws SQLException, NamingException {
 		if (startTime == null)
 			return 0;
 		int rows = -1;
@@ -139,10 +143,11 @@ public class ListOrdersTrackEditor {
 	 * @param listOrdersTrack
 	 * @return
 	 * @throws SQLException
+	 * @throws NamingException
 	 * @throws ClassNotFoundException
 	 */
 	public static int updateToCompleted(Timestamp createdBefore, Timestamp endTime, int id)
-			throws ClassNotFoundException, SQLException {
+			throws SQLException, NamingException {
 		int rows = -1;
 
 		String sql = "UPDATE list_orders_track SET created_before=?,status=?,end_time=? WHERE id=?";

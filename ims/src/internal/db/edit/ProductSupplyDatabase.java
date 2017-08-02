@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 import internal.db.model.ProductSupply;
 
@@ -43,7 +45,7 @@ public class ProductSupplyDatabase {
 				ps.close();
 			}
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -92,7 +94,7 @@ public class ProductSupplyDatabase {
 
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

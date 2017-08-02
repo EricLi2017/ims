@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import amazon.db.model.Product;
 import common.db.DB;
 
@@ -38,7 +40,7 @@ public class InventoryReportDatabase {
 				ps.close();
 			}
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -88,7 +90,7 @@ public class InventoryReportDatabase {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 			return null;
 		} finally {

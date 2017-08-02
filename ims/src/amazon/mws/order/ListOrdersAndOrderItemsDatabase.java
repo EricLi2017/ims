@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 
 public class ListOrdersAndOrderItemsDatabase {
@@ -54,9 +56,7 @@ public class ListOrdersAndOrderItemsDatabase {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -134,9 +134,7 @@ public class ListOrdersAndOrderItemsDatabase {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -188,7 +186,7 @@ public class ListOrdersAndOrderItemsDatabase {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

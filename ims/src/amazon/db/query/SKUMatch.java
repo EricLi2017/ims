@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 /**
  * Check sku in database
  * <p>
@@ -55,7 +57,7 @@ public class SKUMatch {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -120,7 +122,7 @@ public class SKUMatch {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -163,7 +165,7 @@ public class SKUMatch {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -206,7 +208,7 @@ public class SKUMatch {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

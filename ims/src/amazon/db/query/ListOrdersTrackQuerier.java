@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.naming.NamingException;
+
 import amazon.db.model.ListOrdersTrackStatus;
 import common.db.DB;
 
@@ -28,8 +30,9 @@ public class ListOrdersTrackQuerier {
 	 * @return the latest completed createdBefore
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
-	public static Timestamp queryLatestCompletedCreatedBefore() throws SQLException, ClassNotFoundException {
+	public static Timestamp queryLatestCompletedCreatedBefore() throws SQLException, NamingException {
 		Timestamp latestCompletedCreatedBefore = null;
 
 		String sql = "SELECT created_before FROM list_orders_track WHERE status=? ORDER BY created_before DESC LIMIT 1";
@@ -76,9 +79,10 @@ public class ListOrdersTrackQuerier {
 	 * 
 	 * @return
 	 * @throws SQLException
+	 * @throws NamingException
 	 * @throws ClassNotFoundException
 	 */
-	public static boolean isTableEmpty() throws SQLException, ClassNotFoundException {
+	public static boolean isTableEmpty() throws SQLException, NamingException {
 		boolean isEmpty = false;
 
 		String sql = "SELECT id FROM list_orders_track LIMIT 1";
@@ -126,8 +130,9 @@ public class ListOrdersTrackQuerier {
 	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
-	public static boolean hasPendingTask() throws SQLException, ClassNotFoundException {
+	public static boolean hasPendingTask() throws SQLException, NamingException {
 		boolean hasPendingTask = false;
 
 		String sql = "SELECT id FROM list_orders_track WHERE status=? ORDER BY id ASC LIMIT 1";
@@ -165,7 +170,7 @@ public class ListOrdersTrackQuerier {
 		return hasPendingTask;
 	}
 
-	public static int getOldestPendingTaskId() throws SQLException, ClassNotFoundException {
+	public static int getOldestPendingTaskId() throws SQLException, NamingException {
 		int id = 0;
 
 		String sql = "SELECT id FROM list_orders_track WHERE status=? ORDER BY id ASC LIMIT 1";

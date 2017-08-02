@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 
 /**
@@ -39,9 +41,8 @@ public class BatchNoGenerator {
 
 	/**
 	 * 
-	 * @return the current max batch no : while batch no existed; -1 : while
-	 *         system error while query database; 0 : while there is no existed
-	 *         batch no
+	 * @return the current max batch no : while batch no existed; -1 : while system
+	 *         error while query database; 0 : while there is no existed batch no
 	 */
 	private static synchronized int getMaxBatchNo() {
 		int batchNo = -1;
@@ -62,7 +63,7 @@ public class BatchNoGenerator {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;
@@ -84,7 +85,5 @@ public class BatchNoGenerator {
 
 		return batchNo;
 	}
-	
-	
 
 }

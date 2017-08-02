@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 /**
  * Use to query database for tables orders,order_items,products Created by Eric
  * Li on 2/26/2017.
@@ -128,7 +130,7 @@ public class QueryProductAndOrder {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 			return null;
 		} finally {

@@ -6,6 +6,8 @@ package amazon.mws.order;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResult;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
@@ -49,10 +51,10 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	 * No asynchronous thread will be produced by this method
 	 * 
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
 	@Override
-	protected void work() throws ClassNotFoundException, SQLException {
+	protected void work() throws SQLException, NamingException {
 		// initialization
 		System.out.println(getLogPrefix() + ": workType is " + workType.name());
 		mwsCalledTimes = 0;

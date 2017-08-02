@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 
 /**
@@ -27,8 +29,9 @@ public class AmazonProductQuerier {
 	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
-	public static final List<String> selectAllSku() throws ClassNotFoundException, SQLException {
+	public static final List<String> selectAllSku() throws SQLException, NamingException {
 		List<String> skus = new ArrayList<>();
 
 		String sql = "SELECT sku FROM amazon_product";

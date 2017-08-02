@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import amazon.mws.order.OrderStatus;
 import common.db.DB;
 
@@ -24,10 +26,9 @@ public class OrderQuerier {
 	 * @param rows
 	 * @return
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
-	public static List<String> selectOldestNonPendingOrdersWithoutItems(int rows)
-			throws ClassNotFoundException, SQLException {
+	public static List<String> selectOldestNonPendingOrdersWithoutItems(int rows) throws SQLException, NamingException {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select a.amazon_order_id from orders as a "
@@ -76,9 +77,9 @@ public class OrderQuerier {
 	 * @param rows
 	 * @return
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @throws NamingException
 	 */
-	public static List<String> selectOldestPendingOrders(int rows) throws ClassNotFoundException, SQLException {
+	public static List<String> selectOldestPendingOrders(int rows) throws SQLException, NamingException {
 		List<String> amazonOrderIds = new ArrayList<>();
 
 		String sql = "select amazon_order_id from orders where order_status=? order by purchase_date asc limit ?";

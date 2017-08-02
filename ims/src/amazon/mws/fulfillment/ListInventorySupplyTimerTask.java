@@ -6,6 +6,8 @@ package amazon.mws.fulfillment;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.InventorySupply;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyResponse;
 import amazon.db.edit.AmazonProductEditor;
@@ -36,7 +38,7 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 	}
 
 	@Override
-	protected void work() throws ClassNotFoundException, SQLException {
+	protected void work() throws SQLException, NamingException {
 		// init
 		int mwsCalledTimes = 0;
 		List<String> skus = AmazonProductQuerier.selectAllSku();

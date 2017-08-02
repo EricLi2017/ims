@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.InventorySupply;
 
 import common.db.DB;
@@ -57,7 +59,7 @@ public class AmazonProductEditor {
 				}
 			}
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

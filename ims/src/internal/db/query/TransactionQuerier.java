@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 import common.util.Filter;
 import internal.db.model.ProductSupply;
@@ -135,7 +137,7 @@ public class TransactionQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch ( SQLException | NamingException e) {
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -181,7 +183,7 @@ public class TransactionQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import common.db.DB;
 import common.util.Filter;
 import internal.db.model.InternalProduct;
@@ -31,8 +33,8 @@ public class ProductQuerier {
 	 * @param asin
 	 * @param orderBy
 	 * @param ascOrDesc
-	 * @return null: if exception happened while query database; empty size
-	 *         List: if there is no matched result;
+	 * @return null: if exception happened while query database; empty size List: if
+	 *         there is no matched result;
 	 */
 	public List<InternalProduct> queryProduct(String productId, String name, Timestamp dateAfter, Timestamp dateBefore,
 			String status, String asin, String orderBy, String ascOrDesc) {
@@ -115,7 +117,7 @@ public class ProductQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -162,7 +164,7 @@ public class ProductQuerier {
 			rs.close();
 			ps.close();
 			con.close();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 		} finally {
 			boolean flag = true;

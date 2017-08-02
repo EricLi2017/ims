@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.naming.NamingException;
+
 import com.amazonservices.mws.orders._2013_09_01.model.GetOrderResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.Order;
 
@@ -42,7 +44,7 @@ public class GetOrderTimerTask extends MWSTimerTask {
 	}
 
 	@Override
-	protected void work() throws ClassNotFoundException, SQLException {
+	protected void work() throws SQLException, NamingException {
 		// init
 		int mwsCalledTimes = 0;
 		List<String> pendingAmazonOrderIds = OrderQuerier

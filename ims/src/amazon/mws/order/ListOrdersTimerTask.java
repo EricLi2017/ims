@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import javax.naming.NamingException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
@@ -67,7 +68,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 	}
 
 	@Override
-	protected void work() throws SQLException, ClassNotFoundException, MarketplaceWebServiceOrdersException {
+	protected void work() throws SQLException, NamingException, MarketplaceWebServiceOrdersException {
 		// initialization
 		init();
 
@@ -86,8 +87,9 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
+	 * @throws NamingException
 	 */
-	private XMLGregorianCalendar getCreatedAfter() throws ClassNotFoundException, SQLException {
+	private XMLGregorianCalendar getCreatedAfter() throws SQLException, NamingException {
 		// query latestCompletedCreatedBefore
 		Timestamp latestCompletedCreatedBefore = ListOrdersTrackQuerier.queryLatestCompletedCreatedBefore();
 		if (latestCompletedCreatedBefore != null) {
@@ -106,7 +108,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 		}
 	}
 
-	private void init() throws ClassNotFoundException, SQLException {
+	private void init() throws SQLException, NamingException {
 		// reset
 		createdAfter = null;
 		createdBefore = null;
@@ -143,10 +145,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 	 * to loop again.
 	 * 
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @throws NamingException
+	 * @throws MarketplaceWebServiceOrdersException
 	 */
 	private void saveAllOrdersByCreatedAfter()
-			throws SQLException, ClassNotFoundException, MarketplaceWebServiceOrdersException {
+			throws SQLException, NamingException, MarketplaceWebServiceOrdersException {
 		// Make the call to get first result
 		int mwsCalledTimes = 1;
 		System.out.println(getLogPrefix() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);
@@ -227,7 +230,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 		return new ListOrdersDatabase().insert(orders);
 	}
 
-	private int updateTrackToCompleted(Timestamp createdBefore, int id) throws ClassNotFoundException, SQLException {
+	private int updateTrackToCompleted(Timestamp createdBefore, int id) throws SQLException, NamingException {
 		return ListOrdersTrackEditor.updateToCompleted(createdBefore, new Timestamp(System.currentTimeMillis()), id);
 	}
 

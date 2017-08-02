@@ -67,7 +67,7 @@
 		rs.close();
 		ps.close();
 		con.close();
-	} catch (ClassNotFoundException | SQLException e) {
+	} catch (Exception e) {
 		e.printStackTrace();
 	} finally {
 		boolean flag = true;
