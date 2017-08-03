@@ -18,9 +18,8 @@ public class SellerConfig {
 	/**
 	 * Read the attributes value from the properties file
 	 */
-	private static Properties config;
 	static {
-		config = new Properties();
+		Properties config = new Properties();
 		try {
 			config.load(SellerConfig.class.getResourceAsStream("SellerConfig.properties"));
 		} catch (IOException e) {
@@ -30,5 +29,4 @@ public class SellerConfig {
 		sellerId = config.getProperty("sellerId");
 		marketplaceId = config.getProperty("marketplaceId");
 	}
-
 }

@@ -22,27 +22,14 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.FBAInventoryServi
 import amazon.mws.MWSConfig;
 
 /**
- * Configuration for FBAInventoryServiceMWS samples.
+ * Configuration for FBAInventoryServiceMWS
  */
-public class MWSFulfillmentConfig {
-
-	/** Developer AWS access key. */
-	private static final String accessKey = MWSConfig.accessKey;
-
-	/** Developer AWS secret key. */
-	private static final String secretKey = MWSConfig.secretKey;
-
-	/** The client application name. */
-	private static final String appName = MWSConfig.appName;
-
-	/** The client application version. */
-	private static final String appVersion = MWSConfig.appVersion;
-
+public class MWSFulfillmentConfig extends MWSConfig {
 	/**
 	 * The endpoint for region service and version. ex: serviceURL =
 	 * MWSEndpoint.NA_PROD.toString();
 	 */
-	private static final String serviceURL = MWSConfig.serviceURL_Fulfillment;
+	private static final String serviceURL = serviceURL_Fulfillment;
 
 	/** The client, lazy initialized. Async client is also a sync client. */
 	private static FBAInventoryServiceMWSAsyncClient client = null;
