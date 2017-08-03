@@ -28,7 +28,6 @@ public class AmazonProductQuerier {
 	 * 
 	 * @return
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
 	 * @throws NamingException
 	 */
 	public static final List<String> selectAllSku() throws SQLException, NamingException {

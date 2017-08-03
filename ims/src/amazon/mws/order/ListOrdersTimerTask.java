@@ -85,7 +85,6 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 	 * value.
 	 * 
 	 * @return
-	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws NamingException
 	 */

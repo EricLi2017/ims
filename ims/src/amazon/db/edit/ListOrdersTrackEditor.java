@@ -27,7 +27,6 @@ public class ListOrdersTrackEditor {
 	 * @return
 	 * @throws SQLException
 	 * @throws NamingException
-	 * @throws ClassNotFoundException
 	 */
 	public static int insertDefaultFirst(Timestamp createdBefore, Timestamp startTime, Timestamp endTime)
 			throws SQLException, NamingException {
@@ -78,7 +77,6 @@ public class ListOrdersTrackEditor {
 	 * @return
 	 * @throws SQLException
 	 * @throws NamingException
-	 * @throws ClassNotFoundException
 	 */
 
 	public static int insertNewAndGetId(Timestamp startTime) throws SQLException, NamingException {
@@ -144,7 +142,6 @@ public class ListOrdersTrackEditor {
 	 * @return
 	 * @throws SQLException
 	 * @throws NamingException
-	 * @throws ClassNotFoundException
 	 */
 	public static int updateToCompleted(Timestamp createdBefore, Timestamp endTime, int id)
 			throws SQLException, NamingException {

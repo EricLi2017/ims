@@ -168,7 +168,7 @@ public class OrderQuerier {
 	// rs.close();
 	// ps.close();
 	// con.close();
-	// } catch (ClassNotFoundException | SQLException e) {
+	// } catch ( SQLException e) {
 	// e.printStackTrace();
 	// } finally {
 	// boolean flag = true;

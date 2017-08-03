@@ -29,7 +29,6 @@ public class ListOrdersTrackQuerier {
 	 * 
 	 * @return the latest completed createdBefore
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
 	 * @throws NamingException
 	 */
 	public static Timestamp queryLatestCompletedCreatedBefore() throws SQLException, NamingException {
@@ -80,7 +79,6 @@ public class ListOrdersTrackQuerier {
 	 * @return
 	 * @throws SQLException
 	 * @throws NamingException
-	 * @throws ClassNotFoundException
 	 */
 	public static boolean isTableEmpty() throws SQLException, NamingException {
 		boolean isEmpty = false;
@@ -129,7 +127,6 @@ public class ListOrdersTrackQuerier {
 	 * 
 	 * @return
 	 * @throws SQLException
-	 * @throws ClassNotFoundException
 	 * @throws NamingException
 	 */
 	public static boolean hasPendingTask() throws SQLException, NamingException {

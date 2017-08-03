@@ -266,7 +266,7 @@ public class TransactionQuerier {
 	// rs.close();
 	// ps.close();
 	// con.close();
-	// } catch (ClassNotFoundException | SQLException e) {
+	// } catch ( SQLException e) {
 	// e.printStackTrace();
 	// return null;
 	// } finally {
