@@ -22,7 +22,7 @@ import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersConf
 import amazon.mws.MWSConfig;
 
 /**
- * Configuration for MarketplaceWebServiceOrders samples.
+ * Configuration for MarketplaceWebServiceOrders
  */
 public class MWSOrderConfig {
 
