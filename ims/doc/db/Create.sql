@@ -24,15 +24,21 @@ CREATE TABLE IF NOT EXISTS `amazon_product` (
   `title` varchar(200) DEFAULT NULL,
   `binding` varchar(50) DEFAULT NULL,
   `brand` varchar(50) DEFAULT NULL,
+  `publisher` varchar(50) DEFAULT NULL,
+  `product_group` varchar(50) DEFAULT NULL,
+  `product_type_name` varchar(50) DEFAULT NULL,
+  `small_image_url` varchar(255) DEFAULT NULL,
   `feature1` varchar(500) DEFAULT NULL,
   `feature2` varchar(500) DEFAULT NULL,
   `feature3` varchar(500) DEFAULT NULL,
   `feature4` varchar(500) DEFAULT NULL,
   `feature5` varchar(500) DEFAULT NULL,
-  `product_group` varchar(50) DEFAULT NULL,
-  `product_type_name` varchar(50) DEFAULT NULL,
-  `small_image_url` varchar(255) DEFAULT NULL,
-  `sales_rank` int(11) DEFAULT NULL,
+  `rank1` int(11) DEFAULT NULL,
+  `rank2` int(11) DEFAULT NULL,
+  `rank3` int(11) DEFAULT NULL,
+  `product_category_id1` varchar(50) DEFAULT NULL,
+  `product_category_id2` varchar(50) DEFAULT NULL,
+  `product_category_id3` varchar(50) DEFAULT NULL,
   `total_supply_quantity` int(11) DEFAULT NULL,
   `in_stock_supply_quantity` int(11) DEFAULT NULL,
   PRIMARY KEY (`sku`),
@@ -62,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `list_orders_track` (
   `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8 COMMENT='track of call MWS ListOrders API';
+) ENGINE=MyISAM AUTO_INCREMENT=184 DEFAULT CHARSET=utf8 COMMENT='track of call MWS ListOrders API';
 
 -- Data exporting was unselected.
 -- Dumping structure for table ims.orders
