@@ -26,7 +26,7 @@ import common.util.Page;
  * @since 1.0
  */
 public class GetMatchingProductTimerTask extends MWSTimerTask {
-	private static GetMatchingProductTimerTask getMatchingProductTimerTask;
+	private static GetMatchingProductTimerTask getMatchingProductTimerTask = new GetMatchingProductTimerTask();
 
 	private GetMatchingProductTimerTask() {
 
