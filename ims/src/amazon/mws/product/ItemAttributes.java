@@ -3,12 +3,19 @@
  */
 package amazon.mws.product;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.amazonservices.mws.products.model.AttributeSetList;
 
 /**
  * Created by Eclipse on Aug 3, 2017 at 10:01:18 PM.
@@ -117,5 +124,17 @@ public class ItemAttributes {
 			this.url = url;
 		}
 
+	}
+
+	private static Unmarshaller unmarshaller;
+
+	public static ItemAttributes parse(AttributeSetList attributeSetList) throws JAXBException {
+		if (unmarshaller == null) {
+			unmarshaller = JAXBContext.newInstance(ItemAttributes.class).createUnmarshaller();
+		}
+		InputStream inputStream = new ByteArrayInputStream(attributeSetList.toXMLFragment().getBytes());
+		ItemAttributes itemAttributes = (ItemAttributes) unmarshaller.unmarshal(inputStream);
+
+		return itemAttributes;
 	}
 }

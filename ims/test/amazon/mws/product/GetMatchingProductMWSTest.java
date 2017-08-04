@@ -1,13 +1,9 @@
 package amazon.mws.product;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -112,11 +108,7 @@ public class GetMatchingProductMWSTest {
 		System.out.println("attributeSetList.toXML()=" + attributeSetList.toXML());
 		System.out.println("attributeSetList.toXMLFragment()=" + attributeSetList.toXMLFragment());
 
-		JAXBContext context = JAXBContext.newInstance(ItemAttributes.class);
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		InputStream inputStream = new ByteArrayInputStream(attributeSetList.toXMLFragment().getBytes());
-		ItemAttributes itemAttributes = (ItemAttributes) unmarshaller.unmarshal(inputStream);
-
+		ItemAttributes itemAttributes = ItemAttributes.parse(attributeSetList);
 		if (itemAttributes != null) {
 			System.out.println("itemAttributes.getBinding=" + itemAttributes.getBinding());
 			System.out.println("itemAttributes.getBrand=" + itemAttributes.getBrand());
