@@ -15,6 +15,7 @@ import amazon.mws.fulfillment.ListInventorySupplyTimerTask;
 import amazon.mws.order.GetOrderTimerTask;
 import amazon.mws.order.ListOrderItemsTimerTask;
 import amazon.mws.order.ListOrdersTimerTask;
+import amazon.mws.product.GetMatchingProductTimerTask;
 
 /**
  * Servlet implementation class ScheduleServlet
@@ -30,13 +31,15 @@ public class ScheduleServlet extends HttpServlet {
 	public static final long INITIAL_DELAY_LIST_ORDER_ITEMS = 80;
 	public static final long INITIAL_DELAY_GET_ORDER = 100;
 	public static final long INITIAL_DELAY_LIST_INVENTORY_SUPPLY = 120;
+	public static final long INITIAL_DELAY_GET_MATCHING_PRODUCT = 140;
 	/**
 	 * delay
 	 */
-	public static final long DELAY_LIST_ORDERS = 60 * 60;// at least 6 minutes
-	public static final long DELAY_LIST_ORDER_ITEMS = 60 * 60;// at least 1 minute
-	public static final long DELAY_GET_ORDER = 60 * 60;// at least 6 minutes
-	public static final long DELAY_LIST_INVENTORY_SUPPLY = 60 * 60;// at least 15 seconds
+	public static final long DELAY_LIST_ORDERS = 60 * 60;// at least 6/1=6 minutes
+	public static final long DELAY_LIST_ORDER_ITEMS = 60 * 60;// at least 30/0.5=60 seconds
+	public static final long DELAY_GET_ORDER = 60 * 60;// at least 6/1=6 minutes
+	public static final long DELAY_LIST_INVENTORY_SUPPLY = 60 * 60;// at least 30/2=15 seconds
+	public static final long DELAY_GET_MATCHING_PRODUCT = 60 * 60;// at least 20*10/2=100 seconds
 	/**
 	 * unit
 	 */
@@ -80,6 +83,12 @@ public class ScheduleServlet extends HttpServlet {
 		 */
 		scheduledExecutorService.scheduleWithFixedDelay(ListInventorySupplyTimerTask.getInstance(),
 				INITIAL_DELAY_LIST_INVENTORY_SUPPLY, DELAY_LIST_INVENTORY_SUPPLY, TIME_UNIT);
+
+		/**
+		 * Update product ItemAttribute and SalesRank by ASIN
+		 */
+		scheduledExecutorService.scheduleWithFixedDelay(GetMatchingProductTimerTask.getInstance(),
+				INITIAL_DELAY_GET_MATCHING_PRODUCT, DELAY_GET_MATCHING_PRODUCT, TIME_UNIT);
 	}
 
 	/**

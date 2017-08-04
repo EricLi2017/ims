@@ -113,4 +113,15 @@ public class GetMatchingProductMWS {
 		// Make the call.
 		return GetMatchingProductMWS.invokeGetMatchingProduct(client, request);
 	}
+
+	/**
+	 * A safe restore period can restore REQUEST_QUOTA * MAX_SIZE_ASIN_LIST items
+	 * 
+	 * milliseconds
+	 * 
+	 * @return
+	 */
+	public static long getSafeRestorePeriod() {
+		return (REQUEST_QUOTA * MAX_SIZE_ASIN_LIST / RESTORE_QUOTA) * 1000;
+	}
 }

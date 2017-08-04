@@ -68,4 +68,42 @@ public class AmazonProductQuerier {
 		return skus;
 	}
 
+	public static final List<String> selectAllDistinctAsin() throws SQLException, NamingException {
+		List<String> asins = new ArrayList<>();
+
+		String sql = "SELECT DISTINCT asin FROM amazon_product";
+		Connection con = null;
+		try {
+			con = DB.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				asins.add(rs.getString(1));
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		System.out.println(OrderQuerier.class.getName() + ": selectAllDistinctAsin().size()=" + asins.size());
+		return asins;
+	}
+
 }
