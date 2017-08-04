@@ -61,11 +61,11 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 			try {
 				// wait a safe restore period for next call when request quota reached
 				if (!(++mwsCalledTimes <= GetMatchingProductMWS.REQUEST_QUOTA)) {
-					log.info(getLogPrefix() + ": reached request quota " + mwsCalledTimes + ", start to sleep"
-							+ GetMatchingProductMWS.getSafeRestorePeriod() + " seconds");
+					log.info(getLogPrefix() + ": mwsCalledTimes reached request quota, start to sleep "
+							+ GetMatchingProductMWS.getSafeRestorePeriod() / 1000 + " seconds");
 					Thread.sleep(GetMatchingProductMWS.getSafeRestorePeriod());
-					mwsCalledTimes = 0;
-					log.info(getLogPrefix() + ": sleeping ended and reset mwsCalledTimes to 0");
+					mwsCalledTimes = 1;
+					log.info(getLogPrefix() + ": sleeping ended and reset mwsCalledTimes to "+mwsCalledTimes);
 				}
 
 				// get sub ASINs

@@ -114,7 +114,7 @@ public class QueryProductAndOrder {
 				productAndOrder.setProductGroup(rs.getString("product_group"));
 				productAndOrder.setProductTypeName(rs.getString("product_type_name"));
 				productAndOrder.setImage(rs.getString("small_image_url"));
-				productAndOrder.setSalesRank(rs.getString("sales_rank") == null ? null : rs.getInt("sales_rank"));
+				productAndOrder.setSalesRank(rs.getString("rank1") == null ? null : rs.getInt("rank1"));
 				productAndOrder.setFbaTotal(
 						rs.getString("total_supply_quantity") == null ? null : rs.getInt("total_supply_quantity"));
 				productAndOrder.setFbaInStock(rs.getString("in_stock_supply_quantity") == null ? null
