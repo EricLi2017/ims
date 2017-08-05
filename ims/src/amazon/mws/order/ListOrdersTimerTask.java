@@ -43,6 +43,7 @@ import common.util.Time;
  */
 public class ListOrdersTimerTask extends MWSTimerTask {
 	private static final Log log = LogFactory.getLog(ListOrdersTimerTask.class);
+	private static final ListOrdersTimerTask ListOrdersTimerTask = new ListOrdersTimerTask();
 
 	// the default first createdAfter time span in hour before now
 	public static final int DEFAULT_FIRST_CREATED_AFTER_FROM_NOW_HOUR = -24 * 30 * 3;// 90 days before now
@@ -61,13 +62,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 	 */
 	private ScheduledExecutorService scheduledExecutorService;
 
-	private static ListOrdersTimerTask ListOrdersTimerTask = new ListOrdersTimerTask();
-
 	private ListOrdersTimerTask() {
 
 	}
 
-	public static ListOrdersTimerTask getInstance() {
+	public static final ListOrdersTimerTask getInstance() {
 		return ListOrdersTimerTask;
 	}
 
