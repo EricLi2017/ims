@@ -128,10 +128,10 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			pendingId = ListOrdersTrackQuerier.getOldestPendingTaskId();
 		}
 
-		log.info(getLogPrefix() + ": init() hasPerviousPendingId=" + hasPerviousPendingId);
-		log.info(getLogPrefix() + ": init() pendingId=" + pendingId);
-		log.info(getLogPrefix() + ": init() createdAfter=" + createdAfter);
-		log.info(getLogPrefix() + ": init() createdBefore=" + createdBefore);
+		log.info("init() hasPerviousPendingId=" + hasPerviousPendingId);
+		log.info("init() pendingId=" + pendingId);
+		log.info("init() createdAfter=" + createdAfter);
+		log.info("init() createdBefore=" + createdBefore);
 	}
 
 	/**
@@ -154,15 +154,14 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			throws SQLException, NamingException, MarketplaceWebServiceOrdersException {
 		// Make the call to get first result
 		int mwsCalledTimes = 1;
-		log.info(getLogPrefix() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);
+		log.info("getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);
 		ListOrdersResult result = getFirstResult();// may cause MarketplaceWebServiceOrdersException
 		String nextToken = result.getNextToken();
 
 		// Update database according to the result from MWS
 		if (result.getOrders() != null && result.getOrders().size() > 0) {
-			log.info(getLogPrefix() + ": insertOrders(), orders size="
-					+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
-					+ mwsCalledTimes);
+			log.info("insertOrders(), orders size=" + (result.getOrders() == null ? null : result.getOrders().size())
+					+ ", mwsCalledTimes=" + mwsCalledTimes);
 			insertOrders(result.getOrders());
 		}
 
@@ -171,8 +170,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			if (++mwsCalledTimes <= ListOrdersMWS.REQUEST_QUOTA && !isThrottling) {
 				try {
 					// Make the call to get next result by next token
-					log.info(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken="
-							+ nextToken);
+					log.info("getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken=" + nextToken);
 					ListOrdersByNextTokenResult nextResult = getNextResult(nextToken);
 
 					// set new nextToken
@@ -180,7 +178,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 
 					// Update database according to the result from MWS
 					if (nextResult.getOrders() != null && nextResult.getOrders().size() > 0) {
-						log.info(getLogPrefix() + ": insertOrders(), orders size="
+						log.info("insertOrders(), orders size="
 								+ (nextResult.getOrders() == null ? null : nextResult.getOrders().size())
 								+ ", mwsCalledTimes=" + mwsCalledTimes);
 						insertOrders(nextResult.getOrders());
@@ -188,11 +186,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 				} catch (MarketplaceWebServiceOrdersException ex) {
 					// check if it is a throttling exception
 					isThrottling = isThrottlingException(ex);
-					log.info(getLogPrefix() + ": failed to getNextResult(), mwsCalledTimes=" + mwsCalledTimes
-							+ ", isThrottling=" + isThrottling + ", nextToken=" + nextToken);
+					log.info("failed to getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", isThrottling="
+							+ isThrottling + ", nextToken=" + nextToken);
 				}
 			} else {
-				log.info(getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);
+				log.info("callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);
 				callByRestorePeriodAsync(nextToken, mwsCalledTimes);
 				return;
 			}
@@ -201,11 +199,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 		// createBefor should be same for every response
 		if (nextToken == null) {
 			/** Set the task to ready for the next scheduled call */
-			log.info(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
+			log.info("ready(), mwsCalledTimes=" + mwsCalledTimes);
 			ready();
 
 			// Complete the track of ListOrders task
-			log.info(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
+			log.info("updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
 			updateTrackToCompleted(Time.getTime(result.getCreatedBefore()), pendingId);
 		}
 	}
@@ -254,14 +252,13 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 				String newNextToken = nextToken;
 				try {
 					// Call
-					log.info(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken="
-							+ nextToken);
+					log.info("getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken=" + nextToken);
 					ListOrdersByNextTokenResult result = getNextResult(nextToken);
 					newNextToken = result.getNextToken();
 
 					// Update database according to the result from MWS
 					if (result.getOrders() != null && result.getOrders().size() > 0) {
-						log.info(getLogPrefix() + ": insertOrders(), orders size="
+						log.info("insertOrders(), orders size="
 								+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
 								+ mwsCalledTimes);
 						insertOrders(result.getOrders());
@@ -270,25 +267,25 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 					// task end
 					if (newNextToken == null) {
 						/** Set the task to ready for the next scheduled call */
-						log.info(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
+						log.info("ready(), mwsCalledTimes=" + mwsCalledTimes);
 						ready();
 
 						// Complete the track of ListOrders task
-						log.info(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
+						log.info("updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
 						updateTrackToCompleted(Time.getTime(result.getCreatedBefore()), pendingId);
 					}
 				} catch (Exception e) {
 					// use old nextToken as the new nextToken
 					newNextToken = nextToken;
 
-					log.info(getLogPrefix() + ": processing failed in callByRestorePeriodAsync(), mwsCalledTimes="
-							+ mwsCalledTimes + ", nextToken=" + nextToken);
+					log.error("processing failed in callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes
+							+ ", nextToken=" + nextToken);
 				}
 
 				// process new async task
 				if (newNextToken != null) {
 					// Loop call use the new nextToken
-					log.info(getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + (mwsCalledTimes + 1));
+					log.info("callByRestorePeriodAsync(), mwsCalledTimes=" + (mwsCalledTimes + 1));
 					callByRestorePeriodAsync(newNextToken, mwsCalledTimes + 1);
 				}
 

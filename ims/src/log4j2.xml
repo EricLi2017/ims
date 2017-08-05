@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Default format of org.apache.commons.logging.Log (org.apache.commons.logging.impl.Jdk14Logger) 
+	is: <pre> {Current time} {Log type} [{Current thread name}] {Class name}.{Method 
+	name} Example: 05-Aug-2017 08:30:46.643 INFO [pool-1-thread-5] amazon.mws.MWSTimerTask.run 
+	</pre> Use Log4j2 to override -->
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%T][%t]%tp %logger - %msg{nolookups}%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>

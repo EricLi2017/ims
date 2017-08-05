@@ -53,7 +53,7 @@ public class GetOrderTimerTask extends MWSTimerTask {
 		int mwsCalledTimes = 0;
 		List<String> pendingAmazonOrderIds = OrderQuerier
 				.selectOldestPendingOrders(GetOrderMWS.REQUEST_QUOTA * GetOrderMWS.MAX_SIZE_AMAZON_ORDER_ID_LIST);
-		log.info(getLogPrefix() + ": " + pendingAmazonOrderIds.size() + " pendingAmaonOderIds are selected.");
+		log.info(pendingAmazonOrderIds.size() + " pendingAmaonOderIds are selected.");
 
 		// Update orders that status changed from pending to non-pending, and schedule
 		// ListOrderItemsTimerTask to asynchronously insert order items for these orders
@@ -64,33 +64,33 @@ public class GetOrderTimerTask extends MWSTimerTask {
 		while (++mwsCalledTimes <= GetOrderMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get subPendingAmazonOrderIds
 			List<String> subPendingAmazonOrderIds = Page.getSub(pendingAmazonOrderIds, subIndex, subSize);
-			log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub "
-					+ subPendingAmazonOrderIds.size() + " pendingAmaonOderIds");
+			log.info("(" + subIndex + "/" + subMaxIndex + ") process the sub " + subPendingAmazonOrderIds.size()
+					+ " pendingAmaonOderIds");
 
 			// call
 			GetOrderResponse response = GetOrderMWS.getOrder(subPendingAmazonOrderIds);
 			List<Order> nonPendingOrders = getNonPendingOrders(response.getGetOrderResult().getOrders());
 			List<String> nonPendingAmazonOrderIds = getAmazonOrderIds(nonPendingOrders);
-			log.info(getLogPrefix() + ": found " + nonPendingAmazonOrderIds.size() + "/"
-					+ subPendingAmazonOrderIds.size() + " orders in MWS changed from pending to non-pending");
+			log.info("found " + nonPendingAmazonOrderIds.size() + "/" + subPendingAmazonOrderIds.size()
+					+ " orders in MWS changed from pending to non-pending");
 
 			// update orders
 			if (nonPendingOrders != null && nonPendingOrders.size() > 0) {
 				int update = updateOrders(nonPendingOrders);
-				log.info(getLogPrefix() + ": updated " + update + "/" + nonPendingOrders.size()
+				log.info("updated " + update + "/" + nonPendingOrders.size()
 						+ " orders in IMS from pending to non-pending");
 			}
 
 			// schedule async ListOrderItemsTimerTask to insert order items
 			if (nonPendingAmazonOrderIds != null && nonPendingAmazonOrderIds.size() > 0) {
-				log.info(getLogPrefix() + ": scheduleListOrderItemsTimerTask(), nonPendingAmazonOrderIds.size()="
+				log.info("scheduleListOrderItemsTimerTask(), nonPendingAmazonOrderIds.size()="
 						+ nonPendingAmazonOrderIds.size());
 				scheduleListOrderItemsTimerTask(nonPendingAmazonOrderIds);
 			}
 		}
 
 		// set ready for the next scheduled task running
-		log.info(getLogPrefix() + ": ready()");
+		log.info("ready()");
 		ready();
 	}
 

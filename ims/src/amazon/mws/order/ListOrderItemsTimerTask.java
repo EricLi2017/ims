@@ -60,32 +60,30 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	@Override
 	protected void work() throws SQLException, NamingException {
 		// initialization
-		log.info(getLogPrefix() + ": workType is " + workType.name());
+		log.info("workType is " + workType.name());
 		mwsCalledTimes = 0;
 		if (workType == WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList set from internal
 			setAmazonOrderIdList(
 					OrderQuerier.selectOldestNonPendingOrdersWithoutItems(ListOrderItemsMWS.REQUEST_QUOTA));
 			if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
-				log.info(getLogPrefix() + ": All non-pending orders have related order items.");
+				log.info("All non-pending orders have related order items.");
 			}
 		} else if (workType == WorkType.INSERT_BY_EXTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList should be set from the external caller
 			if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
-				log.info(getLogPrefix()
-						+ ": External caller didn't select any non-pending orders without related order items.");
+				log.info("External caller didn't select any non-pending orders without related order items.");
 			}
 		}
 
 		// save all orderItems by amazonOrderId list
 		if (!(amazonOrderIdList == null || amazonOrderIdList.size() < 1)) {
-			log.info(getLogPrefix() + ": " + amazonOrderIdList.size()
-					+ " non-pending orders without related order items are selected.");
+			log.info(amazonOrderIdList.size() + " non-pending orders without related order items are selected.");
 			for (String amazonOrderId : amazonOrderIdList) {
 				if (++mwsCalledTimes <= ListOrderItemsMWS.REQUEST_QUOTA) {
-					log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId started");
+					log.info(getLogPrefix(amazonOrderId) + "insertOrderItemsByOrderId started");
 					insertOrderItemsByOrderId(amazonOrderId);
-					log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId ended");
+					log.info(getLogPrefix(amazonOrderId) + "insertOrderItemsByOrderId ended");
 				} else {
 					break;
 				}
@@ -93,13 +91,13 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 		}
 
 		/** Set the task to ready for the next scheduled call */
-		log.info(getLogPrefix() + ": ready()");
+		log.info("ready()");
 		ready();
 	}
 
 	private void insertOrderItemsByOrderId(String amazonOrderId) {
 		// Make the call to get first result
-		log.info(getLogPrefix(amazonOrderId) + ": getFirstResult()");
+		log.info(getLogPrefix(amazonOrderId) + "getFirstResult()");
 		ListOrderItemsResult result = getFirstResult(amazonOrderId);// may cause MarketplaceWebServiceOrdersException
 		List<OrderItem> orderItems = result.getOrderItems();
 		String nextToken = result.getNextToken();
@@ -107,7 +105,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 		while (nextToken != null) {
 			if (++mwsCalledTimes <= ListOrderItemsMWS.REQUEST_QUOTA) {
 				// Make the call to get next result by next token
-				log.info(getLogPrefix(amazonOrderId) + ": getNextResult(), nextToken=" + nextToken);
+				log.info(getLogPrefix(amazonOrderId) + "getNextResult(), nextToken=" + nextToken);
 				ListOrderItemsByNextTokenResult nextResult = getNextResult(nextToken);
 
 				// add orderItems
@@ -116,14 +114,14 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 				// set new nextToken
 				nextToken = nextResult.getNextToken();
 			} else {
-				log.info(getLogPrefix(amazonOrderId) + ": reached request quota");
+				log.info(getLogPrefix(amazonOrderId) + "reached request quota");
 				return;
 			}
 		}
 
 		// createBefor should be same for every response
 		if (nextToken == null) {
-			log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsIntoDatabase()");
+			log.info(getLogPrefix(amazonOrderId) + "insertOrderItemsIntoDatabase()");
 			insertOrderItemsIntoDatabase(orderItems, amazonOrderId);
 		}
 	}
@@ -151,7 +149,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	}
 
 	private String getLogPrefix(String amazonOrderId) {
-		return getLogPrefix() + ": mwsCalledTimes=" + mwsCalledTimes + ", amazonOrderId=" + amazonOrderId;
+		return "mwsCalledTimes=" + mwsCalledTimes + ", amazonOrderId=" + amazonOrderId;
 	}
 
 	/**
@@ -161,7 +159,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	@Override
 	protected void afterWork() {
 		// reset
-		log.info(getLogPrefix() + ": reset()");
+		log.info("reset()");
 		reset();
 	}
 

@@ -47,7 +47,7 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 		// init
 		int mwsCalledTimes = 0;
 		List<String> asins = AmazonProductQuerier.selectAllDistinctAsin();
-		log.info(getLogPrefix() + ": There are a total of " + asins.size() + " ASINs.");
+		log.info("There are a total of " + asins.size() + " ASINs.");
 
 		// Call ListInventorySupply and update database
 		int total = asins.size();
@@ -60,38 +60,36 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 			try {
 				// wait a safe restore period for next call when request quota reached
 				if (!(++mwsCalledTimes <= GetMatchingProductMWS.REQUEST_QUOTA)) {
-					log.info(getLogPrefix() + ": mwsCalledTimes reached request quota, start to sleep "
+					log.info("mwsCalledTimes reached request quota, start to sleep "
 							+ GetMatchingProductMWS.getSafeRestorePeriod() / 1000 + " seconds");
 					Thread.sleep(GetMatchingProductMWS.getSafeRestorePeriod());
 					mwsCalledTimes = 1;
-					log.info(getLogPrefix() + ": sleeping ended and reset mwsCalledTimes to " + mwsCalledTimes);
+					log.info("sleeping ended and reset mwsCalledTimes to " + mwsCalledTimes);
 				}
 
 				// get sub ASINs
 				List<String> subAsins = Page.getSub(asins, subIndex, subSize);
-				log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub " + subAsins.size()
-						+ " ASINs");
+				log.info("(" + subIndex + "/" + subMaxIndex + ") process the sub " + subAsins.size() + " ASINs");
 
 				// call
 				GetMatchingProductResponse response = GetMatchingProductMWS.getMatchingProduct(subAsins);
 				List<GetMatchingProductResult> results = response.getGetMatchingProductResult();
-				log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") get " + results.size()
-						+ " ASINs results");
+				log.info("(" + subIndex + "/" + subMaxIndex + ") get " + results.size() + " ASINs results");
 
 				// update database
 				if (results.size() > 0) {
 					int update = AmazonProductEditor.updateAttributeAndSalesRankByAsin(results);
-					log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex
-							+ ") updateAttributeAndSalesRankByAsin " + update + "/" + results.size()
-							+ "(updated SKU/by ASIN) amazon product updated ");
+					log.info("(" + subIndex + "/" + subMaxIndex + ") updateAttributeAndSalesRankByAsin " + update + "/"
+							+ results.size() + "(updated SKU/by ASIN) amazon product updated");
 				}
 			} catch (Exception e) {
+				log.error("(" + subIndex + "/" + subMaxIndex + ") processiong failed!");
 				e.printStackTrace();
 			}
 		}
 
 		// set ready for the next scheduled task running
-		log.info(getLogPrefix() + ": ready()");
+		log.info("ready()");
 		ready();
 	}
 }
