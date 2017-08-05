@@ -79,8 +79,8 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 				// update database
 				if (results.size() > 0) {
 					int update = AmazonProductEditor.updateAttributeAndSalesRankByAsin(results);
-					log.info("(" + subIndex + "/" + subMaxIndex + ") updateAttributeAndSalesRankByAsin " + update + "/"
-							+ results.size() + "(updated SKU/by ASIN) amazon product updated");
+					log.info("(" + subIndex + "/" + subMaxIndex + ") update " + update + "/" + results.size()
+							+ "(updated SKU/by ASIN) products in updateAttributeAndSalesRankByAsin");
 				}
 			} catch (Exception e) {
 				log.error("(" + subIndex + "/" + subMaxIndex + ") processiong failed!");
