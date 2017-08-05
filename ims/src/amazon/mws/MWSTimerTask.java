@@ -14,7 +14,6 @@ import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersExce
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
 public abstract class MWSTimerTask extends TimerTask {
-
 	private static final Log log = LogFactory.getLog(MWSTimerTask.class);
 
 	private boolean isReady = true;
@@ -64,7 +63,8 @@ public abstract class MWSTimerTask extends TimerTask {
 	/**
 	 * Get the prefix for the log
 	 * 
-	 * Default format of org.apache.commons.logging.Log is:
+	 * Default format of org.apache.commons.logging.Log
+	 * (org.apache.commons.logging.impl.Jdk14Logger) is:
 	 * 
 	 * <pre>
 	 * {Current time} {Log type} [{Current thread name}] {Class name}.{Method name}
