@@ -11,7 +11,30 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Root level="info">
+		<!-- Special level -->
+		<Logger name="amazon.mws.fulfillment.ListInventorySupplyTimerTask"
+			level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="amazon.mws.order.GetOrderTimerTask" level="INFO"
+			additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="amazon.mws.order.ListOrderItemsTimerTask" level="INFO"
+			additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="amazon.mws.order.ListOrdersTimerTask" level="INFO"
+			additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="amazon.mws.product.GetMatchingProductTimerTask"
+			level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+
+		<!-- Default level -->
+		<Root level="WARN">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>
