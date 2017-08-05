@@ -50,7 +50,7 @@ httpcore-4.2		(MWS API shared)
 MWSClientJavaRuntime-1.0	(MWS API shared)
 ------------------------------------
 
-Log4J
+Log4J2
 ------------------------------------
 log4j-api-2.8.2.jar
 log4j-core-2.8.2.jar
