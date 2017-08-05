@@ -22,9 +22,9 @@ commons-collections4-4.1
 
 MWS Fulfillment API
 ------------------------------------
+FulfillmentInventory_2010-10-01_v2014-09-30
 commons-codec-1.6
 commons-logging-api-1.1.1
-FulfillmentInventory_2010-10-01_v2014-09-30
 httpclient-4.2.3
 httpcore-4.2
 MWSClientJavaRuntime-1.0
@@ -32,9 +32,9 @@ MWSClientJavaRuntime-1.0
 
 MWS Order API
 ------------------------------------
+MWSOrders_2013-09-01_v2015-09-24
 commons-codec-1.6	(MWS API shared)
 commons-logging-api-1.1.1	(MWS API shared)
-MWSOrders_2013-09-01_v2015-09-24
 httpclient-4.2.3	(MWS API shared)
 httpcore-4.2		(MWS API shared)
 MWSClientJavaRuntime-1.0	(MWS API shared)
@@ -42,10 +42,18 @@ MWSClientJavaRuntime-1.0	(MWS API shared)
 
 MWS Product API
 ------------------------------------
+MWSProducts_2011-10-01_v2017-03-22
 commons-codec-1.6	(MWS API shared)
 commons-logging-api-1.1.1	(MWS API shared)
-MWSProducts_2011-10-01_v2017-03-22
 httpclient-4.2.3	(MWS API shared)
 httpcore-4.2		(MWS API shared)
 MWSClientJavaRuntime-1.0	(MWS API shared)
+------------------------------------
+
+Log4J
+------------------------------------
+log4j-api-2.8.2.jar
+log4j-core-2.8.2.jar
+log4j-jcl-2.8.2.jar			(used to bridge commons-logging)
+commons-logging-api-1.1.1	(MWS API shared)
 ------------------------------------
