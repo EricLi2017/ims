@@ -66,7 +66,7 @@ public abstract class MWSTimerTask extends TimerTask {
 	 * @return
 	 */
 	private String getLogPrefixOfImplCls() {
-		return getClass().getName();
+		return getClass().getName()+" ";
 	}
 
 	/**
