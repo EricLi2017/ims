@@ -12,6 +12,9 @@
 	</Appenders>
 	<Loggers>
 		<!-- Special level -->
+		<Logger name="amazon.mws.MWSTimerTask" level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
 		<Logger name="amazon.mws.fulfillment.ListInventorySupplyTimerTask"
 			level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
