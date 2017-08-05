@@ -6,6 +6,9 @@ package amazon.mws.order;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrders;
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersClient;
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
@@ -43,6 +46,7 @@ import amazon.mws.SellerConfig;
  * @since 1.0
  */
 public class GetOrderMWS {
+	private static final Log log = LogFactory.getLog(GetOrderMWS.class);
 	/**
 	 * Throttling
 	 */
@@ -75,24 +79,24 @@ public class GetOrderMWS {
 			GetOrderResponse response = client.getOrder(request);
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (MarketplaceWebServiceOrdersException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}

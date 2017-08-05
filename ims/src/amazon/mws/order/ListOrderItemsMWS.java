@@ -15,8 +15,10 @@
  */
 package amazon.mws.order;
 
-import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
@@ -47,6 +49,7 @@ import amazon.mws.SellerConfig;
  * seconds.
  */
 public class ListOrderItemsMWS {
+	private static final Log log = LogFactory.getLog(ListOrderItemsMWS.class);
 	/**
 	 * Throttling
 	 */
@@ -76,24 +79,24 @@ public class ListOrderItemsMWS {
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every
 			// call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (MarketplaceWebServiceOrdersException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}
@@ -114,24 +117,24 @@ public class ListOrderItemsMWS {
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every
 			// call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (MarketplaceWebServiceOrdersException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}
@@ -145,7 +148,7 @@ public class ListOrderItemsMWS {
 		ListOrderItemsRequest request = new ListOrderItemsRequest();
 		request.setSellerId(sellerId);
 		request.setAmazonOrderId(amazonOrderId);
-		System.out.println("amazonOrderId= " + amazonOrderId);
+		log.info("amazonOrderId= " + amazonOrderId);
 
 		// Make the call.
 		ListOrderItemsResponse response = ListOrderItemsMWS.invokeListOrderItems(client, request);
@@ -166,68 +169,4 @@ public class ListOrderItemsMWS {
 		ListOrderItemsByNextTokenResponse response = invokeListOrderItemsByNextToken(client, request);
 		return response;
 	}
-
-	/**
-	 * Command line entry point.
-	 */
-	public static void main(String[] args) {
-
-		// String amazonOrderId = "107-5499830-9104262";// 7 units, 1 sku
-		String amazonOrderId = "002-1524942-4267460";// a canceled order
-
-		// Make the call.
-		ListOrderItemsResponse response = listOrderItems(amazonOrderId);
-
-		ListOrderItemsResult listOrderItemsResult = response.getListOrderItemsResult();
-		boolean hasNextOrderItems = listOrderItemsResult.isSetNextToken();
-		String nextToken = listOrderItemsResult.getNextToken();
-		List<OrderItem> orderItems = listOrderItemsResult.getOrderItems();
-		for (OrderItem orderItem : orderItems) {
-			System.out.println(orderItem.toXML());
-
-			System.out.println(orderItem.getASIN());
-			System.out.println(orderItem.getSellerSKU());
-			System.out.println(orderItem.getItemPrice().getCurrencyCode());
-			System.out.println(orderItem.getItemPrice().getAmount());
-			System.out.println(orderItem.getPromotionDiscount().getCurrencyCode());
-			System.out.println(orderItem.getPromotionDiscount().getAmount());
-			System.out.println(orderItem.getItemTax().getCurrencyCode());
-			System.out.println(orderItem.getItemTax().getAmount());
-			System.out.println(orderItem.getOrderItemId());
-			System.out.println(orderItem.getTitle());
-			System.out.println(orderItem.getQuantityOrdered());
-			System.out.println(orderItem.getQuantityShipped());
-
-		}
-		System.out.println("hasNextOrderItems= " + hasNextOrderItems);
-		System.out.println("nextToken= " + nextToken);
-
-		while (hasNextOrderItems && nextToken != null) {
-			ListOrderItemsByNextTokenResponse nextTokenResponse = listOrderItemsByNextToken(nextToken);
-			ListOrderItemsByNextTokenResult nextTokenResult = nextTokenResponse.getListOrderItemsByNextTokenResult();
-			hasNextOrderItems = nextTokenResult.isSetNextToken();
-			nextToken = nextTokenResult.getNextToken();
-			List<OrderItem> nextOrderItems = nextTokenResult.getOrderItems();
-			for (OrderItem orderItem : nextOrderItems) {
-				System.out.println(orderItem.toXML());
-
-				System.out.println(orderItem.getASIN());
-				System.out.println(orderItem.getSellerSKU());
-				System.out.println(orderItem.getItemPrice().getCurrencyCode());
-				System.out.println(orderItem.getItemPrice().getAmount());
-				System.out.println(orderItem.getPromotionDiscount().getCurrencyCode());
-				System.out.println(orderItem.getPromotionDiscount().getAmount());
-				System.out.println(orderItem.getItemTax().getCurrencyCode());
-				System.out.println(orderItem.getItemTax().getAmount());
-				System.out.println(orderItem.getOrderItemId());
-				System.out.println(orderItem.getTitle());
-				System.out.println(orderItem.getQuantityOrdered());
-				System.out.println(orderItem.getQuantityShipped());
-			}
-			System.out.println("hasNextOrderItems= " + hasNextOrderItems);
-			System.out.println("nextToken= " + nextToken);
-		}
-
-	}
-
 }

@@ -20,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.orders._2013_09_01.*;
 import com.amazonservices.mws.orders._2013_09_01.model.*;
 
@@ -47,6 +50,7 @@ import amazon.mws.SellerConfig;
  * can be returned per page. Value must be 1 - 100. Default: 100
  */
 public class ListOrdersMWS {
+	private static final Log log = LogFactory.getLog(ListOrdersMWS.class);
 	/**
 	 * Throttling
 	 */
@@ -58,8 +62,7 @@ public class ListOrdersMWS {
 	/**
 	 * MaxResultsPerPage
 	 */
-	public static final int MAX_RESULTS_PER_PAGE = 10;// TODO for test
-
+	public static final int MAX_RESULTS_PER_PAGE = 100;
 	/** Seller Seller ID. */
 	private static String sellerId = SellerConfig.sellerId;
 	/** Seller Marketplace ID. */
@@ -79,24 +82,24 @@ public class ListOrdersMWS {
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every
 			// call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (MarketplaceWebServiceOrdersException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}
@@ -116,24 +119,24 @@ public class ListOrdersMWS {
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every
 			// call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (MarketplaceWebServiceOrdersException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}
@@ -161,8 +164,8 @@ public class ListOrdersMWS {
 		// Create a request.
 		ListOrdersRequest request = new ListOrdersRequest();
 		request.setSellerId(sellerId);
-		System.out.println("createdAfter: " + createdAfter);
-		System.out.println("createdBefore: " + createdBefore);
+		log.info("createdAfter: " + createdAfter);
+		log.info("createdBefore: " + createdBefore);
 		request.setCreatedAfter(createdAfter);
 		request.setCreatedBefore(createdBefore);
 		List<String> orderStatus = new ArrayList<String>();

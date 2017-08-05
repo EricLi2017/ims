@@ -1,13 +1,14 @@
 package amazon.mws.fulfillment;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.FBAInventoryServiceMWS;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.FBAInventoryServiceMWSClient;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.FBAInventoryServiceMWSException;
-import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.InventorySupply;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyRequest;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyResponse;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ResponseHeaderMetadata;
@@ -28,6 +29,7 @@ import amazon.mws.SellerConfig;
  * Maximum 50
  */
 public class ListInventorySupplyMWS {
+	private static final Log log = LogFactory.getLog(ListInventorySupplyMWS.class);
 	/**
 	 * Throttling
 	 */
@@ -79,24 +81,24 @@ public class ListInventorySupplyMWS {
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 			// We recommend logging every the request id and timestamp of every
 			// call.
-			System.out.println("Response:");
-			System.out.println("RequestId: " + rhmd.getRequestId());
-			System.out.println("Timestamp: " + rhmd.getTimestamp());
+			log.info("Response:");
+			log.info("RequestId: " + rhmd.getRequestId());
+			log.info("Timestamp: " + rhmd.getTimestamp());
 			String responseXml = response.toXML();
-			System.out.println(responseXml);
+			log.info(responseXml);
 			return response;
 		} catch (FBAInventoryServiceMWSException ex) {
 			// Exception properties are important for diagnostics.
-			System.out.println("Service Exception:");
+			log.error("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				log.error("RequestId: " + rhmd.getRequestId());
+				log.error("Timestamp: " + rhmd.getTimestamp());
 			}
-			System.out.println("Message: " + ex.getMessage());
-			System.out.println("StatusCode: " + ex.getStatusCode());
-			System.out.println("ErrorCode: " + ex.getErrorCode());
-			System.out.println("ErrorType: " + ex.getErrorType());
+			log.error("Message: " + ex.getMessage());
+			log.error("StatusCode: " + ex.getStatusCode());
+			log.error("ErrorCode: " + ex.getErrorCode());
+			log.error("ErrorType: " + ex.getErrorType());
 			throw ex;
 		}
 	}
@@ -125,27 +127,4 @@ public class ListInventorySupplyMWS {
 		ListInventorySupplyResponse response = ListInventorySupplyMWS.invokeListInventorySupply(client, request);
 		return response;
 	}
-
-	/**
-	 * Command line entry point.
-	 */
-	public static void main(String[] args) {
-
-		List<String> skus = new ArrayList<String>();
-		skus.add("0B-K1QZ-4RUE");
-		ListInventorySupplyResponse response = ListInventorySupplyMWS.listInventory(skus);
-
-		List<InventorySupply> member = response.getListInventorySupplyResult().getInventorySupplyList().getMember();
-		for (InventorySupply supply : member) {
-			System.out.println(supply.getASIN());
-			System.out.println(supply.getCondition());
-			System.out.println(supply.getEarliestAvailability() == null ? null
-					: supply.getEarliestAvailability().getTimepointType());
-			System.out.println(supply.getFNSKU());
-			System.out.println(supply.getInStockSupplyQuantity());
-			System.out.println(supply.getSellerSKU());
-			System.out.println(supply.getTotalSupplyQuantity());
-		}
-	}
-
 }
