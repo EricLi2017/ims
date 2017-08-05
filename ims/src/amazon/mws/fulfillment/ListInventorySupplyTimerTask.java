@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.InventorySupply;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyResponse;
 import amazon.db.edit.AmazonProductEditor;
@@ -27,7 +30,8 @@ import common.util.Page;
  * @since 1.0
  */
 public class ListInventorySupplyTimerTask extends MWSTimerTask {
-	private static ListInventorySupplyTimerTask listInventorySupplyTimerTask = new ListInventorySupplyTimerTask();
+	private static final Log log = LogFactory.getLog(ListInventorySupplyTimerTask.class);
+	private static final ListInventorySupplyTimerTask listInventorySupplyTimerTask = new ListInventorySupplyTimerTask();
 
 	private ListInventorySupplyTimerTask() {
 
@@ -42,7 +46,7 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 		// init
 		int mwsCalledTimes = 0;
 		List<String> skus = AmazonProductQuerier.selectAllSku();
-		System.out.println(getLogPrefix() + ": There are a total of " + skus.size() + " SKUs.");
+		log.info(getLogPrefix() + ": There are a total of " + skus.size() + " SKUs.");
 
 		// Call ListInventorySupply and update database
 		int total = skus.size();
@@ -52,8 +56,8 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 		while (++mwsCalledTimes <= ListInventorySupplyMWS.REQUEST_QUOTA && ++subIndex <= subMaxIndex) {
 			// get sub SKUs
 			List<String> subSkus = Page.getSub(skus, subIndex, subSize);
-			System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub "
-					+ subSkus.size() + " SKUs");
+			log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") process the sub " + subSkus.size()
+					+ " SKUs");
 
 			// catch exception for all the loop can be executed
 			try {
@@ -61,14 +65,14 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 				ListInventorySupplyResponse response = ListInventorySupplyMWS.listInventory(subSkus);
 				List<InventorySupply> supplys = response.getListInventorySupplyResult().getInventorySupplyList()
 						.getMember();
-				System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") get " + supplys.size()
+				log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") get " + supplys.size()
 						+ " SKUs inventory supply");
 
 				// update database
 				if (supplys.size() > 0) {
 					int update = AmazonProductEditor.update(supplys);
-					System.out.println(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") update " + update
-							+ "/" + supplys.size() + " amazon product");
+					log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex + ") update " + update + "/"
+							+ supplys.size() + " amazon product");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -76,7 +80,7 @@ public class ListInventorySupplyTimerTask extends MWSTimerTask {
 		}
 
 		// set ready for the next scheduled task running
-		System.out.println(getLogPrefix() + ": ready()");
+		log.info(getLogPrefix() + ": ready()");
 		ready();
 	}
 }

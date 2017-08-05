@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsByNextTokenResult;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrderItemsResponse;
@@ -24,6 +27,9 @@ import amazon.mws.MWSTimerTask;
  * Created by Eclipse. User: Eric Li Date: Jul 23, 2017 Time: 10:23:48 PM
  */
 public class ListOrderItemsTimerTask extends MWSTimerTask {
+	private static final Log log = LogFactory.getLog(ListOrderItemsTimerTask.class);
+	private static final ListOrderItemsTimerTask listOrderItemsTimerTask = new ListOrderItemsTimerTask();
+
 	private int mwsCalledTimes;
 	private List<String> amazonOrderIdList;
 	private WorkType workType = WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID;
@@ -32,13 +38,11 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 		INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID, INSERT_BY_EXTERNAL_SET_AMAZON_ORDER_ID
 	}
 
-	public void setAmazonOrderIdList(List<String> amazonOrderIdList) {
-		this.amazonOrderIdList = amazonOrderIdList;
+	private ListOrderItemsTimerTask() {
 	}
 
-	private static ListOrderItemsTimerTask listOrderItemsTimerTask = new ListOrderItemsTimerTask();
-
-	private ListOrderItemsTimerTask() {
+	public void setAmazonOrderIdList(List<String> amazonOrderIdList) {
+		this.amazonOrderIdList = amazonOrderIdList;
 	}
 
 	public static ListOrderItemsTimerTask getInstance(WorkType workType) {
@@ -56,32 +60,32 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	@Override
 	protected void work() throws SQLException, NamingException {
 		// initialization
-		System.out.println(getLogPrefix() + ": workType is " + workType.name());
+		log.info(getLogPrefix() + ": workType is " + workType.name());
 		mwsCalledTimes = 0;
 		if (workType == WorkType.INSERT_BY_INTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList set from internal
 			setAmazonOrderIdList(
 					OrderQuerier.selectOldestNonPendingOrdersWithoutItems(ListOrderItemsMWS.REQUEST_QUOTA));
 			if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
-				System.out.println(getLogPrefix() + ": All non-pending orders have related order items.");
+				log.info(getLogPrefix() + ": All non-pending orders have related order items.");
 			}
 		} else if (workType == WorkType.INSERT_BY_EXTERNAL_SET_AMAZON_ORDER_ID) {
 			// amazonOrderIdList should be set from the external caller
 			if (amazonOrderIdList == null || amazonOrderIdList.size() < 1) {
-				System.out.println(getLogPrefix()
+				log.info(getLogPrefix()
 						+ ": External caller didn't select any non-pending orders without related order items.");
 			}
 		}
 
 		// save all orderItems by amazonOrderId list
 		if (!(amazonOrderIdList == null || amazonOrderIdList.size() < 1)) {
-			System.out.println(getLogPrefix() + ": " + amazonOrderIdList.size()
+			log.info(getLogPrefix() + ": " + amazonOrderIdList.size()
 					+ " non-pending orders without related order items are selected.");
 			for (String amazonOrderId : amazonOrderIdList) {
 				if (++mwsCalledTimes <= ListOrderItemsMWS.REQUEST_QUOTA) {
-					System.out.println(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId started");
+					log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId started");
 					insertOrderItemsByOrderId(amazonOrderId);
-					System.out.println(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId ended");
+					log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsByOrderId ended");
 				} else {
 					break;
 				}
@@ -89,13 +93,13 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 		}
 
 		/** Set the task to ready for the next scheduled call */
-		System.out.println(getLogPrefix() + ": ready()");
+		log.info(getLogPrefix() + ": ready()");
 		ready();
 	}
 
 	private void insertOrderItemsByOrderId(String amazonOrderId) {
 		// Make the call to get first result
-		System.out.println(getLogPrefix(amazonOrderId) + ": getFirstResult()");
+		log.info(getLogPrefix(amazonOrderId) + ": getFirstResult()");
 		ListOrderItemsResult result = getFirstResult(amazonOrderId);// may cause MarketplaceWebServiceOrdersException
 		List<OrderItem> orderItems = result.getOrderItems();
 		String nextToken = result.getNextToken();
@@ -103,7 +107,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 		while (nextToken != null) {
 			if (++mwsCalledTimes <= ListOrderItemsMWS.REQUEST_QUOTA) {
 				// Make the call to get next result by next token
-				System.out.println(getLogPrefix(amazonOrderId) + ": getNextResult(), nextToken=" + nextToken);
+				log.info(getLogPrefix(amazonOrderId) + ": getNextResult(), nextToken=" + nextToken);
 				ListOrderItemsByNextTokenResult nextResult = getNextResult(nextToken);
 
 				// add orderItems
@@ -112,14 +116,14 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 				// set new nextToken
 				nextToken = nextResult.getNextToken();
 			} else {
-				System.out.println(getLogPrefix(amazonOrderId) + ": reached request quota");
+				log.info(getLogPrefix(amazonOrderId) + ": reached request quota");
 				return;
 			}
 		}
 
 		// createBefor should be same for every response
 		if (nextToken == null) {
-			System.out.println(getLogPrefix(amazonOrderId) + ": insertOrderItemsIntoDatabase()");
+			log.info(getLogPrefix(amazonOrderId) + ": insertOrderItemsIntoDatabase()");
 			insertOrderItemsIntoDatabase(orderItems, amazonOrderId);
 		}
 	}
@@ -157,7 +161,7 @@ public class ListOrderItemsTimerTask extends MWSTimerTask {
 	@Override
 	protected void afterWork() {
 		// reset
-		System.out.println(getLogPrefix() + ": reset()");
+		log.info(getLogPrefix() + ": reset()");
 		reset();
 	}
 

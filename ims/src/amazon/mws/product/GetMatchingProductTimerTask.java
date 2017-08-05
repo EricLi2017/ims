@@ -26,7 +26,8 @@ import common.util.Page;
  * @since 1.0
  */
 public class GetMatchingProductTimerTask extends MWSTimerTask {
-	private static GetMatchingProductTimerTask getMatchingProductTimerTask = new GetMatchingProductTimerTask();
+	private static final Log log = LogFactory.getLog(GetMatchingProductTimerTask.class);
+	private static final GetMatchingProductTimerTask getMatchingProductTimerTask = new GetMatchingProductTimerTask();
 
 	private GetMatchingProductTimerTask() {
 
@@ -35,8 +36,6 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 	public static GetMatchingProductTimerTask getInstance() {
 		return getMatchingProductTimerTask;
 	}
-
-	private static Log log = LogFactory.getLog(GetMatchingProductTimerTask.class);
 
 	/*
 	 * (non-Javadoc)
@@ -65,7 +64,7 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 							+ GetMatchingProductMWS.getSafeRestorePeriod() / 1000 + " seconds");
 					Thread.sleep(GetMatchingProductMWS.getSafeRestorePeriod());
 					mwsCalledTimes = 1;
-					log.info(getLogPrefix() + ": sleeping ended and reset mwsCalledTimes to "+mwsCalledTimes);
+					log.info(getLogPrefix() + ": sleeping ended and reset mwsCalledTimes to " + mwsCalledTimes);
 				}
 
 				// get sub ASINs
@@ -83,13 +82,12 @@ public class GetMatchingProductTimerTask extends MWSTimerTask {
 				if (results.size() > 0) {
 					int update = AmazonProductEditor.updateAttributeAndSalesRankByAsin(results);
 					log.info(getLogPrefix() + ": (" + subIndex + "/" + subMaxIndex
-							+ ") updateAttributeAndSalesRankByAsin " + update
-							+ " rows(by SKU) amazon product updated by" + results.size() + " ASINs");
+							+ ") updateAttributeAndSalesRankByAsin " + update + "/" + results.size()
+							+ "(updated SKU/by ASIN) amazon product updated ");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 
 		// set ready for the next scheduled task running

@@ -5,12 +5,17 @@ package amazon.mws;
 
 import java.util.TimerTask;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
 
 /**
  * Created by Eclipse. User: Eric Li Date: Jul 24, 2017 Time: 12:57:59 PM
  */
 public abstract class MWSTimerTask extends TimerTask {
+
+	private static final Log log = LogFactory.getLog(MWSTimerTask.class);
 
 	private boolean isReady = true;
 
@@ -57,7 +62,7 @@ public abstract class MWSTimerTask extends TimerTask {
 	}
 
 	protected final String getLogPrefix() {
-		return Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": " + getClass().getName();
+		return "[" + Thread.currentThread().getId() + "]";
 	}
 
 	/**
@@ -80,28 +85,27 @@ public abstract class MWSTimerTask extends TimerTask {
 	 */
 	@Override
 	public final void run() {
-		System.out.println(getLogPrefix() + ": run() started");
+		log.info(getLogPrefix() + ": run() started");
 		if (!isReady()) {
-			System.out.println(getLogPrefix() + ": The task was not ready, it stopped runnig this time!");
+			log.info(getLogPrefix() + ": The task was not ready, it stopped runnig this time!");
 			return;
 		}
 
 		try {
-			System.out.println(getLogPrefix() + ": work() started");
+			log.info(getLogPrefix() + ": work() started");
 			/** Action of the work */
 			work();
-			System.out.println(Thread.currentThread().getId() + ": " + Thread.currentThread().getName() + ": "
-					+ getClass().getName() + ": work() ended");
+			log.info(getLogPrefix() + ": work() ended");
 		} catch (Exception e) {
 			/** Set the task to ready for the next scheduled call */
-			System.out.println(getLogPrefix() + ": work() ended for exception, call ready()");
+			log.info(getLogPrefix() + ": work() ended for exception, call ready()");
 			ready();
 			e.printStackTrace();
 		} finally {
 			afterWork();
 		}
 
-		System.out.println(getLogPrefix() + ": run() ended");
+		log.info(getLogPrefix() + ": run() ended");
 	}
 
 	/**

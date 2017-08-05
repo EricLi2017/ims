@@ -15,6 +15,9 @@ import java.util.concurrent.ScheduledFuture;
 import javax.naming.NamingException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.amazonservices.mws.orders._2013_09_01.MarketplaceWebServiceOrdersException;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersByNextTokenResponse;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersByNextTokenResult;
@@ -39,6 +42,7 @@ import common.util.Time;
  * Created by Eclipse. User: Eric Li Date: Jul 23, 2017 Time: 9:40:09 PM
  */
 public class ListOrdersTimerTask extends MWSTimerTask {
+	private static final Log log = LogFactory.getLog(ListOrdersTimerTask.class);
 
 	// the default first createdAfter time span in hour before now
 	public static final int DEFAULT_FIRST_CREATED_AFTER_FROM_NOW_HOUR = -24 * 30 * 3;// 90 days before now
@@ -125,10 +129,10 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			pendingId = ListOrdersTrackQuerier.getOldestPendingTaskId();
 		}
 
-		System.out.println(getLogPrefix() + ": init() hasPerviousPendingId=" + hasPerviousPendingId);
-		System.out.println(getLogPrefix() + ": init() pendingId=" + pendingId);
-		System.out.println(getLogPrefix() + ": init() createdAfter=" + createdAfter);
-		System.out.println(getLogPrefix() + ": init() createdBefore=" + createdBefore);
+		log.info(getLogPrefix() + ": init() hasPerviousPendingId=" + hasPerviousPendingId);
+		log.info(getLogPrefix() + ": init() pendingId=" + pendingId);
+		log.info(getLogPrefix() + ": init() createdAfter=" + createdAfter);
+		log.info(getLogPrefix() + ": init() createdBefore=" + createdBefore);
 	}
 
 	/**
@@ -151,13 +155,13 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			throws SQLException, NamingException, MarketplaceWebServiceOrdersException {
 		// Make the call to get first result
 		int mwsCalledTimes = 1;
-		System.out.println(getLogPrefix() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);
+		log.info(getLogPrefix() + ": getFirstResult(), mwsCalledTimes=" + mwsCalledTimes);
 		ListOrdersResult result = getFirstResult();// may cause MarketplaceWebServiceOrdersException
 		String nextToken = result.getNextToken();
 
 		// Update database according to the result from MWS
 		if (result.getOrders() != null && result.getOrders().size() > 0) {
-			System.out.println(getLogPrefix() + ": insertOrders(), orders size="
+			log.info(getLogPrefix() + ": insertOrders(), orders size="
 					+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
 					+ mwsCalledTimes);
 			insertOrders(result.getOrders());
@@ -168,8 +172,8 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 			if (++mwsCalledTimes <= ListOrdersMWS.REQUEST_QUOTA && !isThrottling) {
 				try {
 					// Make the call to get next result by next token
-					System.out.println(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes
-							+ ", nextToken=" + nextToken);
+					log.info(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken="
+							+ nextToken);
 					ListOrdersByNextTokenResult nextResult = getNextResult(nextToken);
 
 					// set new nextToken
@@ -177,7 +181,7 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 
 					// Update database according to the result from MWS
 					if (nextResult.getOrders() != null && nextResult.getOrders().size() > 0) {
-						System.out.println(getLogPrefix() + ": insertOrders(), orders size="
+						log.info(getLogPrefix() + ": insertOrders(), orders size="
 								+ (nextResult.getOrders() == null ? null : nextResult.getOrders().size())
 								+ ", mwsCalledTimes=" + mwsCalledTimes);
 						insertOrders(nextResult.getOrders());
@@ -185,11 +189,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 				} catch (MarketplaceWebServiceOrdersException ex) {
 					// check if it is a throttling exception
 					isThrottling = isThrottlingException(ex);
-					System.out.println(getLogPrefix() + ": failed to getNextResult(), mwsCalledTimes=" + mwsCalledTimes
+					log.info(getLogPrefix() + ": failed to getNextResult(), mwsCalledTimes=" + mwsCalledTimes
 							+ ", isThrottling=" + isThrottling + ", nextToken=" + nextToken);
 				}
 			} else {
-				System.out.println(getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);
+				log.info(getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + mwsCalledTimes);
 				callByRestorePeriodAsync(nextToken, mwsCalledTimes);
 				return;
 			}
@@ -198,11 +202,11 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 		// createBefor should be same for every response
 		if (nextToken == null) {
 			/** Set the task to ready for the next scheduled call */
-			System.out.println(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
+			log.info(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
 			ready();
 
 			// Complete the track of ListOrders task
-			System.out.println(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
+			log.info(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
 			updateTrackToCompleted(Time.getTime(result.getCreatedBefore()), pendingId);
 		}
 	}
@@ -251,14 +255,14 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 				String newNextToken = nextToken;
 				try {
 					// Call
-					System.out.println(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes
-							+ ", nextToken=" + nextToken);
+					log.info(getLogPrefix() + ": getNextResult(), mwsCalledTimes=" + mwsCalledTimes + ", nextToken="
+							+ nextToken);
 					ListOrdersByNextTokenResult result = getNextResult(nextToken);
 					newNextToken = result.getNextToken();
 
 					// Update database according to the result from MWS
 					if (result.getOrders() != null && result.getOrders().size() > 0) {
-						System.out.println(getLogPrefix() + ": insertOrders(), orders size="
+						log.info(getLogPrefix() + ": insertOrders(), orders size="
 								+ (result.getOrders() == null ? null : result.getOrders().size()) + ", mwsCalledTimes="
 								+ mwsCalledTimes);
 						insertOrders(result.getOrders());
@@ -267,28 +271,25 @@ public class ListOrdersTimerTask extends MWSTimerTask {
 					// task end
 					if (newNextToken == null) {
 						/** Set the task to ready for the next scheduled call */
-						System.out.println(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
+						log.info(getLogPrefix() + ": ready(), mwsCalledTimes=" + mwsCalledTimes);
 						ready();
 
 						// Complete the track of ListOrders task
-						System.out.println(
-								getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
+						log.info(getLogPrefix() + ": updateTrackToCompleted(), mwsCalledTimes=" + mwsCalledTimes);
 						updateTrackToCompleted(Time.getTime(result.getCreatedBefore()), pendingId);
 					}
 				} catch (Exception e) {
 					// use old nextToken as the new nextToken
 					newNextToken = nextToken;
 
-					System.out.println(
-							getLogPrefix() + ": processing failed in callByRestorePeriodAsync(), mwsCalledTimes="
-									+ mwsCalledTimes + ", nextToken=" + nextToken);
+					log.info(getLogPrefix() + ": processing failed in callByRestorePeriodAsync(), mwsCalledTimes="
+							+ mwsCalledTimes + ", nextToken=" + nextToken);
 				}
 
 				// process new async task
 				if (newNextToken != null) {
 					// Loop call use the new nextToken
-					System.out.println(
-							getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + (mwsCalledTimes + 1));
+					log.info(getLogPrefix() + ": callByRestorePeriodAsync(), mwsCalledTimes=" + (mwsCalledTimes + 1));
 					callByRestorePeriodAsync(newNextToken, mwsCalledTimes + 1);
 				}
 
