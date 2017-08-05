@@ -172,9 +172,9 @@ public class AmazonProductEditor {
 	 * @param result
 	 * @return
 	 */
-	static ProductWithAttributeAndSalesRank parse(GetMatchingProductResult result) {
+	static final ProductWithAttributeAndSalesRank parse(GetMatchingProductResult result) {
 		// set ASIN of product
-		ProductWithAttributeAndSalesRank product = new AmazonProductEditor().new ProductWithAttributeAndSalesRank();
+		ProductWithAttributeAndSalesRank product = new ProductWithAttributeAndSalesRank();
 		product.setAsin(result.getASIN());
 
 		// set ItemAttributes of product
@@ -248,7 +248,7 @@ public class AmazonProductEditor {
 		return product;
 	}
 
-	class ProductWithAttributeAndSalesRank {
+	static class ProductWithAttributeAndSalesRank {
 		/**
 		 * ASIN
 		 */
