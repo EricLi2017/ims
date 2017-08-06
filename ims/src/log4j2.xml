@@ -40,6 +40,10 @@
 		<Logger name="common.util.Time" level="DEBUG" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
+		<!-- for tomcat listener -->
+		<Logger name="common.util.Time" level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
 
 		<!-- Default level -->
 		<Root level="WARN">
