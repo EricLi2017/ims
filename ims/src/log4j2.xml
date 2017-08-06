@@ -12,6 +12,7 @@
 	</Appenders>
 	<Loggers>
 		<!-- Special level -->
+		<!-- for timer tasks -->
 		<Logger name="amazon.mws.MWSTimerTask" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
@@ -33,6 +34,10 @@
 		</Logger>
 		<Logger name="amazon.mws.product.GetMatchingProductTimerTask"
 			level="INFO" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<!-- for time debug -->
+		<Logger name="common.util.Time" level="DEBUG" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 
