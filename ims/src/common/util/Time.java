@@ -40,13 +40,11 @@ public class Time {
 	 * @return time Timestamp or null if time is null or not isValid
 	 */
 	public static Timestamp getTime(XMLGregorianCalendar time) {
-		log.debug("[input] XMLGregorianCalendar time:" + time);
-		log.debug("Timezone of XMLGregorianCalendar time:" + time.getTimezone() / 60);
+		log.debug("[input] XMLGregorianCalendar:" + time);
 		if (time == null || !time.isValid())
 			return null;
 		Timestamp timestamp = new Timestamp(time.toGregorianCalendar().getTimeInMillis());
-		log.debug("[output] Timestamp:" + timestamp);
-		log.debug("Timezone default:" + TimeZone.getDefault());
+		log.debug("[output] Timestamp:" + timestamp + " (Timezone default:" + TimeZone.getDefault() + ")");
 		return timestamp;
 	}
 
@@ -59,6 +57,7 @@ public class Time {
 	 * @return
 	 */
 	public static XMLGregorianCalendar getTime(TimeZone timeZone, Timestamp timestamp) {
+		log.debug("[input] Timestamp :" + timestamp + ", TimeZone:" + timeZone);
 		if (timeZone == null || timestamp == null)
 			return null;
 
@@ -70,6 +69,7 @@ public class Time {
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
+		log.debug("[output] XMLGregorianCalendar:" + cal);
 		return cal;
 	}
 
@@ -81,6 +81,7 @@ public class Time {
 	 * @return
 	 */
 	public static XMLGregorianCalendar getTime(Timestamp timestamp) {
+		log.debug("[input] Timestamp :" + timestamp + " (Timezone default:" + TimeZone.getDefault() + ")");
 		if (timestamp == null)
 			return null;
 
@@ -92,6 +93,7 @@ public class Time {
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
+		log.debug("[output] XMLGregorianCalendar:" + cal);
 		return cal;
 	}
 
