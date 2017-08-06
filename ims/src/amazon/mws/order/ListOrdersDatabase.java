@@ -44,7 +44,11 @@ public class ListOrdersDatabase {
 			PreparedStatement ps;
 			PreparedStatement ps2;
 			for (Order order : orders) {
-				System.out.println(order.getAmazonOrderId());// TODO
+				System.out.print(order.getAmazonOrderId());// TODO
+				System.out.print("\t");
+				System.out.print(order.getOrderStatus());
+				System.out.print("\t");
+				System.out.println(order.getPurchaseDate());
 				// insert into table order_shipping_address
 				Address address = order.getShippingAddress();
 				// canceled and pending order has no address
@@ -162,7 +166,11 @@ public class ListOrdersDatabase {
 			PreparedStatement ps;
 			PreparedStatement ps2;
 			for (Order order : orders) {
-				System.out.println(order.getAmazonOrderId());// TODO
+				System.out.print(order.getAmazonOrderId());// TODO
+				System.out.print("\t");
+				System.out.print(order.getOrderStatus());
+				System.out.print("\t");
+				System.out.println(order.getPurchaseDate());
 				// delete from table order_shipping_address
 				delPs2 = con.prepareStatement(delSql2);
 				delPs2.setString(1, order.getAmazonOrderId());
