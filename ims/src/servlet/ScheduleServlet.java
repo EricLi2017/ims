@@ -114,4 +114,8 @@ public class ScheduleServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
+
+	public static void shutDownExecuter() {
+		scheduledExecutorService.shutdown();
+	}
 }

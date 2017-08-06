@@ -14,6 +14,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
+import servlet.ScheduleServlet;
+
 /**
  * Application Lifecycle Listener implementation class
  * TomcatServletContextListener
@@ -43,9 +45,16 @@ public final class TomcatServletContextListener implements ServletContextListene
 	public void contextDestroyed(ServletContextEvent sce) {
 		log.info("Servlet context is about to be shut down");
 
+		// Shut down executer
+		log.info("Shut down executer");
+		ScheduleServlet.shutDownExecuter();
+
+		// Deregister JDBC Driver
 		deregisterDriver();
 
-		shutDownAbandonedConnectionCleanupThread();
+		// AbandonedConnectionCleanupThread@since 5.1.41
+		log.info("AbandonedConnectionCleanupThread.checkedShutdown()");
+		AbandonedConnectionCleanupThread.checkedShutdown();
 	}
 
 	private void deregisterDriver() {
@@ -75,11 +84,5 @@ public final class TomcatServletContextListener implements ServletContextListene
 			}
 
 		}
-	}
-
-	private void shutDownAbandonedConnectionCleanupThread() {
-		// AbandonedConnectionCleanupThread@since 5.1.41
-		log.info("AbandonedConnectionCleanupThread.checkedShutdown()");
-		AbandonedConnectionCleanupThread.checkedShutdown();
 	}
 }
