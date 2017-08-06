@@ -72,13 +72,13 @@ public class GetOrderTimerTask extends MWSTimerTask {
 			List<Order> nonPendingOrders = getNonPendingOrders(response.getGetOrderResult().getOrders());
 			List<String> nonPendingAmazonOrderIds = getAmazonOrderIds(nonPendingOrders);
 			log.info("found " + nonPendingAmazonOrderIds.size() + "/" + subPendingAmazonOrderIds.size()
-					+ " orders in MWS changed from pending to non-pending");
+					+ " orders whose status has been changed from pending to non-pending in MWS");
 
 			// update orders
 			if (nonPendingOrders != null && nonPendingOrders.size() > 0) {
 				int update = updateOrders(nonPendingOrders);
 				log.info("updated " + update + "/" + nonPendingOrders.size()
-						+ " orders in IMS from pending to non-pending");
+						+ " orders from pending to non-pending status in IMS");
 			}
 
 			// schedule async ListOrderItemsTimerTask to insert order items
