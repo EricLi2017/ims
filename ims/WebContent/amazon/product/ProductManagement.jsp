@@ -32,6 +32,20 @@
 			dateFormat : "yy-mm-dd"
 		});
 
+		/*click to hide and show*/
+		$("#hide").click(function() {
+			$(".product2").hide();
+		});
+		$("#show").click(function() {
+			$(".product2").show();
+		});
+		$("#hide").hover(function() {
+			$(".product2").hide();
+		});
+		$("#show").hover(function() {
+			$(".product2").show();
+		});
+
 	});//end of $(document).ready()
 
 	/** 
@@ -109,6 +123,10 @@
 						id="sortOrder" name="sortOrder" value="<%=sortOrder%>"> <input
 						type="submit" value="Search" title="">
 				</div>
+				<div style="display: inline;">
+					<input type="button" value="+" id="show" title="show all columns"><input
+						type="button" value="-" id="hide" title="hide some columns">
+				</div>
 			</form>
 		</div>
 
@@ -149,7 +167,7 @@
 					<th class="product2"><a href="javascript:void(0)"
 						onclick="reorder('14')">Brand<%=orderBy.getHtmlArrow("14")%>
 					</a></th>
-					<th class="product2"><a href="javascript:void(0)"
+					<th class="product2_img"><a href="javascript:void(0)"
 						onclick="reorder('11')">Image<%=orderBy.getHtmlArrow("11")%>
 					</a></th>
 					<th class="product2"><a href="javascript:void(0)"
@@ -183,42 +201,42 @@
 				%>
 				<tr>
 					<td><%=++rows%></td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getSku())%>
+					<td class="product"><%=common.util.Filter.nullFilter(productAndOrder.getSku())%>
 					</td>
-					<td><a
+					<td class="product"><a
 						href="../../internal/product/InternalProductManagement.jsp?asin=<%=common.util.Filter.nullFilter(productAndOrder.getAsin())%>"
 						title="click to view the related internal product" target="_blank"><%=common.util.Filter.nullFilter(productAndOrder.getAsin())%>
 					</a></td>
-					<td><%=productAndOrder.getYourPrice() == null ? "" : productAndOrder.getYourPrice()%>
+					<td class="product"><%=productAndOrder.getYourPrice() == null ? "" : productAndOrder.getYourPrice()%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getTitle())%>
+					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getTitle())%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getBinding())%>
+					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getBinding())%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getProductGroup())%>
+					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getProductGroup())%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getProductTypeName())%>
+					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getProductTypeName())%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getBrand())%>
+					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getBrand())%>
 					</td>
-					<td><img
+					<td class="product2_img"><img
 						src="<%=common.util.Filter.nullFilter(productAndOrder.getImage())%>"
 						alt="" /></td>
-					<td><%=productAndOrder.getSalesRank() == null ? "" : productAndOrder.getSalesRank()%>
+					<td class="product2"><%=productAndOrder.getSalesRank() == null ? "" : productAndOrder.getSalesRank()%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getFnsku())%>
+					<td class="fulfillment"><%=common.util.Filter.nullFilter(productAndOrder.getFnsku())%>
 					</td>
-					<td><%=productAndOrder.getFbaTotal() == null ? "" : productAndOrder.getFbaTotal()%>
+					<td class="fulfillment"><%=productAndOrder.getFbaTotal() == null ? "" : productAndOrder.getFbaTotal()%>
 					</td>
-					<td><%=productAndOrder.getFbaInStock() == null ? "" : productAndOrder.getFbaInStock()%>
+					<td class="fulfillment"><%=productAndOrder.getFbaInStock() == null ? "" : productAndOrder.getFbaInStock()%>
 					</td>
-					<td><%=productAndOrder.getUnitsOrdered() == null ? "" : productAndOrder.getUnitsOrdered()%>
+					<td class="order"><%=productAndOrder.getUnitsOrdered() == null ? "" : productAndOrder.getUnitsOrdered()%>
 					</td>
-					<td><%=productAndOrder.getUnitsOrderedB2B() == null ? ""
+					<td class="order"><%=productAndOrder.getUnitsOrderedB2B() == null ? ""
 								: productAndOrder.getUnitsOrderedB2B()%></td>
-					<td><%=productAndOrder.getOrderedProductSales() == null ? ""
+					<td class="order"><%=productAndOrder.getOrderedProductSales() == null ? ""
 								: productAndOrder.getOrderedProductSales()%></td>
-					<td><%=productAndOrder.getOrderedProductSalesB2B() == null ? ""
+					<td class="order"><%=productAndOrder.getOrderedProductSalesB2B() == null ? ""
 								: productAndOrder.getOrderedProductSalesB2B()%></td>
 				</tr>
 				<%
