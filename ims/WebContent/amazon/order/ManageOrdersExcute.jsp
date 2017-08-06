@@ -20,8 +20,8 @@
 
 	//set time zone to PST
 	//
-	TimeZone PST = Time.PST;
-	TimeZone.setDefault(PST);
+	// 	TimeZone PST = Time.PST;
+	// 	TimeZone.setDefault(PST);
 	TimeZone currentTZone = TimeZone.getDefault();
 	Timestamp defaultDateAfter;
 	Timestamp defaultDateBefore;

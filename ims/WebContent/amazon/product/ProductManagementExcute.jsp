@@ -1,3 +1,7 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="common.util.Filter"%>
+<%@page import="common.util.OrderBy"%>
 <%@ page import="amazon.db.query.QueryProductAndOrder"%>
 <%@ page import="common.util.Time"%>
 <%@ page import="java.sql.Timestamp"%>
@@ -9,15 +13,23 @@
 <%
 	//query params ()
 	boolean isQuery = (request.getQueryString() != null);
-	String sku = common.util.Filter.nullFilter(request.getParameter("sku"));
-	String fnsku = common.util.Filter.nullFilter(request.getParameter("fnsku"));
-	String asin = common.util.Filter.nullFilter(request.getParameter("asin"));
-	String name = common.util.Filter.nullFilter(request.getParameter("name"));
-	String dateAfter = common.util.Filter.nullFilter(request.getParameter("dateAfter"));
-	String dateBefore = common.util.Filter.nullFilter(request.getParameter("dateBefore"));
+	String sku = Filter.nullFilter(request.getParameter("sku"));
+	String fnsku = Filter.nullFilter(request.getParameter("fnsku"));
+	String asin = Filter.nullFilter(request.getParameter("asin"));
+	String name = Filter.nullFilter(request.getParameter("name"));
+	String dateAfter = Filter.nullFilter(request.getParameter("dateAfter"));
+	String dateBefore = Filter.nullFilter(request.getParameter("dateBefore"));
 	//order by params
-	String orderBy = common.util.Filter.nullFilter(request.getParameter("orderBy"));
-	String ascOrDesc = common.util.Filter.nullFilter(request.getParameter("ascOrDesc"));
+	String sortedColumnId = Filter.nullFilter(request.getParameter("sortedColumnId"));
+	String sortOrder = Filter.nullFilter(request.getParameter("sortOrder"));
+
+	Map<String, String> sortedColumnMap = new HashMap<>();
+	sortedColumnMap.putAll(QueryProductAndOrder.SORTED_COLUMN_MAP_1);
+	sortedColumnMap.putAll(QueryProductAndOrder.SORTED_COLUMN_MAP_2);
+	OrderBy orderBy = new OrderBy(sortedColumnId, sortedColumnMap, sortOrder);
+	//set default order by
+	sortedColumnId = !sortedColumnMap.containsKey(sortedColumnId) ? "1" : sortedColumnId;//set default orderBy value
+	sortOrder = !OrderBy.ASC_DESC_MAP.containsKey(sortOrder) ? OrderBy.DESCENDING : sortOrder;//set default ascDesc value
 
 	System.out.println("sku=" + sku);
 	System.out.println("fnsku=" + fnsku);
@@ -28,8 +40,8 @@
 
 	//set time zone to PST
 	//
-	TimeZone PST = Time.PST;
-	TimeZone.setDefault(PST);
+	// 	TimeZone PST = Time.PST;
+	// 	TimeZone.setDefault(PST);
 	TimeZone currentTZone = TimeZone.getDefault();
 	String pattern = "yyyy-MM-dd";
 	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -66,7 +78,7 @@
 			return;
 		}
 
-		productAndOrders = new QueryProductAndOrder().querySkuSalesSum(Time.getTime(createdAfter),
-				Time.getTime(createdBefore), sku, asin, fnsku, name, orderBy, ascOrDesc);
+		productAndOrders = QueryProductAndOrder.querySkuSalesSum(Time.getTime(createdAfter),
+				Time.getTime(createdBefore), sku, asin, fnsku, name, sortedColumnId, sortOrder);
 	}
 %>

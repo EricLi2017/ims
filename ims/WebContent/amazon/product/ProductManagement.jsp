@@ -33,6 +33,32 @@
 		});
 
 	});//end of $(document).ready()
+
+	/** 
+	Click sorted column to reorder:
+		Reverse sort order if click the current sorted column,
+		or change sorted column to the clicked column if click non current sorted column
+	
+	How to use:
+	1: Search form set id;
+	2: Search form add 2 hidden sort parameters;
+	3: Result table add A link at title TD/TH
+	 */
+	function reorder(sortCol) {
+		//is the same sorted column 
+		if ($("#sortedColumnId").val() == sortCol) {
+			//reverse sort order
+			$("#sortOrder").val(
+<%=OrderBy.getOppositeSortOrder(sortOrder)%>
+	);
+		} else {
+			//change sorted column
+			$("#sortedColumnId").val(sortCol);
+		}
+
+		//submit search form
+		$("#searchForm").submit();
+	}
 </script>
 <style type="text/css">
 .product th:HOVER {
@@ -55,7 +81,7 @@
 
 		<%--Search form--%>
 		<div id="searchDiv" class="searchTable">
-			<form action="" method="get">
+			<form id="searchForm" action="" method="get">
 
 				<div style="display: inline;">
 					SKU:<input type="text" name="sku" value="<%=sku%>" title="">
@@ -78,7 +104,10 @@
 						value="<%=dateBefore%>" title="">
 				</div>
 				<div style="display: inline;">
-					<input type="submit" value="Search" title="">
+					<input type="hidden" id="sortedColumnId" name="sortedColumnId"
+						value="<%=sortedColumnId%>"> <input type="hidden"
+						id="sortOrder" name="sortOrder" value="<%=sortOrder%>"> <input
+						type="submit" value="Search" title="">
 				</div>
 			</form>
 		</div>
@@ -96,23 +125,57 @@
 			<table>
 				<tr>
 					<th></th>
-					<th class="product">SKU</th>
-					<th class="product">ASIN</th>
-					<th class="product">Your Price</th>
-					<th class="product2">Title</th>
-					<th class="product2">Binding</th>
-					<th class="product2">Brand</th>
-					<th class="product2">Product Group</th>
-					<th class="product2">Product Type Name</th>
-					<th class="product2">Image</th>
-					<th class="product2">Sales Rank</th>
-					<th class="fulfillment">FNSKU</th>
-					<th class="fulfillment">FBA Total</th>
-					<th class="fulfillment">FBA In Stock</th>
-					<th class="order">Units Ordered</th>
-					<th class="order">Units Ordered B2B</th>
-					<th class="order">Sales</th>
-					<th class="order">Sales B2B</th>
+					<th class="product"><a href="javascript:void(0)"
+						onclick="reorder('5')">SKU<%=orderBy.getHtmlArrow("5")%>
+					</a></th>
+					<th class="product"><a href="javascript:void(0)"
+						onclick="reorder('6')">ASIN<%=orderBy.getHtmlArrow("6")%>
+					</a></th>
+					<th class="product"><a href="javascript:void(0)"
+						onclick="reorder('7')">Your Price<%=orderBy.getHtmlArrow("7")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('12')">Title<%=orderBy.getHtmlArrow("12")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('13')">Binding<%=orderBy.getHtmlArrow("13")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('16')">Product Group<%=orderBy.getHtmlArrow("16")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('17')">Product Type Name<%=orderBy.getHtmlArrow("17")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('14')">Brand<%=orderBy.getHtmlArrow("14")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('11')">Image<%=orderBy.getHtmlArrow("11")%>
+					</a></th>
+					<th class="product2"><a href="javascript:void(0)"
+						onclick="reorder('18')">Sales Rank<%=orderBy.getHtmlArrow("18")%>
+					</a></th>
+					<th class="fulfillment"><a href="javascript:void(0)"
+						onclick="reorder('8')">FNSKU<%=orderBy.getHtmlArrow("8")%>
+					</a></th>
+					<th class="fulfillment"><a href="javascript:void(0)"
+						onclick="reorder('9')">FBA Total<%=orderBy.getHtmlArrow("9")%>
+					</a></th>
+					<th class="fulfillment"><a href="javascript:void(0)"
+						onclick="reorder('10')">FBA In Stock<%=orderBy.getHtmlArrow("10")%>
+					</a></th>
+					<th class="order"><a href="javascript:void(0)"
+						onclick="reorder('1')">Units Ordered<%=orderBy.getHtmlArrow("1")%>
+					</a></th>
+					<th class="order"><a href="javascript:void(0)"
+						onclick="reorder('2')">Units Ordered B2B<%=orderBy.getHtmlArrow("2")%>
+					</a></th>
+					<th class="order"><a href="javascript:void(0)"
+						onclick="reorder('3')">Sales<%=orderBy.getHtmlArrow("3")%>
+					</a></th>
+					<th class="order"><a href="javascript:void(0)"
+						onclick="reorder('4')">Sales B2B<%=orderBy.getHtmlArrow("4")%>
+					</a></th>
 				</tr>
 				<%
 					int rows = 0;
@@ -132,11 +195,11 @@
 					</td>
 					<td><%=common.util.Filter.nullFilter(productAndOrder.getBinding())%>
 					</td>
-					<td><%=common.util.Filter.nullFilter(productAndOrder.getBrand())%>
-					</td>
 					<td><%=common.util.Filter.nullFilter(productAndOrder.getProductGroup())%>
 					</td>
 					<td><%=common.util.Filter.nullFilter(productAndOrder.getProductTypeName())%>
+					</td>
+					<td><%=common.util.Filter.nullFilter(productAndOrder.getBrand())%>
 					</td>
 					<td><img
 						src="<%=common.util.Filter.nullFilter(productAndOrder.getImage())%>"
