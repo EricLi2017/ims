@@ -8,7 +8,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class Time {
+	private static final Log log = LogFactory.getLog(Time.class);
 	/**
 	 * Hours from UTC: UTC-8 (Standard time), UTC-7 (Daylight saving time)
 	 * <p>
@@ -36,10 +40,14 @@ public class Time {
 	 * @return time Timestamp or null if time is null or not isValid
 	 */
 	public static Timestamp getTime(XMLGregorianCalendar time) {
+		log.debug("[input] XMLGregorianCalendar time:" + time);
+		log.debug("Timezone of XMLGregorianCalendar time:" + time.getTimezone() / 60);
 		if (time == null || !time.isValid())
 			return null;
-
-		return new Timestamp(time.toGregorianCalendar().getTimeInMillis());
+		Timestamp timestamp = new Timestamp(time.toGregorianCalendar().getTimeInMillis());
+		log.debug("[output] Timestamp:" + timestamp);
+		log.debug("Timezone default:" + TimeZone.getDefault());
+		return timestamp;
 	}
 
 	/**
