@@ -41,7 +41,7 @@
 			<AppenderRef ref="Console" />
 		</Logger>
 		<!-- for tomcat listener -->
-		<Logger name="common.util.Time" level="INFO" additivity="false">
+		<Logger name="listener.TomcatServletContextListener" level="INFO" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 
