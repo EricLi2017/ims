@@ -1,6 +1,6 @@
 mysql connector
 ------------------------------------
-mysql-connector-java-5.1.40-bin
+mysql-connector-java-5.1.43-bin
 ------------------------------------
 
 jsp upload file
