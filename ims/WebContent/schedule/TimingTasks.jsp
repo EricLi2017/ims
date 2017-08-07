@@ -35,18 +35,8 @@
 					<th title="The maximum number of requests you can submit per hour.">Hourly
 						request quota</th>
 					<th>Other</th>
-					<th>Shortest cycle</th>
-					<th>Longest cycle</th>
-				</tr>
-				<tr>
-					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
-					<td>30</td>
-					<td>two requests every second</td>
-					<td>N/A</td>
-					<td>N/A</td>
-					<td>SellerSkus Maximum: 50 SKUs</td>
-					<td>every second: 100 SKUs</td>
-					<td>every 15 seconds or above: 1500 SKUs</td>
+					<th>Shortest restore cycle</th>
+					<th>Full restore cycle</th>
 				</tr>
 				<tr>
 					<td>ListOrders and ListOrdersByNextToken</td>
@@ -78,30 +68,39 @@
 					<td>every minute: 50 orders</td>
 					<td>every 6 minutes or above: 300 orders</td>
 				</tr>
+				<tr>
+					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
+					<td>30</td>
+					<td>two requests every second</td>
+					<td>N/A</td>
+					<td>N/A</td>
+					<td>SellerSkus Maximum: 50 SKUs</td>
+					<td>every second: 100 SKUs</td>
+					<td>every 15 seconds or above: 1500 SKUs</td>
+				</tr>
+				<tr>
+					<td>GetMatchingProduct</td>
+					<td>20</td>
+					<td>Two items every second</td>
+					<td>N/A</td>
+					<td>7200</td>
+					<td>ASINList Maximum: 10 ASIN</td>
+					<td>every second: 2 ASIN</td>
+					<td>every 100 second or above: 200 ASIN</td>
+				</tr>
 			</table>
 		</div>
 
 		<div id="timingTasks">
-			<h2>Timing Tasks</h2>
+			<h2>Timer Tasks</h2>
 			<table>
 				<tr>
-					<th title="">Timing Task</th>
+					<th title="">Timer Task</th>
 					<th title="">MWS API</th>
 					<th>Initial Delay</th>
 					<th>Delay</th>
 					<th>Scope</th>
 					<th>Setting Requirement</th>
-
-				</tr>
-				<tr>
-					<td>List Inventory</td>
-					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
-					<td><%=ScheduleServlet.INITIAL_DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
-					<td><%=ScheduleServlet.DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
-					<td>all products in IMS</td>
-					<td>Total SKUs &lt;=30*50: Run until all SKU call once or
-						total call times reach 30(&lt;=30*50 SKUs), then task end for this
-						time</td>
 
 				</tr>
 				<tr>
@@ -136,6 +135,28 @@
 					<td>oldest 300 pending orders</td>
 					<td>: If 6 call(&lt;=6*50 orders) complete or exception
 						happened, then task end for this time</td>
+
+				</tr>
+				<tr>
+					<td>List Inventory</td>
+					<td>ListInventorySupply and ListInventorySupplyByNextToken</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_LIST_INVENTORY_SUPPLY%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td>all products in IMS</td>
+					<td>Total SKUs &lt;=30*50: Run until all SKU call once or
+						total call times reach 30(&lt;=30*50 SKUs), then task end for this
+						time</td>
+
+				</tr>
+				<tr>
+					<td>Get Matching Product</td>
+					<td>GetMatchingProduct</td>
+					<td><%=ScheduleServlet.INITIAL_DELAY_GET_MATCHING_PRODUCT%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td><%=ScheduleServlet.DELAY_GET_MATCHING_PRODUCT%> <%=ScheduleServlet.TIME_UNIT%></td>
+					<td>all products in IMS</td>
+					<td>: If all ASINs call(after 20 ASINs call(&lt;=20*10 ) will
+						sleep a full restore cycle) complete or exception happened, then
+						task end for this time</td>
 
 				</tr>
 			</table>
