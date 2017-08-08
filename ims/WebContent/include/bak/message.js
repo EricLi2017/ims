@@ -3,14 +3,17 @@
  * message
  */
 $(function() {
-	var wsocket = new WebSocket("ws://localhost:8080/ims/notifyall");
+	alert("function");
+	var wsocket = new WebSocket("ws://192.168.1.102:8080/ims/notifyall");
 	wsocket.onerror = onError;
 	wsocket.onopen = onOpen;
 	wsocket.onmessage = onMessage;
 	wsocket.onclose = onClose;
 	function onError(evt) {
+		alert("error");
 	}
 	function onOpen(evt) {
+		alert("open");
 	}
 	function onMessage(evt) {
 		// disable the previous one
