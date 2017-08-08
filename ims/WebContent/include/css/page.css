@@ -113,6 +113,7 @@ body button {
 .content {
 	margin: 0;
 	padding: 0 2.8%;
+	min-height: 80vh;
 }
 
 .content table {
@@ -142,10 +143,10 @@ body button {
 
 /* .footer */
 .footer {
-	position: static;
-	bottom: 0;
+	position: relative;
+	top: 5vh;
 	left: 0;
-	margin: 15% 0 0 0;
+	margin: 0;
 	border-top: 1px solid #ddd;
 	padding: 0;
 	width: 100%;
