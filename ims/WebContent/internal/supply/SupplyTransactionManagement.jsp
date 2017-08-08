@@ -130,29 +130,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Supply Transaction Management</title>
-<%--page style--%>
-<link rel="stylesheet" href="../../include/css/page.css">
-<%--jquery lib--%>
-<script type="text/javascript"
-	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
-<%--jquery ui for datepicker function--%>
-<script type="text/javascript"
-	src="../../include/js/jquery-ui-1.12.1/jquery-ui.js"></script>
-<%--jquery ui for datepicker style--%>
-<link rel="stylesheet"
-	href="../../include/js/jquery-ui-1.12.1/themes/redmond/jquery-ui.css">
+<%--Required Head Core Elements--%>
+<%@ include file="/include/page/head/Head-Core.jsp"%>
+<%--Optional Head Date Elements--%>
+<%@ include file="/include/page/head/Head-Date.jsp"%>
 <%--special only for this page--%>
 <script type="text/javascript">
-	$(document).ready(function() {
-		/*set date*/
-		$("#dateAfter").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-		$("#dateBefore").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-	});//end of $(document).ready()
-
 	/* 
 	Reverse sort order or change sorted column
 
