@@ -9,30 +9,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%--jquery lib--%>
-<script type="text/javascript"
-	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
-<%--jquery ui for datepicker function--%>
-<script type="text/javascript"
-	src="../../include/js/jquery-ui-1.12.1/jquery-ui.js"></script>
-<%--jquery ui for datepicker style--%>
-<link rel="stylesheet"
-	href="../../include/js/jquery-ui-1.12.1/themes/redmond/jquery-ui.css">
-<%--page style--%>
-<link rel="stylesheet" href="../../include/css/page.css">
-
+<%--Head Required Core Elements--%>
+<%@ include file="/include/page/head/Head-Core.jsp"%>
+<%--Head Optional Date Elements--%>
+<%@ include file="/include/page/head/Head-Date.jsp"%>
 <%--special only for this page--%>
 <script type="text/javascript">
 	$(document).ready(function() {
-		/*set date*/
-		$("#dateAfter").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-		$("#dateBefore").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-
-		/*click to hide and show*/
+		/**click to hide and show*/
 		$("#hide").click(function() {
 			$(".product2").hide();
 		});

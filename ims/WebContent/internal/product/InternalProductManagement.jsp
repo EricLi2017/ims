@@ -8,37 +8,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%--Permission Check--%>
 <%@ include file="/include/PermissionCheck.jsp"%>
-<%--Excute part--%>
+<%--Execute part--%>
 <%@ include file="/internal/product/InternalProductManagementExcute.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title>Internal Product Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%--page style--%>
-<link rel="stylesheet" href="../../include/css/page.css">
-<%--jquery lib--%>
-<script type="text/javascript"
-	src="../../include/js/jquery/jquery-3.1.1.min.js"></script>
-<%--jquery ui for datepicker function--%>
-<script type="text/javascript"
-	src="../../include/js/jquery-ui-1.12.1/jquery-ui.js"></script>
-<%--jquery ui for datepicker style--%>
-<link rel="stylesheet"
-	href="../../include/js/jquery-ui-1.12.1/themes/redmond/jquery-ui.css">
+<%--Head Required Core Elements--%>
+<%@ include file="/include/page/head/Head-Core.jsp"%>
+<%--Head Optional Date Elements--%>
+<%@ include file="/include/page/head/Head-Date.jsp"%>
 <%--special only for this page--%>
 <script type="text/javascript">
-	$(document).ready(function() {
-		/*set date*/
-		$("#dateAfter").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-		$("#dateBefore").datepicker({
-			dateFormat : "yy-mm-dd"
-		});
-
-	});//end of $(document).ready()
-	/*async count supply*/
+	/**async count supply*/
 	function countSupply(obj) {
 		var id = $(obj).attr("id");
 		// async call 
@@ -67,7 +50,7 @@
 		});
 	}
 <%--special only for this page--%>
-	/*async count transaction*/
+	/**async count transaction*/
 	function countTransaction(obj) {
 		var id = $(obj).attr("id");
 		// async call 
