@@ -7,7 +7,8 @@
 <%
 	String message = Filter.nullFilter(request.getParameter("message"));
 	if (message != null && "" != message.trim()) {
-		PushMessageClientEndpoint.pushMessage(message);
+		request.setAttribute("message", message);
+		PushMessageClientEndpoint.pushMessage(request);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -34,7 +35,7 @@
 			<h1>Push Real Time Notice to All Signed In User</h1>
 		</div>
 		<div>
-			<form id="pushForm">
+			<form id="pushForm" method="post">
 				Input Message:
 				<textarea rows="5" cols="50" name="message" id="message"><%=message%></textarea>
 				<input type="button" value="Clear Content" id="reset"
