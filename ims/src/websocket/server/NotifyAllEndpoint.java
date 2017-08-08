@@ -3,7 +3,6 @@
  */
 package websocket.server;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,48 +32,36 @@ public class NotifyAllEndpoint {
 
 	private static final Log log = LogFactory.getLog(NotifyAllEndpoint.class);
 
-	@OnClose
-	public void close(Session session, CloseReason reason) {
-		log.info("Websocket session closing");
-
-		delSession(session);
-		log.info("Session has been removed from map");
-	}
-
 	@OnError
 	public void error(Session session, Throwable error) {
-		log.info("Websocket session error");
-		// error.printStackTrace();
+		log.info("Erring websocket session " + (session == null ? "" : session.getId()) + ", " + error);
 	}
 
 	@OnOpen
 	public void open(Session session, EndpointConfig config) {
-		log.info("Websocket session opening");
+		log.info("Opening websocket session " + (session == null ? "" : session.getId()));
 		addSession(session);
-		log.info("Session has been added to map");
-
-		if (session.isOpen()) {
-			session.getAsyncRemote().sendText("Session opened");
-		} else {
-			log.info("Websocket session is closed in open()");
-		}
+		log.info("Websocket session " + (session == null ? "" : session.getId()) + " was added into map");
 	}
 
 	@OnMessage
 	public void onMessage(Session session, String msg) {
-		log.info("Websocket session received message " + msg);
+		log.info("Received a notice that needs to be pushed immediately：" + msg);
 		Collection<Session> sessions = getSessions().values();
-		log.info("sessions.size()=" + sessions.size());
-		try {
-			for (Session sess : sessions) {
-				if (sess.isOpen()) {
-					log.info("start to send message " + msg);
-					sess.getBasicRemote().sendText(msg);
-
-				}
+		log.info(sessions.size() + " websocket session(s) need to be pushed");
+		for (Session sess : sessions) {
+			if (sess.isOpen()) {
+				log.info("Pushing to websocket session " + sess.getId());
+				sess.getAsyncRemote().sendText(msg);
 			}
-		} catch (IOException e) {
 		}
+	}
+
+	@OnClose
+	public void close(Session session, CloseReason reason) {
+		log.info("Closing websocket session " + (session == null ? "" : session.getId()) + ", " + reason);
+		delSession(session);
+		log.info("Websocket session " + (session == null ? "" : session.getId()) + " was removed from map");
 	}
 
 	private static synchronized void addSession(Session session) {
