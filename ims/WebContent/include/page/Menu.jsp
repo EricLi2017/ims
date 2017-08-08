@@ -8,7 +8,6 @@
 				<ul>
 					<li style="border-bottom: 1px dotted #ddd;"><a
 						href="/ims/user/SignOut.jsp">Sign Out</a></li>
-					<li><a href="/ims/schedule/TimingTasks.jsp">Timing Tasks</a></li>
 				</ul></li>
 		</ul>
 	</div>
@@ -62,6 +61,13 @@
 							Transaction Management</a></li>
 					<li><a href="/ims/internal/supply/AddSupplyTransaction.jsp">Add
 							Supply Transaction</a></li>
+				</ul></li>
+			<li><a href="/ims/schedule/TimingTasks.jsp">Administrator</a>
+				<ul>
+					<li><a href="/ims/schedule/TimingTasks.jsp">Timing Tasks
+							Configuration</a></li>
+					<li><a href="/ims/admin/notice/PushRealTimeNotice.jsp">Push
+							Real Time Notice</a></li>
 				</ul></li>
 		</ul>
 	</div>
