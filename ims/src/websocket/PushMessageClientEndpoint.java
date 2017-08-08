@@ -19,6 +19,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,88 +32,62 @@ import org.apache.commons.logging.LogFactory;
  */
 @ClientEndpoint
 public class PushMessageClientEndpoint {
-	private static final Log log = LogFactory.getLog(PushMessageClientEndpoint.class);
-
-	@OnClose
-	public void close(Session session, CloseReason reason) {
-		log.info("Websocket session closing");
-	}
+	private static final Log LOG = LogFactory.getLog(PushMessageClientEndpoint.class);
+	private static final String SERVER_END_POINT_SCHEME = "ws://";
+	private static final String SERVER_END_POINT_SERVLET_PATH = "/notifyall";
 
 	@OnError
 	public void error(Session session, Throwable error) {
-		log.info("Websocket session error");
-		// error.printStackTrace();
+		// NO-OP
 	}
 
 	@OnOpen
 	public void open(Session session, EndpointConfig config) {
-		log.info("Websocket session opening");
-
-		if (session.isOpen()) {
-
-		} else {
-			log.info("Websocket session is closed in open()");
-		}
+		// NO-OP
 	}
 
 	@OnMessage
 	public void onMessage(Session session, String msg) {
-		log.info("Websocket session received message " + msg);
-		if (session.isOpen()) {
-			// blocking method
-			// session.getBasicRemote().sendText(msg);
-			// nonblocking method
-			// session.getAsyncRemote().sendText(msg);
-		} else {
-			log.info("Websocket session is closed in onMessage()");
-		}
+		// NO-OP
 	}
 
-	public static void pushMessage(String message) {
-		if (message == null || message.trim().isEmpty())
+	@OnClose
+	public void close(Session session, CloseReason reason) {
+		// NO-OP
+	}
+
+	public static final void pushMessage(String url, String message) {
+		LOG.info("url=" + url);
+		LOG.info("message=" + message);
+		if (url == null || url.trim().isEmpty() || message == null || message.trim().isEmpty())
 			return;
 
 		Session session = null;
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 		try {
-			session = container.connectToServer(PushMessageClientEndpoint.class,
-					new URI("ws://127.0.0.1:8088/ims/notifyall"));// TODO
+			session = container.connectToServer(PushMessageClientEndpoint.class, new URI(url));
 		} catch (DeploymentException | IOException | URISyntaxException e) {
-			log.error("Connection error occured!");
+			LOG.error("Connection error occured!");
 			e.printStackTrace();
 		}
-
 		if (session != null && session.isOpen()) {
 			// nonblocking method
 			session.getAsyncRemote().sendText(message);
-
 			try {
 				session.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				// NO-OP
 			}
-
 		}
 	}
 
-	public static void main(String[] args) throws IOException, InterruptedException {
-		Session session = null;
-		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-		try {
-			session = container.connectToServer(PushMessageClientEndpoint.class,
-					new URI("ws://127.0.0.1:8088/ims/echoall"));
-		} catch (DeploymentException | IOException | URISyntaxException e) {
-			log.error("Connection error occured!");
-			e.printStackTrace();
-		}
+	public static final void pushMessage(HttpServletRequest request) {
+		if (request == null)
+			return;
+		String url = SERVER_END_POINT_SCHEME + request.getServerName() + ":" + request.getServerPort()
+				+ request.getContextPath() + SERVER_END_POINT_SERVLET_PATH;
+		String message = (String) request.getAttribute("message");
 
-		String msg = "The system will be shut down in 5 minutes!";
-		if (session != null && session.isOpen()) {
-			// nonblocking method
-			session.getAsyncRemote().sendText(msg);
-
-			// Thread.sleep(1000);
-		}
-
+		pushMessage(url, message);
 	}
 }
