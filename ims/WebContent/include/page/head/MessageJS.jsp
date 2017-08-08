@@ -1,6 +1,5 @@
 <script type="text/javascript">
 	$(document).ready(function() {
-		alert("function22");
 		var wsocket = new WebSocket("<%=("ws://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
 					+ "/notifyall")%>");
 						wsocket.onerror = onError;
@@ -8,10 +7,8 @@
 						wsocket.onmessage = onMessage;
 						wsocket.onclose = onClose;
 						function onError(evt) {
-							alert("error");
 						}
 						function onOpen(evt) {
-							alert("open");
 						}
 						function onMessage(evt) {
 							// disable the previous one
