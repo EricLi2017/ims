@@ -1,5 +1,5 @@
 <%--Navigation Menu--%>
-<div class="menu">
+<div id="menu" class="menu">
 	<%--right part--%>
 	<div class="right">
 		<ul>

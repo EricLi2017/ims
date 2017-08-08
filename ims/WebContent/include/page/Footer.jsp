@@ -1,5 +1,5 @@
 <%--Footer --%>
-<div class="footer">
+<div id="footer" class="footer">
 	<%--right part--%>
 	<div class="right">
 		&copy;
