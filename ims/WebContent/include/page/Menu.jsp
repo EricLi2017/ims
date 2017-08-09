@@ -16,6 +16,7 @@
 	<%--left part--%>
 	<div class="left">
 		<ul>
+			<li><a href="/ims/index.jsp">IMS</a></li>
 			<li><a href="/ims/amazon/product/ProductManagement.jsp">Amazon
 					Product</a>
 				<ul>
