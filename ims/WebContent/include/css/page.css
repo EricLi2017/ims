@@ -114,12 +114,13 @@ body button {
 	margin: 0;
 	padding: 0 2.8%;
 	min-height: 80vh;
+	overflow: auto;
 }
 
 .content table {
 	width: 100%;
 	margin-top: 1em;
-	border-spacing: 0;
+	border-collapse: collapse;
 	border: 1px solid #ddd;
 	border-bottom: none;
 	background-color: #fff;
@@ -128,13 +129,12 @@ body button {
 }
 
 .content table th {
-	border-bottom: 1px solid #ddd;
 	background-color: #f3f3f3;
-	padding: 0 2% 0 0;
 }
 
-.content table td {
+.content table th, td {
 	border-bottom: 1px solid #ddd;
+	padding: 0 2% 0 0;
 }
 
 .content table tr:HOVER {
