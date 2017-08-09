@@ -134,11 +134,15 @@ body button {
 }
 
 .content table td {
-	padding: 0 1em 0 0;
+	padding: 0.5em 1em 0.5em 0;
 }
 
 .content table tr:HOVER {
 	background-color: #eef5ff;
+}
+
+.content table img {
+	height: 75px;
 }
 
 /* .footer */
