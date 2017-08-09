@@ -24,11 +24,9 @@ body button {
 
 /* .menu */
 .menu {
-	/* 	width: 100%; */
 	overflow: hidden;
 	margin: 0;
 	border-bottom: 1px solid #ddd;
-	border-right: none;
 	padding: 0;
 	background-color: #f3f3f3;
 	font-family: sans-serif;
@@ -45,7 +43,7 @@ body button {
 }
 
 /* level 1 menu */
-.menu  ul li a, span {
+.menu  ul li a, .menu  ul li span {
 	display: block;
 	width: auto;
 	background-color: #f3f3f3; /* level 1 menu background color */
