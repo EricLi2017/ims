@@ -8,7 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%
     //get current Messages
     List<String> messages = MessageForUpdateInventory.getInstance().getMessage();

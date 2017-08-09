@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%--Excute part--%>
 <%@ include file="ProductManagementExcute.jsp"%>
 
@@ -10,9 +10,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%--Head Required Core Elements--%>
-<%@ include file="/include/page/head/Head-Core.jsp"%>
+<%@ include file="/include/jsp/head/Head-Core.jsp"%>
 <%--Head Optional Date Elements--%>
-<%@ include file="/include/page/head/Head-Date.jsp"%>
+<%@ include file="/include/jsp/head/Head-Date.jsp"%>
 <%--special only for this page--%>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -68,7 +68,7 @@
 </head>
 <body>
 	<%--Page Navigation Menu --%>
-	<%@ include file="/include/page/Menu.jsp"%>
+	<%@ include file="/include/jsp/body/Menu.jsp"%>
 
 	<%--Page Main Content --%>
 	<div class="content">
@@ -235,7 +235,7 @@
 	</div>
 
 	<%--Page Footer --%>
-	<%@ include file="/include/page/Footer.jsp"%>
+	<%@ include file="/include/jsp/body/Footer.jsp"%>
 
 </body>
 </html>

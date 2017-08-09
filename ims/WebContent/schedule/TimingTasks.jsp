@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +14,7 @@
 </head>
 <body>
 	<%--Page Navigation Menu --%>
-	<%@ include file="/include/page/Menu.jsp"%>
+	<%@ include file="/include/jsp/body/Menu.jsp"%>
 
 	<%--Page Main Content --%>
 	<div class="content">
@@ -165,6 +165,6 @@
 
 
 	<%--Page Footer --%>
-	<%@ include file="/include/page/Footer.jsp"%>
+	<%@ include file="/include/jsp/body/Footer.jsp"%>
 </body>
 </html>

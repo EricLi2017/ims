@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%--Execute part--%>
 <%@ include file="/internal/product/InternalProductManagementExcute.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,9 +16,9 @@
 <title>Internal Product Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%--Head Required Core Elements--%>
-<%@ include file="/include/page/head/Head-Core.jsp"%>
+<%@ include file="/include/jsp/head/Head-Core.jsp"%>
 <%--Head Optional Date Elements--%>
-<%@ include file="/include/page/head/Head-Date.jsp"%>
+<%@ include file="/include/jsp/head/Head-Date.jsp"%>
 <%--special only for this page--%>
 <script type="text/javascript">
 	/**async count supply*/
@@ -109,7 +109,7 @@
 </head>
 <body>
 	<%--Page Navigation Menu --%>
-	<%@ include file="/include/page/Menu.jsp"%>
+	<%@ include file="/include/jsp/body/Menu.jsp"%>
 
 	<%--Page Main Content --%>
 	<div class="content">
@@ -230,6 +230,6 @@
 	</div>
 
 	<%--Page Footer --%>
-	<%@ include file="/include/page/Footer.jsp"%>
+	<%@ include file="/include/jsp/body/Footer.jsp"%>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%
 	String message = Filter.nullFilter(request.getParameter("message"));
 	if (message != null && "" != message.trim()) {
@@ -26,7 +26,7 @@
 </head>
 <body>
 	<%--Page Navigation Menu --%>
-	<%@ include file="/include/page/Menu.jsp"%>
+	<%@ include file="/include/jsp/body/Menu.jsp"%>
 
 	<%--Page Main Content --%>
 	<div class="content">
@@ -45,6 +45,6 @@
 	</div>
 
 	<%--Page Footer --%>
-	<%@ include file="/include/page/Footer.jsp"%>
+	<%@ include file="/include/jsp/body/Footer.jsp"%>
 </body>
 </html>

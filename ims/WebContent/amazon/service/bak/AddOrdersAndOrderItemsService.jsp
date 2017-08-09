@@ -9,9 +9,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%--Get request date in PST time zone--%>
-<%@ include file="/include/GetRequestDateInPST.jsp"%>
+<%@ include file="/include/jsp/GetRequestDateInPST.jsp"%>
 <%
 	//Call mws for order and order items and insert them into ims database
 	List<ListOrderAndOrderItemsManager.InsertResult> insertResults = new ListOrderAndOrderItemsManager()

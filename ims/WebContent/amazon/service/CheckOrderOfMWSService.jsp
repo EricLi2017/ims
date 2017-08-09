@@ -8,9 +8,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%--Permission Check--%>
-<%@ include file="/include/PermissionCheck.jsp"%>
+<%@ include file="/include/jsp/PermissionCheck.jsp"%>
 <%--Get request date in PST time zone--%>
-<%@ include file="/include/GetRequestDateInPST.jsp"%>
+<%@ include file="/include/jsp/GetRequestDateInPST.jsp"%>
 <%
 	//Call MWS to count order and sum items in order
 	ListOrdersManager.OrderSumMWS orderSumMWS = new ListOrdersManager().getSumFromMWS(createdAfter,
