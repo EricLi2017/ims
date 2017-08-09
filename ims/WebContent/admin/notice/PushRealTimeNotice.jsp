@@ -1,5 +1,5 @@
+<%@page import="websocket.server.NotifyAllEndpoint"%>
 <%@page import="common.util.Filter"%>
-<%@page import="websocket.PushMessageClientEndpoint"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%--Permission Check--%>
@@ -7,8 +7,7 @@
 <%
 	String message = Filter.nullFilter(request.getParameter("message"));
 	if (message != null && "" != message.trim()) {
-		request.setAttribute("message", message);
-		PushMessageClientEndpoint.pushMessage(request);
+		NotifyAllEndpoint.pushMessage(message);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

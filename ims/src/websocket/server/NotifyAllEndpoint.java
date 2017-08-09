@@ -46,15 +46,8 @@ public class NotifyAllEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String msg) {
-		log.info("Received a notice that needs to be pushed immediately：" + msg);
-		Collection<Session> sessions = getSessions().values();
-		log.info(sessions.size() + " websocket session(s) need to be pushed");
-		for (Session sess : sessions) {
-			if (sess.isOpen()) {
-				log.info("Pushing to websocket session " + sess.getId());
-				sess.getAsyncRemote().sendText(msg);
-			}
-		}
+		log.info("Unexpectedly received a message from session " + (session == null ? "" : session.getId())
+				+ ", message is: " + msg);
 	}
 
 	@OnClose
@@ -78,4 +71,15 @@ public class NotifyAllEndpoint {
 		return sessionMap;
 	}
 
+	public static void pushMessage(String message) {
+		log.info("Prepared to push a message：" + message);
+		Collection<Session> sessions = getSessions().values();
+		log.info(sessions.size() + " websocket session(s) need to be pushed");
+		for (Session sess : sessions) {
+			if (sess.isOpen()) {
+				log.info("Pushing to websocket session " + sess.getId());
+				sess.getAsyncRemote().sendText(message);
+			}
+		}
+	}
 }
