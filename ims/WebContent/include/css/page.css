@@ -40,21 +40,12 @@ body button {
 	list-style: none;
 }
 
-.menu  ul li span {
-	display: block;
-	width: auto;
-	background-color: #f3f3f3; /* level 1 menu background color */
-	padding: 0.8em 2.4em; /* level 1 menu padding */
-	text-align: center;
-	color: #666; /* menu color */
-}
-
 /* level 1 menu */
-.menu  ul li a {
+.menu  ul li a, span {
 	display: block;
 	width: auto;
 	background-color: #f3f3f3; /* level 1 menu background color */
-	padding: 0.8em 2.4em; /* level 1 menu padding */
+	padding: 1.1em 3em 1.1em 1em; /* level 1 menu padding */
 	text-align: center;
 	text-decoration: none;
 	color: #666; /* menu color */
@@ -79,7 +70,7 @@ body button {
 .menu  ul li ul li a {
 	width: auto; /* level 2 menu width*/
 	background-color: #fff; /* level 2 menu background color */
-	padding: 0.8em 1.6em; /*level 2 menu padding*/
+	padding: 1em 1.3em 1em 1em; /*level 2 menu padding*/
 	text-align: left;
 }
 
@@ -112,7 +103,7 @@ body button {
 /* .content */
 .content {
 	margin: 0;
-	padding: 0 2.8%;
+	padding: 0 1.6em;
 	min-height: 80vh;
 }
 
@@ -133,7 +124,7 @@ body button {
 
 .content table th, td {
 	border-bottom: 1px solid #ddd;
-	padding: 0 2% 0 0;
+	padding: 0 1em 0 0;
 }
 
 .content table tr:HOVER {
@@ -172,7 +163,7 @@ body button {
 	display: block;
 	width: auto;
 	background-color: #f3f3f3;
-	padding: 0.8em 2.4em;
+	padding: 1.1em 3em;
 	text-align: center;
 	text-decoration: none;
 }
@@ -189,5 +180,5 @@ body button {
 .footer .right {
 	float: right;
 	background-color: #f3f3f3;
-	padding: 0.8em 2.4em;
+	padding: 1.1em 3em;
 }
