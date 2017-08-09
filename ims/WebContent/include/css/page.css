@@ -113,12 +113,12 @@ body button {
 
 .content table {
 	width: 100%;
-	margin: 1em 0;
+	margin: 0;
 	border-collapse: collapse;
 	border: 1px solid #ddd;
 	border-bottom: none;
 	background-color: #fff;
-	padding: 0;
+	padding: 1em 0;
 	text-align: left;
 }
 
