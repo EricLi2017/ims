@@ -29,7 +29,9 @@ body button {
 	border-bottom: 1px solid #ddd;
 	padding: 0;
 	background-color: #f3f3f3;
-	font-family: sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	min-width: 300px;
 }
 
 .menu  ul {
@@ -47,20 +49,34 @@ body button {
 	display: block;
 	width: auto;
 	background-color: #f3f3f3; /* level 1 menu background color */
-	padding: 1.1em 3em 1.1em 1em; /* level 1 menu padding */
-	text-align: center;
+	padding: 1.1em 3em 1.1em 0; /* level 1 menu padding */
+	color: #5c5c5c; /* menu color */
+	font-weight: bold;
+	font-size: 13px;
+	text-align: left;
 	text-decoration: none;
-	color: #666; /* menu color */
+	text-transform: uppercase;
+	text-align: left;
+	font-weight: bold;
+	font-size: 13px;
 }
 
-.menu  ul li a:HOVER {
-	color: #111;
+.menu  ul li span {
+	color: #212121;
+	font-weight: normal;
+	text-transform: none;
+}
+
+.menu  ul li a:hover {
+	color: #212121
 }
 
 .menu  ul li ul {
 	display: none;
 	position: absolute;
 	background-color: #fff;
+	border: 1px solid #ddd;
+	border-top: 3px solid #333;
 }
 
 .menu  ul li ul li {
@@ -70,20 +86,24 @@ body button {
 
 /* level 2 menu */
 .menu  ul li ul li a {
+	border-radius: 2px;
 	width: auto; /* level 2 menu width*/
 	background-color: #fff; /* level 2 menu background color */
-	padding: 1em 1.3em 1em 1em; /*level 2 menu padding*/
+	padding: 1em 1em 1em; /*level 2 menu padding*/
+	color: #333;
+	font-size: 12px;
+	font-weight: normal;
 	text-align: left;
+	text-decoration: none;
+	text-transform: none;
 }
 
 .menu  ul li ul li a:HOVER {
-	background-color: #ddd;
+	background-color: #e4e4e4;
 }
 
 .menu  ul li:hover ul {
 	display: block;
-	border: 1px solid #ddd;
-	border-top: 3px solid #333;
 }
 
 .menu .left {
