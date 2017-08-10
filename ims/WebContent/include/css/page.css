@@ -67,6 +67,11 @@ body button {
 	text-transform: none;
 }
 
+.menu  ul li a.home {
+	padding-left: 2em;
+	padding-right: 3em;
+}
+
 .menu  ul li a:hover {
 	color: #212121
 }
