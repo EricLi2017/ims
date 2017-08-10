@@ -18,7 +18,7 @@ body a:HOVER {
 	text-decoration: none;
 }
 
-body button {
+button, input[type=submit], input[type=reset], input[type=button] {
 	cursor: pointer;
 }
 
