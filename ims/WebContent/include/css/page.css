@@ -77,6 +77,7 @@ body button {
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-top: 3px solid #333;
+	min-width: 10em;
 }
 
 .menu  ul li ul li {
