@@ -106,4 +106,42 @@ public class AmazonProductQuerier {
 		return asins;
 	}
 
+	public static final Integer selectLevelBySku(String sku) throws SQLException, NamingException {
+		Integer level = null;
+
+		String sql = "SELECT level FROM amazon_product WHERE sku=?";
+		Connection con = null;
+		try {
+			con = DB.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, sku);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				level = (rs.getString(1) == null ? null : rs.getInt(1));
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return level;
+	}
+
 }

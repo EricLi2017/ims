@@ -188,7 +188,9 @@
 				%>
 				<tr>
 					<td><%=++rows%></td>
-					<td class="product"><%=common.util.Filter.nullFilter(productAndOrder.getSku())%>
+					<td class="product"><a
+						href="EditLevel.jsp?sku=<%=common.util.Filter.nullFilter(productAndOrder.getSku())%>"
+						title="click to edit the level of product" target="_blank"><%=common.util.Filter.nullFilter(productAndOrder.getSku())%></a>
 					</td>
 					<td class="product"><a
 						href="../../internal/product/InternalProductManagement.jsp?asin=<%=common.util.Filter.nullFilter(productAndOrder.getAsin())%>"

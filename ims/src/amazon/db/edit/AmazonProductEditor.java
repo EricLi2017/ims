@@ -166,6 +166,48 @@ public class AmazonProductEditor {
 		return rows;
 	}
 
+	public static final int updateLevelByAsin(int level, String sku) {
+		if (sku == null)
+			return 0;
+		int rows = 0;
+
+		String sql = "UPDATE amazon_product SET level=? WHERE sku=?";
+		Connection con = null;
+		try {
+			con = DB.getConnection();
+			PreparedStatement ps;
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, level);
+			ps.setString(2, sku);
+			rows = ps.executeUpdate();
+
+			ps.close();
+			con.close();
+		} catch (SQLException |
+
+				NamingException e) {
+			e.printStackTrace();
+		} finally {
+			boolean flag = true;
+			try {
+				if (con == null || con.isClosed()) {
+					flag = false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (flag) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return rows;
+	}
+
 	/**
 	 * Parse GetMatchingProductResult to get ProductWithAttributeAndSalesRank
 	 * 
