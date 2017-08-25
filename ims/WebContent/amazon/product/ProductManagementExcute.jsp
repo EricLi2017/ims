@@ -19,6 +19,7 @@
 	String name = Filter.nullFilter(request.getParameter("name"));
 	String dateAfter = Filter.nullFilter(request.getParameter("dateAfter"));
 	String dateBefore = Filter.nullFilter(request.getParameter("dateBefore"));
+	String level = Filter.nullFilter(request.getParameter("level"));
 	//order by params
 	String sortedColumnId = Filter.nullFilter(request.getParameter("sortedColumnId"));
 	String sortOrder = Filter.nullFilter(request.getParameter("sortOrder"));
@@ -74,11 +75,26 @@
 			}
 		}
 		if (!isDateAfterValid || !isDateBeforeValid) {
-			out.print("incorrect date, correct date format is " + pattern);
+			out.print("Incorrect date, correct date format is " + pattern);
 			return;
 		}
 
+		Integer levelInt = null;
+		if (!level.isEmpty()) {
+			boolean isLevel = false;
+			try {
+				levelInt = Integer.parseInt(level);
+				isLevel = true;
+			} catch (NumberFormatException e) {
+
+			}
+			if (!isLevel) {
+				out.print("Incorrect level, level should be integer");
+				return;
+			}
+		}
+
 		productAndOrders = QueryProductAndOrder.querySkuSalesSum(Time.getTime(createdAfter),
-				Time.getTime(createdBefore), sku, asin, fnsku, name, sortedColumnId, sortOrder);
+				Time.getTime(createdBefore), sku, asin, fnsku, name, levelInt, sortedColumnId, sortOrder);
 	}
 %>

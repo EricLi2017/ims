@@ -52,6 +52,7 @@ public class QueryProductAndOrder {
 	 * @param asin
 	 * @param fnsku
 	 * @param title
+	 * @param level
 	 * @param sortedColumnId
 	 * @see {@value QueryProductAndOrder#SORTED_COLUMN_MAP_1}{@value QueryProductAndOrder#SORTED_COLUMN_MAP_2}
 	 * @param sortOrder
@@ -60,7 +61,7 @@ public class QueryProductAndOrder {
 	 *         there is no matched result in database
 	 */
 	public static List<ProductAndOrder> querySkuSalesSum(Timestamp createdAfter, Timestamp createdBefore, String sku,
-			String asin, String fnsku, String title, String sortedColumnId, String sortOrder) {
+			String asin, String fnsku, String title, Integer level, String sortedColumnId, String sortOrder) {
 		// basic sql
 		String part1 = "select  d.*,c.* from amazon_product as d left join" + "(select b.sku as sku,"
 				+ "sum(if(a.is_business_order='false',b.price_amount-b.discount_amount,null)  ) as sales,"
@@ -91,6 +92,9 @@ public class QueryProductAndOrder {
 		}
 		if (title != null && !"".equals(title.trim())) {
 			where2 += (where2 == "" ? " where " : " and ") + "d.title like '%" + title + "%'";
+		}
+		if (level != null) {
+			where2 += (where2 == "" ? " where " : " and ") + "d.level =" + level;
 		}
 		if (where2 != null)
 			part2 += where2;

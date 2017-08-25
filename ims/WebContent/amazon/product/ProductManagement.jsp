@@ -102,6 +102,9 @@
 						value="<%=dateBefore%>" title="">
 				</div>
 				<div style="display: inline;">
+					Level:<input type="text" name="level" value="<%=level%>">
+				</div>
+				<div style="display: inline;">
 					<input type="hidden" id="sortedColumnId" name="sortedColumnId"
 						value="<%=sortedColumnId%>"> <input type="hidden"
 						id="sortOrder" name="sortOrder" value="<%=sortOrder%>"> <input
