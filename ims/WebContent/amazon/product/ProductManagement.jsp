@@ -208,9 +208,11 @@
 					</td>
 					<td class="product2"><%=common.util.Filter.nullFilter(productAndOrder.getBrand())%>
 					</td>
-					<td class="product2_img"><img
-						src="<%=common.util.Filter.nullFilter(productAndOrder.getImage())%>"
-						alt="" /></td>
+					<td class="product2_img"><a
+						href="https://www.amazon.com/dp/<%=common.util.Filter.nullFilter(productAndOrder.getAsin())%>"
+						title="click to view the product at amazon.com" target="_blank"><img
+							src="<%=common.util.Filter.nullFilter(productAndOrder.getImage())%>"
+							alt="" /></a></td>
 					<td class="product2"><%=productAndOrder.getSalesRank() == null ? "" : productAndOrder.getSalesRank()%>
 					</td>
 					<td class="fulfillment"><%=common.util.Filter.nullFilter(productAndOrder.getFnsku())%>
