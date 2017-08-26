@@ -10,27 +10,29 @@
 	String level = Filter.nullFilter(request.getParameter("level"));
 
 	//validate param requried
-	if (sku.isEmpty() || level.isEmpty()) {
+	if (sku.isEmpty()) {
 		out.print("Missing required parameters!");
 		return;
 	}
 
 	//validate param format
-	boolean isInt = false;
-	try {
-		Integer.parseInt(level);
-		isInt = true;
-	} catch (NumberFormatException e) {
-		e.printStackTrace();
-	}
-	if (!isInt) {
-		out.print("Incorrect parameter format!");
-		return;
+	Integer levelInt = null;
+	if (!level.isEmpty()) {
+		boolean isInt = false;
+		try {
+			levelInt = Integer.parseInt(level);
+			isInt = true;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		if (!isInt) {
+			out.print("Incorrect parameter format!");
+			return;
+		}
 	}
 
 	//edit data from database
-
-	int rows = AmazonProductEditor.updateLevelByAsin(Integer.parseInt(level), sku);
+	int rows = AmazonProductEditor.updateLevelByAsin(levelInt, sku);
 
 	//response
 	String title = rows > 0 ? "Success" : "Failed";

@@ -166,7 +166,7 @@ public class AmazonProductEditor {
 		return rows;
 	}
 
-	public static final int updateLevelByAsin(int level, String sku) {
+	public static final int updateLevelByAsin(Integer level, String sku) {
 		if (sku == null)
 			return 0;
 		int rows = 0;
@@ -177,7 +177,7 @@ public class AmazonProductEditor {
 			con = DB.getConnection();
 			PreparedStatement ps;
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, level);
+			ps.setString(1, level == null ? null : level.toString());
 			ps.setString(2, sku);
 			rows = ps.executeUpdate();
 
