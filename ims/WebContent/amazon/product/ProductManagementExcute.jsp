@@ -1,3 +1,4 @@
+<%@page import="java.util.Calendar"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="common.util.Filter"%>
@@ -32,13 +33,6 @@
 	sortedColumnId = !sortedColumnMap.containsKey(sortedColumnId) ? "1" : sortedColumnId;//set default orderBy value
 	sortOrder = !OrderBy.ASC_DESC_MAP.containsKey(sortOrder) ? OrderBy.DESCENDING : sortOrder;//set default ascDesc value
 
-	System.out.println("sku=" + sku);
-	System.out.println("fnsku=" + fnsku);
-	System.out.println("asin=" + asin);
-	System.out.println("name=" + name);
-	System.out.println("dateAfter=" + dateAfter);
-	System.out.println("dateBefore=" + dateBefore);
-
 	//set time zone to PST
 	//
 	// 	TimeZone PST = Time.PST;
@@ -47,6 +41,25 @@
 	String pattern = "yyyy-MM-dd";
 	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 	Timestamp now = new Timestamp(System.currentTimeMillis());
+
+	//set default query conditions
+	if (!isQuery) {
+		//set default level
+		level = "1";
+
+		//set default dateAfter
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.add(Calendar.DAY_OF_MONTH, -14);
+		dateAfter = sdf.format(calendar.getTime());
+	}
+	System.out.println("sku=" + sku);
+	System.out.println("fnsku=" + fnsku);
+	System.out.println("asin=" + asin);
+	System.out.println("name=" + name);
+	System.out.println("dateAfter=" + dateAfter);
+	System.out.println("dateBefore=" + dateBefore);
+	System.out.println("level=" + level);
 
 	//params showed in page
 	List<QueryProductAndOrder.ProductAndOrder> productAndOrders = null;
